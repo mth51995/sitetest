@@ -63,13 +63,13 @@
       box-shadow: 0 0 10px #00ff7f, 0 0 20px #00ff7f;
     }
 
-    /* Player de música fixo na parte inferior */
+    /* Player estilo Spotify */
     .music-player {
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 20px;
-      background-color: rgba(0, 0, 0, 0.7);
+      background-color: rgba(0, 0, 0, 0.8);
       border-radius: 15px;
       box-shadow: 0 0 20px rgba(0, 255, 127, 0.5);
       width: 100%;
@@ -89,44 +89,42 @@
       text-shadow: 0 0 5px rgba(0, 255, 127, 0.8);
     }
 
-    audio {
-      width: 100%;
-      margin-top: 20px;
-    }
-
-    /* Canvas para a animação das ondas sonoras dentro do botão */
-    #play-button {
-      position: relative;
-      width: 60px;
-      height: 60px;
-      background-color: #00ff7f;
-      border: none;
-      border-radius: 50%;
-      color: black;
-      font-size: 25px;
-      cursor: pointer;
-      transition: background-color 0.3s, box-shadow 0.3s ease;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-
-    /* Canvas que será desenhado dentro do botão */
-    canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    /* Botões de controle */
     .controls {
       display: flex;
       justify-content: center;
-      gap: 20px;
+      align-items: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .control-btn {
+      background-color: transparent;
+      border: none;
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .control-btn:hover {
+      color: #00ff7f;
+    }
+
+    /* Barra de progresso */
+    .progress-container {
+      width: 100%;
+      height: 5px;
+      background-color: #555;
       margin-top: 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      background-color: #00ff7f;
+      border-radius: 5px;
     }
 
     /* Responsividade */
@@ -140,10 +138,8 @@
         font-size: 20px;
       }
 
-      #play-button {
-        width: 50px;
-        height: 50px;
-        font-size: 20px;
+      .control-btn {
+        font-size: 24px;
       }
     }
 
@@ -153,10 +149,8 @@
         padding: 6px 12px;
       }
 
-      #play-button {
-        width: 45px;
-        height: 45px;
-        font-size: 18px;
+      .control-btn {
+        font-size: 20px;
       }
     }
 
@@ -193,20 +187,21 @@
     </nav>
   </header>
 
-  <!-- Player de música fixo -->
+  <!-- Player estilo Spotify -->
   <div class="music-player">
     <h2>Monica te amo!</h2>
-    <audio id="audio" controls autoplay>
-      <source src="infinity.mp3" type="audio/mp3"> <!-- Substitua com o caminho correto do arquivo de música -->
-      Seu navegador não suporta o elemento de áudio.
-    </audio>
 
-    <!-- Botão com o efeito de onda sonora -->
+    <!-- Player -->
+    <audio id="audio" src="infinity.mp3" preload="auto"></audio>
+
     <div class="controls">
-      <button id="play-button" onclick="togglePlay()">
-        <canvas id="waveform"></canvas>
-        <span>▶️</span>
-      </button>
+      <button class="control-btn" id="prev" onclick="skipTrack(-1)">⏮️</button>
+      <button class="control-btn" id="play" onclick="togglePlay()">▶️</button>
+      <button class="control-btn" id="next" onclick="skipTrack(1)">⏭️</button>
+    </div>
+
+    <div class="progress-container" id="progress-container" onclick="setProgress(event)">
+      <div id="progress-bar" class="progress-bar"></div>
     </div>
   </div>
 
@@ -217,66 +212,56 @@
 
   <script>
     const audio = document.getElementById('audio');
-    const playButton = document.getElementById('play-button');
-    const canvas = document.getElementById('waveform');
-    const canvasCtx = canvas.getContext('2d');
+    const playButton = document.getElementById('play');
+    const progressContainer = document.getElementById('progress-container');
+    const progressBar = document.getElementById('progress-bar');
+    const prevButton = document.getElementById('prev');
+    const nextButton = document.getElementById('next');
 
-    // Configurações iniciais do canvas
-    canvas.width = playButton.offsetWidth;
-    canvas.height = playButton.offsetHeight;
-
-    // Criando o contexto de áudio usando Web Audio API
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const analyser = audioContext.createAnalyser();
-    const source = audioContext.createMediaElementSource(audio);
-    source.connect(analyser);
-    analyser.connect(audioContext.destination);
-
-    // Configurações do Analyser
-    analyser.fftSize = 256;
-    const bufferLength = analyser.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
-
-    // Função para desenhar a forma da onda no botão
-    function draw() {
-      analyser.getByteFrequencyData(dataArray);
-
-      canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-
-      const barWidth = (canvas.width / bufferLength) * 2.5;
-      let x = 0;
-
-      for (let i = 0; i < bufferLength; i++) {
-        const barHeight = dataArray[i];
-
-        // Cor da onda
-        canvasCtx.fillStyle = '#00ff7f';
-
-        canvasCtx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-
-        x += barWidth + 1;
-      }
-
-      requestAnimationFrame(draw); // Chama a função recursivamente
-    }
-
-    // Começa a animação quando a música começar a tocar
-    audio.addEventListener('play', () => {
-      audioContext.resume().then(() => {
-        draw();
-      });
-    });
+    let trackIndex = 0;
+    const tracks = [
+      "infinity.mp3", // Adicione seus arquivos de áudio aqui
+      "track2.mp3",
+      "track3.mp3"
+    ];
 
     // Função para alternar entre play/pause
     function togglePlay() {
       if (audio.paused) {
         audio.play();
-        playButton.querySelector('span').textContent = '⏸️';
+        playButton.textContent = '⏸️';
       } else {
         audio.pause();
-        playButton.querySelector('span').textContent = '▶️';
+        playButton.textContent = '▶️';
       }
     }
+
+    // Função para alterar o progresso da barra
+    audio.addEventListener('timeupdate', () => {
+      const progress = (audio.currentTime / audio.duration) * 100;
+      progressBar.style.width = progress + '%';
+    });
+
+    // Função para clicar na barra de progresso
+    function setProgress(event) {
+      const width = progressContainer.clientWidth;
+      const clickX = event.offsetX;
+      const duration = audio.duration;
+      audio.currentTime = (clickX / width) * duration;
+    }
+
+    // Função para pular para o próximo ou anterior
+    function skipTrack(direction) {
+      trackIndex += direction;
+      if (trackIndex < 0) trackIndex = tracks.length - 1;
+      if (trackIndex >= tracks.length) trackIndex = 0;
+      audio.src = tracks[trackIndex];
+      audio.play();
+      playButton.textContent = '⏸️';
+    }
+
+    // Iniciar o player
+    audio.src = tracks[trackIndex];
   </script>
 
 </body>
