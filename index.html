@@ -4,12 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Monica te amo</title>
+  <!-- Importando Google Fonts para uma tipografia moderna -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* Estilo para o corpo e a imagem de fundo */
+    /* Estilos globais */
     body {
       margin: 0;
       padding: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Roboto', sans-serif;
       background-image: url('buldog.png'); /* Substitua pelo caminho correto */
       background-size: cover;
       background-attachment: fixed;
@@ -19,79 +21,80 @@
       flex-direction: column;
       height: 100vh;
       justify-content: space-between;
+      overflow: hidden;
     }
 
-    /* Estilo para o cabeçalho e o menu */
+    /* Cabeçalho e navegação */
     header {
       display: flex;
       justify-content: center;
+      align-items: center;
       width: 100%;
       padding: 20px;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(0, 0, 0, 0.7);
       position: fixed;
       top: 0;
       left: 0;
       z-index: 10;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
 
     nav {
       display: flex;
-      flex-wrap: wrap; /* Permite quebra de linha */
-      gap: 15px; /* Espaçamento entre os itens */
-      justify-content: center; /* Centraliza os itens */
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
     }
 
-    nav a, nav button {
+    nav a {
       text-decoration: none;
       color: white;
-      font-size: 16px; /* Tamanho da fonte reduzido */
+      font-size: 16px;
       font-weight: bold;
       text-transform: uppercase;
-      padding: 5px 10px;
+      padding: 10px 20px;
       border-radius: 5px;
-      transition: color 0.3s, box-shadow 0.3s;
-      background-color: transparent; /* Botões transparentes */
-      border: none; /* Remove a borda dos botões */
-      cursor: pointer; /* Aponta que é clicável */
-      flex: 1; /* Faz com que os itens ocupem espaço igual */
-      max-width: 120px; /* Largura máxima dos botões */
+      transition: all 0.3s ease;
     }
 
-    nav a:hover, nav button:hover {
-      color: #00ff7f; /* Cor fluorescente */
+    nav a:hover {
+      background-color: #00ff7f;
+      color: black;
       box-shadow: 0 0 10px #00ff7f, 0 0 20px #00ff7f;
     }
 
-    /* Estilo para as seções */
+    /* Seções */
     section {
-      margin-top: 80px; /* Espaço para o cabeçalho fixo */
+      margin-top: 80px;
       padding: 20px;
-      background-color: rgba(0, 0, 0, 0.7);
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0, 255, 127, 0.5);
+      background-color: rgba(0, 0, 0, 0.8);
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 255, 127, 0.5);
       max-width: 800px;
       margin: 20px auto;
     }
 
-    /* Estilo para o player de música */
+    /* Player de música */
     .music-player {
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 20px;
       background-color: rgba(0, 0, 0, 0.7);
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0, 255, 127, 0.5);
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 255, 127, 0.5);
       width: 80%;
       max-width: 500px;
-      margin: auto;
-      margin-bottom: 30px;
+      margin: 20px auto;
+      margin-bottom: 40px;
+      text-align: center;
     }
 
     .music-player h2 {
       margin: 0;
       font-size: 24px;
       color: #00ff7f;
+      text-shadow: 0 0 5px rgba(0, 255, 127, 0.8);
     }
 
     audio {
@@ -99,7 +102,7 @@
       margin-top: 20px;
     }
 
-    /* Estilo para os botões de controle */
+    /* Botões de controle */
     .controls {
       display: flex;
       justify-content: center;
@@ -110,39 +113,49 @@
     .controls button {
       background-color: #00ff7f;
       border: none;
-      padding: 10px;
+      padding: 15px;
       border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 60px;
+      height: 60px;
       color: black;
-      font-size: 20px;
+      font-size: 25px;
       cursor: pointer;
-      transition: background-color 0.3s, box-shadow 0.3s;
+      transition: background-color 0.3s, box-shadow 0.3s ease;
     }
 
     .controls button:hover {
+      background-color: #00cc66;
       box-shadow: 0 0 15px #00ff7f, 0 0 30px #00ff7f;
     }
 
-    /* Media Queries para dispositivos menores */
-    @media (max-width: 600px) {
-      nav a, nav button {
-        font-size: 14px; /* Tamanho da fonte ainda menor em telas pequenas */
-        padding: 5px; /* Menos padding */
-        max-width: none; /* Remove a largura máxima para ocupar mais espaço */
+    /* Responsividade */
+    @media (max-width: 768px) {
+      nav a {
+        font-size: 14px;
+        padding: 8px 15px;
       }
 
       .music-player h2 {
-        font-size: 20px; /* Tamanho da fonte menor para cabeçalho */
+        font-size: 20px;
       }
 
       .controls button {
-        width: 40px; /* Botões de controle um pouco menores */
-        height: 40px;
-        font-size: 16px; /* Tamanho da fonte menor para os botões de controle */
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      nav a {
+        font-size: 12px;
+        padding: 6px 12px;
+      }
+
+      .controls button {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
       }
     }
   </style>
@@ -159,7 +172,7 @@
     </nav>
   </header>
 
-  <!-- Player de música na parte inferior -->
+  <!-- Player de música -->
   <div class="music-player">
     <h2>Monica te amo!</h2>
     <audio id="audio" controls autoplay>
