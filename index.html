@@ -36,13 +36,15 @@
 
     nav {
       display: flex;
+      flex-wrap: wrap; /* Permite quebra de linha */
       gap: 15px; /* Espaçamento entre os itens */
+      justify-content: center; /* Centraliza os itens */
     }
 
     nav a, nav button {
       text-decoration: none;
       color: white;
-      font-size: 20px;
+      font-size: 16px; /* Tamanho da fonte reduzido */
       font-weight: bold;
       text-transform: uppercase;
       padding: 5px 10px;
@@ -51,6 +53,8 @@
       background-color: transparent; /* Botões transparentes */
       border: none; /* Remove a borda dos botões */
       cursor: pointer; /* Aponta que é clicável */
+      flex: 1; /* Faz com que os itens ocupem espaço igual */
+      max-width: 120px; /* Largura máxima dos botões */
     }
 
     nav a:hover, nav button:hover {
@@ -121,6 +125,25 @@
 
     .controls button:hover {
       box-shadow: 0 0 15px #00ff7f, 0 0 30px #00ff7f;
+    }
+
+    /* Media Queries para dispositivos menores */
+    @media (max-width: 600px) {
+      nav a, nav button {
+        font-size: 14px; /* Tamanho da fonte ainda menor em telas pequenas */
+        padding: 5px; /* Menos padding */
+        max-width: none; /* Remove a largura máxima para ocupar mais espaço */
+      }
+
+      .music-player h2 {
+        font-size: 20px; /* Tamanho da fonte menor para cabeçalho */
+      }
+
+      .controls button {
+        width: 40px; /* Botões de controle um pouco menores */
+        height: 40px;
+        font-size: 16px; /* Tamanho da fonte menor para os botões de controle */
+      }
     }
   </style>
 </head>
