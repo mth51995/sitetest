@@ -74,7 +74,7 @@
       margin: 20px auto;
     }
 
-    /* Player de música */
+    /* Player de música fixo na parte inferior */
     .music-player {
       display: flex;
       flex-direction: column;
@@ -83,10 +83,13 @@
       background-color: rgba(0, 0, 0, 0.7);
       border-radius: 15px;
       box-shadow: 0 0 20px rgba(0, 255, 127, 0.5);
-      width: 80%;
+      width: 100%;
       max-width: 500px;
-      margin: 20px auto;
-      margin-bottom: 40px;
+      margin: 0 auto;
+      position: fixed;
+      bottom: 20px; /* Colocando o player no fundo */
+      left: 50%;
+      transform: translateX(-50%); /* Centraliza o player horizontalmente */
       text-align: center;
     }
 
@@ -172,7 +175,13 @@
     </nav>
   </header>
 
-  <!-- Player de música -->
+  <!-- Seções do site -->
+  <section id="inicio">
+    <h1>Bem-vindo ao meu site!</h1>
+    <p>Este é um exemplo de site moderno com música e navegação.</p>
+  </section>
+
+  <!-- Player de música fixo -->
   <div class="music-player">
     <h2>Monica te amo!</h2>
     <audio id="audio" controls autoplay>
