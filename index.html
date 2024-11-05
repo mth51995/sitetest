@@ -94,6 +94,15 @@
       margin-top: 20px;
     }
 
+    /* Canvas para a animação das ondas sonoras */
+    canvas {
+      margin-top: 20px;
+      width: 100%;
+      height: 100px;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 5px;
+    }
+
     /* Botões de controle */
     .controls {
       display: flex;
@@ -191,10 +200,12 @@
       <source src="infinity.mp3" type="audio/mp3"> <!-- Substitua com o caminho correto do arquivo de música -->
       Seu navegador não suporta o elemento de áudio.
     </audio>
+
+    <!-- Canvas para as ondas sonoras -->
+    <canvas id="waveform"></canvas>
     
     <div class="controls">
-      <button onclick="document.getElementById('audio').play()">▶️</button>
-      <button onclick="document.getElementById('audio').pause()">⏸️</button>
+      <button id="play-button" onclick="togglePlay()" aria-label="Reproduzir ou pausar música">▶️</button>
     </div>
   </div>
 
@@ -202,6 +213,70 @@
   <footer>
     <p>&copy; 2024 Copyright by <a href="#">Mth5</a></p>
   </footer>
+
+  <script>
+    const audio = document.getElementById('audio');
+    const playButton = document.getElementById('play-button');
+    const canvas = document.getElementById('waveform');
+    const canvasCtx = canvas.getContext('2d');
+
+    // Configurações iniciais do canvas
+    canvas.width = window.innerWidth * 0.9;
+    canvas.height = 100;
+
+    // Criando o contexto de áudio usando Web Audio API
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const analyser = audioContext.createAnalyser();
+    const source = audioContext.createMediaElementSource(audio);
+    source.connect(analyser);
+    analyser.connect(audioContext.destination);
+
+    // Configurações do Analyser
+    analyser.fftSize = 256;
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    // Função para desenhar a forma da onda
+    function draw() {
+      analyser.getByteFrequencyData(dataArray);
+
+      canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const barWidth = (canvas.width / bufferLength) * 2.5;
+      let x = 0;
+
+      for (let i = 0; i < bufferLength; i++) {
+        const barHeight = dataArray[i];
+
+        // Cor da onda
+        canvasCtx.fillStyle = '#00ff7f';
+
+        canvasCtx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+
+        x += barWidth + 1;
+      }
+
+      requestAnimationFrame(draw); // Chama a função recursivamente
+    }
+
+    // Começa a animação quando a música começar a tocar
+    audio.addEventListener('play', () => {
+      audioContext.resume().then(() => {
+        draw();
+      });
+    });
+
+    // Função para alternar entre play/pause
+    function togglePlay() {
+      if (audio.paused) {
+        audio.play();
+        playButton.textContent = '⏸️';
+      } else {
+        audio.pause();
+        playButton.textContent = '▶️';
+      }
+    }
+  </script>
 
 </body>
 </html>
