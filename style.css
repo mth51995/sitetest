@@ -1,4 +1,6 @@
 /* style.css */
+
+/* Estilos Globais */
 body {
   margin: 0;
   padding: 0;
@@ -14,6 +16,7 @@ body {
   justify-content: space-between;
 }
 
+/* Cabeçalho fixo */
 header {
   display: flex;
   justify-content: center;
@@ -24,8 +27,10 @@ header {
   top: 0;
   left: 0;
   z-index: 10;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Sombra suave para o cabeçalho */
 }
 
+/* Estilos de navegação */
 nav a {
   margin: 0 15px;
   text-decoration: none;
@@ -43,11 +48,14 @@ nav a:hover {
   box-shadow: 0 0 10px #00ff7f, 0 0 20px #00ff7f;
 }
 
+/* Estilos do conteúdo principal */
 main {
   padding: 20px;
   margin-top: 80px; /* Espaço para o cabeçalho fixo */
+  flex-grow: 1; /* Garante que o conteúdo principal ocupe o espaço restante */
 }
 
+/* Seções */
 section {
   margin-bottom: 40px;
 }
@@ -60,10 +68,55 @@ section h1, section h2 {
 section p {
   text-align: center;
   margin: 10px 0;
+  font-size: 16px;
+  line-height: 1.5;
 }
 
+/* Rodapé */
 footer {
   text-align: center;
   padding: 20px;
   background-color: rgba(0, 0, 0, 0.5);
+  position: relative; /* Garante que o rodapé não sobreponha o conteúdo */
+  width: 100%;
+}
+
+footer a {
+  color: #00ff7f;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  nav a {
+    font-size: 16px; /* Tamanho de fonte menor para dispositivos móveis */
+    padding: 4px 8px;
+  }
+
+  section h1, section h2 {
+    font-size: 24px; /* Ajuste no tamanho do título */
+  }
+
+  section p {
+    font-size: 14px; /* Ajuste no tamanho do texto */
+  }
+}
+
+@media (max-width: 480px) {
+  nav a {
+    font-size: 14px; /* Tamanho de fonte ainda menor */
+    padding: 3px 6px;
+  }
+
+  section h1, section h2 {
+    font-size: 20px; /* Tamanho ainda menor para títulos */
+  }
+
+  section p {
+    font-size: 12px; /* Tamanho do texto otimizado para telas pequenas */
+  }
 }
