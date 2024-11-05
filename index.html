@@ -63,8 +63,8 @@
       box-shadow: 0 0 10px #00ff7f, 0 0 20px #00ff7f;
     }
 
-    /* Player estilo Spotify */
-    .music-player {
+    /* Player do YouTube */
+    .youtube-player {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -76,55 +76,17 @@
       max-width: 500px;
       margin: 0 auto;
       position: fixed;
-      bottom: 20px; /* Colocando o player no fundo */
+      bottom: 20px;
       left: 50%;
       transform: translateX(-50%); /* Centraliza o player horizontalmente */
       text-align: center;
     }
 
-    .music-player h2 {
+    .youtube-player h2 {
       margin: 0;
       font-size: 24px;
       color: #00ff7f;
       text-shadow: 0 0 5px rgba(0, 255, 127, 0.8);
-    }
-
-    .controls {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 15px;
-      margin-top: 20px;
-    }
-
-    .control-btn {
-      background-color: transparent;
-      border: none;
-      color: white;
-      font-size: 30px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .control-btn:hover {
-      color: #00ff7f;
-    }
-
-    /* Barra de progresso */
-    .progress-container {
-      width: 100%;
-      height: 5px;
-      background-color: #555;
-      margin-top: 15px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .progress-bar {
-      width: 0;
-      height: 100%;
-      background-color: #00ff7f;
-      border-radius: 5px;
     }
 
     /* Responsividade */
@@ -138,16 +100,8 @@
         padding: 8px 15px;
       }
 
-      .music-player h2 {
+      .youtube-player h2 {
         font-size: 20px;
-      }
-
-      .control-btn {
-        font-size: 24px;
-      }
-
-      .progress-container {
-        height: 4px;
       }
     }
 
@@ -161,20 +115,12 @@
         padding: 6px 12px;
       }
 
-      .music-player {
+      .youtube-player {
         padding: 15px;
       }
 
-      .music-player h2 {
+      .youtube-player h2 {
         font-size: 18px;
-      }
-
-      .control-btn {
-        font-size: 20px;
-      }
-
-      .progress-container {
-        height: 3px;
       }
     }
 
@@ -211,82 +157,19 @@
     </nav>
   </header>
 
-  <!-- Player estilo Spotify -->
-  <div class="music-player">
+  <!-- Player do YouTube -->
+  <div class="youtube-player">
     <h2>Monica te amo!</h2>
 
-    <!-- Player -->
-    <audio id="audio" src="infinity.mp3" preload="auto"></audio>
-
-    <div class="controls">
-      <button class="control-btn" id="prev" onclick="skipTrack(-1)">⏮️</button>
-      <button class="control-btn" id="play" onclick="togglePlay()">▶️</button>
-      <button class="control-btn" id="next" onclick="skipTrack(1)">⏭️</button>
-    </div>
-
-    <div class="progress-container" id="progress-container" onclick="setProgress(event)">
-      <div id="progress-bar" class="progress-bar"></div>
-    </div>
+    <!-- Incorporando o player do YouTube -->
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/3muBCOoeFkkVsKIs?autoplay=1&controls=1&showinfo=0&modestbranding=1&rel=0"
+    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
   </div>
 
   <!-- Rodapé com a mensagem de copyright -->
   <footer>
     <p>&copy; 2024 Copyright by <a href="#">Mth5</a></p>
   </footer>
-
-  <script>
-    const audio = document.getElementById('audio');
-    const playButton = document.getElementById('play');
-    const progressContainer = document.getElementById('progress-container');
-    const progressBar = document.getElementById('progress-bar');
-    const prevButton = document.getElementById('prev');
-    const nextButton = document.getElementById('next');
-
-    let trackIndex = 0;
-    const tracks = [
-      "infinity.mp3", // Adicione seus arquivos de áudio aqui
-      "Benson Boone - Beautiful Things (Official Music Video) (256).mp3",
-      "track3.mp3"
-    ];
-
-    // Função para alternar entre play/pause
-    function togglePlay() {
-      if (audio.paused) {
-        audio.play();
-        playButton.textContent = '⏸️';
-      } else {
-        audio.pause();
-        playButton.textContent = '▶️';
-      }
-    }
-
-    // Função para alterar o progresso da barra
-    audio.addEventListener('timeupdate', () => {
-      const progress = (audio.currentTime / audio.duration) * 100;
-      progressBar.style.width = progress + '%';
-    });
-
-    // Função para clicar na barra de progresso
-    function setProgress(event) {
-      const width = progressContainer.clientWidth;
-      const clickX = event.offsetX;
-      const duration = audio.duration;
-      audio.currentTime = (clickX / width) * duration;
-    }
-
-    // Função para pular para o próximo ou anterior
-    function skipTrack(direction) {
-      trackIndex += direction;
-      if (trackIndex < 0) trackIndex = tracks.length - 1;
-      if (trackIndex >= tracks.length) trackIndex = 0;
-      audio.src = tracks[trackIndex];
-      audio.play();
-      playButton.textContent = '⏸️';
-    }
-
-    // Iniciar o player
-    audio.src = tracks[trackIndex];
-  </script>
 
 </body>
 </html>
