@@ -34,8 +34,12 @@
       z-index: 10;
     }
 
-    nav a {
-      margin: 0 15px;
+    nav {
+      display: flex;
+      gap: 15px; /* Espaçamento entre os itens */
+    }
+
+    nav a, nav button {
       text-decoration: none;
       color: white;
       font-size: 20px;
@@ -44,9 +48,12 @@
       padding: 5px 10px;
       border-radius: 5px;
       transition: color 0.3s, box-shadow 0.3s;
+      background-color: transparent; /* Botões transparentes */
+      border: none; /* Remove a borda dos botões */
+      cursor: pointer; /* Aponta que é clicável */
     }
 
-    nav a:hover {
+    nav a:hover, nav button:hover {
       color: #00ff7f; /* Cor fluorescente */
       box-shadow: 0 0 10px #00ff7f, 0 0 20px #00ff7f;
     }
@@ -126,13 +133,15 @@
       <a href="#videos">Vídeos</a>
       <a href="#downloads">Downloads</a>
       <a href="#sobre-nos">Sobre Nós</a>
+      <button onclick="document.getElementById('audio').play()">Tocar Música</button>
+      <button onclick="document.getElementById('audio').pause()">Parar Música</button>
     </nav>
   </header>
 
   <!-- Player de música na parte inferior -->
   <div class="music-player">
     <h2>Monica te amo!</h2>
-    <audio id="audio" controls autoplay>
+    <audio id="audio" controls autoplay muted>
       <source src="infinity.mp3" type="audio/mp3"> <!-- Substitua com o caminho correto do arquivo de música -->
       Seu navegador não suporta o elemento de áudio.
     </audio>
