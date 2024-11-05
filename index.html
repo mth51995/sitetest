@@ -132,14 +132,35 @@
   <!-- Seções do site -->
   <section id="inicio">
     <h1>Bem-vindo ao Nosso Site!</h1>
-    <p>Este é um site de demonstração com um player de música e uma estética neon.</p>
   </section>
 
   <section id="videos">
     <h2>Vídeos</h2>
-    <p>Em breve, adicionaremos vídeos interessantes aqui!</p>
   </section>
 
   <section id="downloads">
     <h2>Downloads</h2>
-    <p>Aqui você poderá encontrar 
+  </section>
+
+  <section id="sobre-nos">
+    <h2>Sobre Nós</h2>
+  </section>
+
+  <!-- Player de música na parte inferior -->
+  <div class="music-player">
+    <h2>Player de Música</h2>
+    <audio id="audio" controls>
+      <source src="infinity.mp3" type="audio/mp3"> <!-- Substitua com o caminho correto do arquivo de música -->
+      Seu navegador não suporta o elemento de áudio.
+    </audio>
+    
+    <div class="controls">
+      <button onclick="document.getElementById('audio').play()">▶️</button>
+      <button onclick="document.getElementById('audio').pause()">⏸️</button>
+      <button onclick="document.getElementById('audio').volume += 0.1">🔊</button>
+      <button onclick="document.getElementById('audio').volume -= 0.1">🔉</button>
+    </div>
+  </div>
+
+</body>
+</html>
