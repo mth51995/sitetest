@@ -156,15 +156,13 @@
       <a href="#videos">Vídeos</a>
       <a href="#downloads">Downloads</a>
       <a href="#sobre-nos">Sobre Nós</a>
-      <button onclick="document.getElementById('audio').play()">Tocar Música</button>
-      <button onclick="document.getElementById('audio').pause()">Parar Música</button>
     </nav>
   </header>
 
   <!-- Player de música na parte inferior -->
   <div class="music-player">
     <h2>Monica te amo!</h2>
-    <audio id="audio" controls autoplay muted>
+    <audio id="audio" controls autoplay>
       <source src="infinity.mp3" type="audio/mp3"> <!-- Substitua com o caminho correto do arquivo de música -->
       Seu navegador não suporta o elemento de áudio.
     </audio>
@@ -172,8 +170,6 @@
     <div class="controls">
       <button onclick="document.getElementById('audio').play()">▶️</button>
       <button onclick="document.getElementById('audio').pause()">⏸️</button>
-      <button onclick="document.getElementById('audio').volume += 0.1">🔊</button>
-      <button onclick="document.getElementById('audio').volume -= 0.1">🔉</button>
     </div>
   </div>
 
