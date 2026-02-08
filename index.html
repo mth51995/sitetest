@@ -4,135 +4,110 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Monica te amo</title>
-  <!-- Importando Google Fonts para uma tipografia moderna -->
+
+  <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
   <style>
-    /* Estilos globais */
     body {
       margin: 0;
       padding: 0;
       font-family: 'Roboto', sans-serif;
-      background-image: url('buldog.png'); /* Substitua pelo caminho correto */
+      background-image: url('buldog.png'); /* coloque sua imagem aqui */
       background-size: cover;
-      background-attachment: fixed;
       background-position: center;
+      background-attachment: fixed;
       color: white;
       display: flex;
       flex-direction: column;
       height: 100vh;
-      justify-content: space-between;
       overflow: hidden;
     }
 
-    /* Cabeçalho e navegação */
+    /* HEADER */
     header {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      padding: 20px;
-      background-color: rgba(0, 0, 0, 0.7);
       position: fixed;
       top: 0;
-      left: 0;
+      width: 100%;
+      background-color: rgba(0,0,0,0.7);
+      padding: 20px;
       z-index: 10;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     }
 
     nav {
       display: flex;
-      gap: 20px;
       justify-content: center;
+      gap: 20px;
       flex-wrap: wrap;
     }
 
     nav a {
-      text-decoration: none;
       color: white;
-      font-size: 16px;
+      text-decoration: none;
       font-weight: bold;
-      text-transform: uppercase;
       padding: 10px 20px;
       border-radius: 5px;
-      transition: all 0.3s ease;
+      transition: 0.3s;
     }
 
     nav a:hover {
       background-color: #00ff7f;
       color: black;
-      box-shadow: 0 0 10px #00ff7f, 0 0 20px #00ff7f;
+      box-shadow: 0 0 10px #00ff7f;
     }
 
-    /* Player do YouTube */
+    /* PLAYER */
     .youtube-player {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-      background-color: rgba(0, 0, 0, 0.8);
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0, 255, 127, 0.5);
-      width: 100%;
-      max-width: 500px;
-      margin: 0 auto;
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%); /* Centraliza o player horizontalmente */
-      text-align: center;
-    }
-
-    .youtube-player h2 {
-      margin: 0;
-      font-size: 24px;
-      color: #00ff7f;
-      text-shadow: 0 0 5px rgba(0, 255, 127, 0.8);
-    }
-
-    /* Responsividade */
-    @media (max-width: 768px) {
-      header {
-        padding: 15px;
-      }
-
-      nav a {
-        font-size: 14px;
-        padding: 8px 15px;
-      }
-
-      .youtube-player h2 {
-        font-size: 20px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      header {
-        padding: 10px;
-      }
-
-      nav a {
-        font-size: 12px;
-        padding: 6px 12px;
-      }
-
-      .youtube-player {
-        padding: 15px;
-      }
-
-      .youtube-player h2 {
-        font-size: 18px;
-      }
-    }
-
-    /* Rodapé */
-    footer {
-      text-align: center;
-      color: white;
-      font-size: 14px;
-      padding: 20px 0;
-      background-color: rgba(0, 0, 0, 0.8);
-      position: relative;
       margin-top: auto;
+      margin-bottom: 80px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .player-box {
+      background-color: rgba(0,0,0,0.8);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,255,127,0.5);
+      max-width: 560px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .player-box h2 {
+      color: #00ff7f;
+      margin-bottom: 15px;
+      text-shadow: 0 0 5px rgba(0,255,127,0.8);
+    }
+
+    /* VIDEO RESPONSIVO */
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      height: 0;
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+    }
+
+    /* FOOTER */
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: rgba(0,0,0,0.8);
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
     }
 
     footer a {
@@ -143,36 +118,52 @@
     footer a:hover {
       text-decoration: underline;
     }
+
+    /* RESPONSIVO */
+    @media (max-width: 480px) {
+      nav a {
+        font-size: 12px;
+        padding: 6px 12px;
+      }
+
+      .player-box h2 {
+        font-size: 18px;
+      }
+    }
   </style>
 </head>
+
 <body>
 
-  <!-- Cabeçalho com o menu -->
+  <!-- HEADER -->
   <header>
     <nav>
       <a href="#inicio">Início</a>
       <a href="#videos">Vídeos</a>
       <a href="#downloads">Downloads</a>
-      <a href="#sobre-nos">Sobre Nós</a>
+      <a href="#sobre">Sobre Nós</a>
     </nav>
   </header>
 
-  <!-- Player do YouTube -->
+  <!-- PLAYER -->
   <div class="youtube-player">
-    <h2>Monica te amo!</h2>
+    <div class="player-box">
+      <h2>Monica te amo ❤️</h2>
 
-    <!-- Incorporando o player do YouTube com o novo vídeo -->
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/JFFq8xgBQZIautoplay=1&controls=1&showinfo=0&modestbranding=1&rel=0"
-    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      <div class="video-container">
+        <iframe
+          src="https://www.youtube.com/embed/JFFq8xgBQZI?autoplay=1&mute=1&controls=1&rel=0&modestbranding=1"
+          allow="autoplay; encrypted-media"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
   </div>
 
-  <!-- Rodapé com a mensagem de copyright -->
+  <!-- FOOTER -->
   <footer>
     <p>&copy; 2024 Copyright by <a href="#">Mth5</a></p>
   </footer>
 
 </body>
 </html>
-
-
-
