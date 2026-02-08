@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Mth5</title>
+  <title>Rádio Mth5</title>
 
-  <meta name="description" content="Streaming pessoal Mth5 com rádio online e relógio em tempo real">
+  <meta name="description" content="Rádio online Mth5">
   <meta name="author" content="Mth5">
 
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -32,7 +32,7 @@
       content: "";
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.45);
+      background: rgba(0,0,0,0.55);
       z-index: -1;
     }
 
@@ -40,69 +40,57 @@
       position: fixed;
       top: 0;
       width: 100%;
-      background-color: rgba(0,0,0,0.7);
-      padding: 12px;
-      z-index: 10;
+      background-color: rgba(0,0,0,0.75);
+      padding: 14px;
       text-align: center;
+      z-index: 10;
     }
 
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      padding: 8px 16px;
-      border-radius: 5px;
-      transition: 0.3s;
-    }
-
-    nav a:hover {
-      background-color: #00ff7f;
-      color: black;
-      box-shadow: 0 0 10px #00ff7f;
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+      color: #00ff7f;
     }
 
     #clock {
-      margin-top: 8px;
-      font-size: 16px;
+      margin-top: 6px;
+      font-size: 15px;
       font-weight: bold;
       letter-spacing: 1px;
-      color: #00ff7f;
     }
 
-    .player-wrapper {
+    .radio-container {
       margin-top: auto;
-      margin-bottom: 110px;
+      margin-bottom: auto;
       display: flex;
       justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
+      align-items: center;
     }
 
-    .player-box {
+    .radio-box {
       background-color: rgba(0,0,0,0.85);
-      padding: 20px;
-      border-radius: 18px;
-      box-shadow: 0 0 25px rgba(0,255,127,0.5);
-      max-width: 560px;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(0,255,127,0.6);
       width: 90%;
+      max-width: 420px;
       text-align: center;
     }
 
-    .player-box h2 {
+    .radio-box h2 {
+      margin-top: 0;
       color: #00ff7f;
-      margin-bottom: 10px;
+      font-size: 24px;
+    }
+
+    .status {
+      margin: 10px 0 20px;
+      font-size: 14px;
+      color: #ccc;
     }
 
     audio {
       width: 100%;
-      margin-top: 10px;
     }
 
     footer {
@@ -111,13 +99,12 @@
       width: 100%;
       background-color: rgba(0,0,0,0.8);
       text-align: center;
-      padding: 14px;
+      padding: 10px;
       font-size: 13px;
     }
 
-    footer a {
+    footer span {
       color: #00ff7f;
-      text-decoration: none;
     }
   </style>
 </head>
@@ -125,47 +112,25 @@
 <body>
 
   <header>
-    <nav>
-      <a href="#inicio">Início</a>
-      <a href="#radio">Rádio</a>
-      <a href="#videos">Vídeo</a>
-    </nav>
-
+    <h1>📻 Rádio Mth5</h1>
     <div id="clock"></div>
   </header>
 
-  <!-- PLAYERS -->
-  <div class="player-wrapper">
-
-    <!-- WEB RÁDIO -->
-    <div class="player-box" id="radio">
-      <h2>📻 Rádio Mth5</h2>
-      <p>Ao vivo</p>
+  <div class="radio-container">
+    <div class="radio-box">
+      <h2>AO VIVO</h2>
+      <div class="status">Transmissão online</div>
 
       <audio controls preload="none">
+        <!-- TROQUE A URL QUANDO SUA RÁDIO ESTIVER PRONTA -->
         <source src="https://SEU-SERVIDOR:8000/stream" type="audio/mpeg">
         Seu navegador não suporta áudio.
       </audio>
     </div>
-
-    <!-- YOUTUBE -->
-    <div class="player-box" id="videos">
-      <h2>🎥 Vídeo</h2>
-
-      <div style="position:relative;padding-bottom:56.25%;height:0;">
-        <iframe
-          src="https://www.youtube.com/embed/SP9owwI72nY?autoplay=1&mute=1"
-          allow="autoplay; encrypted-media"
-          allowfullscreen
-          style="position:absolute;inset:0;width:100%;height:100%;border-radius:12px;">
-        </iframe>
-      </div>
-    </div>
-
   </div>
 
   <footer>
-    <p>&copy; 2024 <a href="#">Mth5</a></p>
+    <span>&copy; 2024 Rádio Mth5</span>
   </footer>
 
   <script>
