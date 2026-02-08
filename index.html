@@ -3,12 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mth5 Rádio</title>
 
-  <title>Rádio Mth5</title>
-
-  <meta name="description" content="Rádio online Mth5">
-  <meta name="author" content="Mth5">
-
+  <!-- Fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
@@ -16,134 +13,262 @@
       margin: 0;
       padding: 0;
       font-family: 'Roboto', sans-serif;
-      background-image: url('buldog.png');
+      background-image: url('buldog.png'); /* sua imagem */
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
       color: white;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-      position: relative;
+      min-height: 100vh;
     }
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.55);
-      z-index: -1;
-    }
-
+    /* HEADER */
     header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background-color: rgba(0,0,0,0.75);
-      padding: 14px;
+      background: rgba(0,0,0,0.8);
+      padding: 20px;
       text-align: center;
-      z-index: 10;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
     }
 
     header h1 {
       margin: 0;
-      font-size: 22px;
       color: #00ff7f;
+      text-shadow: 0 0 8px rgba(0,255,127,0.8);
     }
 
     #clock {
-      margin-top: 6px;
-      font-size: 15px;
+      margin-top: 8px;
+      font-size: 16px;
       font-weight: bold;
-      letter-spacing: 1px;
+      color: #00ff7f;
     }
 
-    .radio-container {
-      margin-top: auto;
-      margin-bottom: auto;
+    /* CONTAINER CENTRAL */
+    .container {
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 0 15px;
+    }
+
+    /* PLAYER DE RÁDIO */
+    .radio-player {
+      background: rgba(0,0,0,0.8);
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,255,127,0.5);
+      margin-bottom: 25px;
+    }
+
+    .radio-player h2 {
+      color: #00ff7f;
+      margin-bottom: 15px;
+    }
+
+    .controls {
       display: flex;
       justify-content: center;
       align-items: center;
+      gap: 15px;
     }
 
-    .radio-box {
-      background-color: rgba(0,0,0,0.85);
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 0 30px rgba(0,255,127,0.6);
-      width: 90%;
-      max-width: 420px;
-      text-align: center;
+    .controls button {
+      background: #00ff7f;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 22px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(0,255,127,0.8);
     }
 
-    .radio-box h2 {
-      margin-top: 0;
-      color: #00ff7f;
-      font-size: 24px;
+    .controls input[type="range"] {
+      width: 120px;
     }
 
     .status {
-      margin: 10px 0 20px;
-      font-size: 14px;
-      color: #ccc;
-    }
-
-    audio {
-      width: 100%;
-    }
-
-    footer {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background-color: rgba(0,0,0,0.8);
-      text-align: center;
-      padding: 10px;
-      font-size: 13px;
-    }
-
-    footer span {
+      margin-top: 10px;
+      font-size: 12px;
       color: #00ff7f;
+      font-weight: bold;
+    }
+
+    /* CHAT */
+    .chat-container {
+      background: rgba(0,0,0,0.8);
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 0 20px rgba(0,255,127,0.4);
+    }
+
+    .chat-container h3 {
+      text-align: center;
+      color: #00ff7f;
+      margin-bottom: 10px;
+    }
+
+    .chat-messages {
+      height: 200px;
+      overflow-y: auto;
+      background: rgba(255,255,255,0.05);
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .chat-message {
+      margin-bottom: 6px;
+    }
+
+    .chat-message span {
+      color: #00ff7f;
+      font-weight: bold;
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 5px;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 8px;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+    }
+
+    .chat-input button {
+      background: #00ff7f;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 12px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .chat-input button:hover {
+      background: #00cc66;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 13px;
+      background: rgba(0,0,0,0.8);
+      margin-top: 30px;
     }
   </style>
 </head>
 
 <body>
 
+  <!-- HEADER -->
   <header>
-    <h1>📻 Rádio Mth5</h1>
+    <h1>Mth5 Rádio 📻</h1>
     <div id="clock"></div>
   </header>
 
-  <div class="radio-container">
-    <div class="radio-box">
-      <h2>AO VIVO</h2>
-      <div class="status">Transmissão online</div>
+  <div class="container">
 
-      <audio controls preload="none">
-        <!-- TROQUE A URL QUANDO SUA RÁDIO ESTIVER PRONTA -->
+    <!-- PLAYER DE RÁDIO -->
+    <div class="radio-player">
+      <h2>🔴 Ao Vivo</h2>
+
+      <div class="controls">
+        <button id="playBtn">▶️</button>
+
+        <input
+          type="range"
+          id="volume"
+          min="0"
+          max="1"
+          step="0.01"
+          value="0.8">
+      </div>
+
+      <div class="status" id="status">OFF</div>
+
+      <audio id="radio">
+        <!-- TROQUE PELO LINK DA SUA RÁDIO -->
         <source src="https://SEU-SERVIDOR:8000/stream" type="audio/mpeg">
-        Seu navegador não suporta áudio.
       </audio>
     </div>
+
+    <!-- CHAT -->
+    <div class="chat-container">
+      <h3>💬 Bate-papo</h3>
+
+      <div id="chatMessages" class="chat-messages"></div>
+
+      <div class="chat-input">
+        <input type="text" id="username" placeholder="Seu nome">
+        <input type="text" id="messageInput" placeholder="Digite sua mensagem">
+        <button onclick="sendMessage()">Enviar</button>
+      </div>
+    </div>
+
   </div>
 
   <footer>
-    <span>&copy; 2024 Rádio Mth5</span>
+    © 2024 Mth5 Rádio
   </footer>
 
+  <!-- SCRIPTS -->
   <script>
+    /* RELÓGIO */
     function atualizarHora() {
       const agora = new Date();
       const h = String(agora.getHours()).padStart(2, '0');
       const m = String(agora.getMinutes()).padStart(2, '0');
       const s = String(agora.getSeconds()).padStart(2, '0');
-      document.getElementById('clock').innerText = `${h}:${m}:${s}`;
+      document.getElementById('clock').innerText = `Hora atual: ${h}:${m}:${s}`;
     }
-
     atualizarHora();
     setInterval(atualizarHora, 1000);
+
+    /* PLAYER */
+    const radio = document.getElementById("radio");
+    const playBtn = document.getElementById("playBtn");
+    const volume = document.getElementById("volume");
+    const status = document.getElementById("status");
+
+    playBtn.onclick = () => {
+      if (radio.paused) {
+        radio.play();
+        playBtn.textContent = "⏸️";
+        status.textContent = "AO VIVO";
+      } else {
+        radio.pause();
+        playBtn.textContent = "▶️";
+        status.textContent = "PAUSADO";
+      }
+    };
+
+    volume.oninput = () => {
+      radio.volume = volume.value;
+    };
+
+    /* CHAT SIMPLES */
+    function sendMessage() {
+      const user = document.getElementById("username").value || "Anônimo";
+      const message = document.getElementById("messageInput").value;
+
+      if (message.trim() === "") return;
+
+      const chat = document.getElementById("chatMessages");
+      const msgDiv = document.createElement("div");
+
+      msgDiv.classList.add("chat-message");
+      msgDiv.innerHTML = `<span>${user}:</span> ${message}`;
+
+      chat.appendChild(msgDiv);
+      chat.scrollTop = chat.scrollHeight;
+
+      document.getElementById("messageInput").value = "";
+    }
   </script>
 
 </body>
