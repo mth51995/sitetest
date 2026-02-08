@@ -33,6 +33,7 @@
       padding: 20px;
       z-index: 10;
       box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      text-align: center;
     }
 
     nav {
@@ -55,6 +56,15 @@
       background-color: #00ff7f;
       color: black;
       box-shadow: 0 0 10px #00ff7f;
+    }
+
+    /* RELÓGIO */
+    #clock {
+      margin-top: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #00ff7f;
+      text-shadow: 0 0 5px rgba(0,255,127,0.8);
     }
 
     /* PLAYER */
@@ -143,6 +153,9 @@
       <a href="#downloads">Downloads</a>
       <a href="#sobre">Sobre Nós</a>
     </nav>
+
+    <!-- HORA ATUAL -->
+    <div id="clock"></div>
   </header>
 
   <!-- PLAYER -->
@@ -152,7 +165,7 @@
 
       <div class="video-container">
         <iframe
-          src="https://www.youtube.com/embed/LFfTN2xUiBU&list?autoplay=1&mute=1&controls=1&rel=0&modestbranding=1"
+          src="https://www.youtube.com/embed/SP9owwI72nY?autoplay=1&mute=1&controls=1&rel=0&modestbranding=1"
           allow="autoplay; encrypted-media"
           allowfullscreen>
         </iframe>
@@ -165,6 +178,22 @@
     <p>&copy; 2024 Copyright by <a href="#">Mth5</a></p>
   </footer>
 
+  <!-- SCRIPT DO RELÓGIO -->
+  <script>
+    function atualizarHora() {
+      const agora = new Date();
+
+      const horas = String(agora.getHours()).padStart(2, '0');
+      const minutos = String(agora.getMinutes()).padStart(2, '0');
+      const segundos = String(agora.getSeconds()).padStart(2, '0');
+
+      document.getElementById('clock').innerText =
+        `Hora atual: ${horas}:${minutos}:${segundos}`;
+    }
+
+    atualizarHora();
+    setInterval(atualizarHora, 1000);
+  </script>
+
 </body>
 </html>
-
