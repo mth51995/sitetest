@@ -3,7 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Mth5</title>
+
+  <!-- SEO básico -->
+  <meta name="description" content="Streaming pessoal Mth5 com música e relógio em tempo real">
+  <meta name="author" content="Mth5">
 
   <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -13,7 +18,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Roboto', sans-serif;
-      background-image: url('buldog.png'); /* coloque sua imagem aqui */
+      background-image: url('buldog.png');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -22,6 +27,16 @@
       flex-direction: column;
       height: 100vh;
       overflow: hidden;
+      position: relative;
+    }
+
+    /* OVERLAY PARA CONTRASTE */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: -1;
     }
 
     /* HEADER */
@@ -30,7 +45,7 @@
       top: 0;
       width: 100%;
       background-color: rgba(0,0,0,0.7);
-      padding: 20px;
+      padding: 12px;
       z-index: 10;
       box-shadow: 0 2px 5px rgba(0,0,0,0.3);
       text-align: center;
@@ -47,7 +62,7 @@
       color: white;
       text-decoration: none;
       font-weight: bold;
-      padding: 10px 20px;
+      padding: 8px 16px;
       border-radius: 5px;
       transition: 0.3s;
     }
@@ -60,9 +75,10 @@
 
     /* RELÓGIO */
     #clock {
-      margin-top: 10px;
-      font-size: 18px;
+      margin-top: 8px;
+      font-size: 16px;
       font-weight: bold;
+      letter-spacing: 1px;
       color: #00ff7f;
       text-shadow: 0 0 5px rgba(0,255,127,0.8);
     }
@@ -70,17 +86,17 @@
     /* PLAYER */
     .youtube-player {
       margin-top: auto;
-      margin-bottom: 80px;
+      margin-bottom: 90px;
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
     .player-box {
-      background-color: rgba(0,0,0,0.8);
+      background-color: rgba(0,0,0,0.85);
       padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0,255,127,0.5);
+      border-radius: 18px;
+      box-shadow: 0 0 25px rgba(0,255,127,0.5);
       max-width: 560px;
       width: 90%;
       text-align: center;
@@ -88,8 +104,14 @@
 
     .player-box h2 {
       color: #00ff7f;
-      margin-bottom: 15px;
+      margin-bottom: 5px;
       text-shadow: 0 0 5px rgba(0,255,127,0.8);
+    }
+
+    .player-box p {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-bottom: 12px;
     }
 
     /* VIDEO RESPONSIVO */
@@ -102,11 +124,10 @@
 
     .video-container iframe {
       position: absolute;
-      top: 0;
-      left: 0;
+      inset: 0;
       width: 100%;
       height: 100%;
-      border-radius: 10px;
+      border-radius: 12px;
     }
 
     /* FOOTER */
@@ -116,8 +137,8 @@
       width: 100%;
       background-color: rgba(0,0,0,0.8);
       text-align: center;
-      padding: 15px;
-      font-size: 14px;
+      padding: 14px;
+      font-size: 13px;
     }
 
     footer a {
@@ -127,6 +148,11 @@
 
     footer a:hover {
       text-decoration: underline;
+    }
+
+    /* ÂNCORAS (MENU) */
+    section {
+      height: 100vh;
     }
 
     /* RESPONSIVO */
@@ -139,11 +165,21 @@
       .player-box h2 {
         font-size: 18px;
       }
+
+      header {
+        padding: 10px;
+      }
     }
   </style>
 </head>
 
 <body>
+
+  <!-- SEÇÕES PARA MENU -->
+  <section id="inicio"></section>
+  <section id="videos"></section>
+  <section id="downloads"></section>
+  <section id="sobre"></section>
 
   <!-- HEADER -->
   <header>
@@ -151,25 +187,28 @@
       <a href="#inicio">Início</a>
       <a href="#videos">Vídeos</a>
       <a href="#downloads">Downloads</a>
-      <a href="#sobre">Sobre Nós</a>
+      <a href="#sobre">Sobre</a>
     </nav>
 
-    <!-- HORA ATUAL -->
     <div id="clock"></div>
   </header>
 
   <!-- PLAYER -->
   <div class="youtube-player">
     <div class="player-box">
-      <h2>Mth5❤️</h2>
+      <h2>Mth5 ❤️</h2>
+      <p id="greeting"></p>
 
       <div class="video-container">
         <iframe
+          loading="lazy"
           src="https://www.youtube.com/embed/SP9owwI72nY?autoplay=1&mute=1&controls=1&rel=0&modestbranding=1"
           allow="autoplay; encrypted-media"
           allowfullscreen>
         </iframe>
       </div>
+
+      <p>Caso o vídeo não inicie automaticamente, clique em ▶</p>
     </div>
   </div>
 
@@ -178,7 +217,7 @@
     <p>&copy; 2024 Copyright by <a href="#">Mth5</a></p>
   </footer>
 
-  <!-- SCRIPT DO RELÓGIO -->
+  <!-- SCRIPT -->
   <script>
     function atualizarHora() {
       const agora = new Date();
@@ -187,8 +226,17 @@
       const minutos = String(agora.getMinutes()).padStart(2, '0');
       const segundos = String(agora.getSeconds()).padStart(2, '0');
 
+      const dia = String(agora.getDate()).padStart(2, '0');
+      const mes = String(agora.getMonth() + 1).padStart(2, '0');
+      const ano = agora.getFullYear();
+
       document.getElementById('clock').innerText =
-        `Hora atual: ${horas}:${minutos}:${segundos}`;
+        `${dia}/${mes}/${ano} • ${horas}:${minutos}:${segundos}`;
+
+      const greeting = document.getElementById('greeting');
+      if (horas < 12) greeting.innerText = "Bom dia ☀️";
+      else if (horas < 18) greeting.innerText = "Boa tarde 🌤️";
+      else greeting.innerText = "Boa noite 🌙";
     }
 
     atualizarHora();
@@ -197,5 +245,3 @@
 
 </body>
 </html>
-
-
