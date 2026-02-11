@@ -48,33 +48,44 @@ header{
   filter:drop-shadow(0 0 12px #00ff7f);
 }
 
-/* PLAYER */
+/* PLAYER PEQUENO */
 .player{
   position:fixed;
   top:90px;
   left:10px;
-  width:240px;
+  width:200px;
   background:#121212;
-  border-radius:14px;
-  box-shadow:0 0 20px rgba(0,255,127,.4);
+  border-radius:12px;
+  box-shadow:0 0 18px rgba(0,255,127,.4);
   z-index:9999;
   user-select:none;
 }
+
 .drag{
   text-align:center;
-  font-size:11px;
-  padding:5px;
+  font-size:10px;
+  padding:4px;
   color:#1db954;
   cursor:grab;
 }
-.info{padding:10px}
-.title{
-  font-size:13px;
-  font-weight:bold;
-  color:#1db954;
-  white-space:nowrap;
+
+.info{padding:8px}
+
+/* NOME DA MÚSICA SLIDE */
+.track{
   overflow:hidden;
-  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:12px;
+  color:#1db954;
+}
+.track span{
+  display:inline-block;
+  padding-left:100%;
+  animation:slide 10s linear infinite;
+}
+@keyframes slide{
+  from{transform:translateX(0)}
+  to{transform:translateX(-100%)}
 }
 
 /* CONTROLES */
@@ -82,36 +93,49 @@ header{
   display:flex;
   justify-content:center;
   align-items:center;
-  gap:14px;
-  margin-top:8px;
+  gap:12px;
+  margin-top:6px;
 }
 .controls button{
   background:none;
   border:none;
-  font-size:22px;
+  font-size:20px;
   color:#1db954;
   cursor:pointer;
 }
-.play{font-size:30px}
+.play{font-size:26px}
 
-/* SLIDERS */
-.progress input,
-.volume input{
+/* PROGRESSO */
+.progress input{
   width:100%;
   accent-color:#1db954;
+  margin-top:4px;
+}
+
+/* VOLUME DIAGONAL */
+.volume{
+  display:flex;
+  justify-content:center;
   margin-top:6px;
+}
+.volume input{
+  width:80px;
+  transform:rotate(-45deg);
+  accent-color:#1db954;
 }
 
 /* EQUALIZADOR PLAYER */
 .eq-player{
   display:flex;
   justify-content:center;
-  gap:4px;
-  margin-top:8px;
+  align-items:flex-end;
+  gap:3px;
+  height:26px;
+  margin-top:6px;
 }
 .eq-player span{
   width:4px;
-  height:6px;
+  height:4px;
   background:#1db954;
 }
 
@@ -124,17 +148,19 @@ footer{
   background:rgba(0,0,0,.85);
   display:flex;
   justify-content:space-between;
-  align-items:center;
+  align-items:flex-end;
   padding:0 20px;
   box-shadow:0 0 12px rgba(0,255,127,.5);
 }
 .footer-eq{
   display:flex;
+  align-items:flex-end;
   gap:5px;
+  height:30px;
 }
 .footer-eq span{
   width:5px;
-  height:6px;
+  height:4px;
   background:#00ff7f;
 }
 
@@ -164,8 +190,9 @@ footer{
 <!-- PLAYER -->
 <div class="player" id="player">
   <div class="drag" id="drag">ARRASTE</div>
+
   <div class="info">
-    <div class="title" id="title"></div>
+    <div class="track"><span id="title"></span></div>
 
     <div class="progress">
       <input type="range" id="progress" value="0">
@@ -217,7 +244,6 @@ const eqPlayer=document.querySelectorAll("#eqPlayer span");
 const eqLeft=document.querySelectorAll("#eqLeft span");
 const eqRight=document.querySelectorAll("#eqRight span");
 
-/* AUDIO CONTEXT */
 let ctx, analyser, data;
 
 function setupAudio(){
@@ -236,14 +262,15 @@ function animateEQ(){
   const step=Math.floor(data.length/eqPlayer.length);
 
   eqPlayer.forEach((bar,i)=>{
-    bar.style.height=Math.max(6,data[i*step]/4)+"px";
+    bar.style.height=(data[i*step]/4+4)+"px";
   });
   eqLeft.forEach((bar,i)=>{
-    bar.style.height=Math.max(6,data[i*step]/5)+"px";
+    bar.style.height=(data[i*step]/5+4)+"px";
   });
   eqRight.forEach((bar,i)=>{
-    bar.style.height=Math.max(6,data[i*step]/5)+"px";
+    bar.style.height=(data[i*step]/5+4)+"px";
   });
+
   requestAnimationFrame(animateEQ);
 }
 
@@ -267,7 +294,6 @@ play.onclick=()=>{
     play.textContent="▶";
   }
 };
-
 document.getElementById("next").onclick=()=>{
   current=(current+1)%playlist.length;
   load(); audio.play(); play.textContent="⏸";
@@ -285,7 +311,7 @@ progress.oninput=e=>{
 };
 volume.oninput=()=>audio.volume=volume.value;
 
-/* ARRASTAR PLAYER */
+/* ARRASTAR */
 let dragging=false,ox=0,oy=0;
 const player=document.getElementById("player");
 const drag=document.getElementById("drag");
