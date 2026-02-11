@@ -42,21 +42,21 @@
     header {
       background: rgba(0,0,0,0.75);
       text-align: center;
-      padding: 12px;
+      padding: 14px;
       box-shadow: 0 0 15px rgba(0,255,127,0.5);
       position: relative;
       z-index: 10;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
     }
 
     .logo {
-      height: 45px;
-      max-width: 160px;
+      height: 65px;
+      max-width: 220px;
       object-fit: contain;
-      filter: drop-shadow(0 0 8px #00ff7f);
+      filter: drop-shadow(0 0 12px #00ff7f);
     }
 
     #clock {
@@ -68,7 +68,7 @@
     /* MINI PLAYER */
     .mini-player {
       position: fixed;
-      top: 95px;
+      top: 105px;
       left: 8px;
       width: 190px;
       background: rgba(0,0,0,0.75);
@@ -171,11 +171,12 @@
     /* MOBILE */
     @media (max-width: 480px) {
       header {
-        padding: 10px;
+        padding: 12px;
       }
 
       .logo {
-        height: 38px;
+        height: 55px;
+        max-width: 200px;
       }
 
       #clock {
@@ -186,7 +187,7 @@
         width: 92%;
         left: 4%;
         right: 4%;
-        top: 90px;
+        top: 100px;
       }
 
       .controls svg {
