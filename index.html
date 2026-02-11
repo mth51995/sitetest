@@ -53,7 +53,7 @@
       border-radius: 20px;
       text-align: center;
       box-shadow: 0 0 25px rgba(0,255,127,0.5);
-      max-width: 400px;
+      max-width: 420px;
       width: 90%;
     }
 
@@ -61,13 +61,14 @@
       color: #00ff7f;
       margin-bottom: 10px;
       font-size: 16px;
+      min-height: 40px;
     }
 
     .controls {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       margin-bottom: 10px;
       flex-wrap: wrap;
     }
@@ -76,11 +77,19 @@
       background: #00ff7f;
       border: none;
       border-radius: 50%;
-      width: 55px;
-      height: 55px;
-      font-size: 20px;
+      width: 56px;
+      height: 56px;
       cursor: pointer;
       box-shadow: 0 0 15px rgba(0,255,127,0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .controls button svg {
+      width: 26px;
+      height: 26px;
+      fill: black;
     }
 
     .status {
@@ -136,11 +145,26 @@
     <h2 id="musicTitle">Carregando...</h2>
 
     <div class="controls">
-      <button id="prevBtn">⏮️</button>
-      <button id="playBtn">▶️</button>
-      <button id="nextBtn">⏭️</button>
-      <button id="volDownBtn">🔉</button>
-      <button id="volUpBtn">🔊</button>
+      <button id="prevBtn" title="Anterior">
+        <svg viewBox="0 0 24 24"><path d="M6 5h2v14H6zM20 12L8 5v14z"/></svg>
+      </button>
+
+      <button id="playBtn" title="Play/Pause">
+        <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6zm8-14v14h4V5z"/></svg>
+      </button>
+
+      <button id="nextBtn" title="Próxima">
+        <svg viewBox="0 0 24 24"><path d="M6 12l12 7V5zM16 5h2v14h-2z"/></svg>
+      </button>
+
+      <button id="volDownBtn" title="Diminuir volume">
+        <svg viewBox="0 0 24 24"><path d="M7 10v4h4l5 5V5l-5 5z"/></svg>
+      </button>
+
+      <button id="volUpBtn" title="Aumentar volume">
+        <svg viewBox="0 0 24 24"><path d="M7 10v4h4l5 5V5l-5 5zM19 9v6h2V9z"/></svg>
+      </button>
     </div>
 
     <div class="status" id="status">PARADO</div>
@@ -174,6 +198,8 @@
     const status = document.getElementById("status");
     const title = document.getElementById("musicTitle");
     const playlistDiv = document.getElementById("playlist");
+    const playIcon = document.getElementById("playIcon");
+    const pauseIcon = document.getElementById("pauseIcon");
 
     const playlist = [
       "Som da Liberdade (feat. Tevão Lino & Ivair Filho) (Remix).mp3",
@@ -185,79 +211,4 @@
     let currentIndex = 0;
     audio.volume = 0.8;
 
-    function loadMusic(index) {
-      audio.src = playlist[index];
-      title.textContent = playlist[index];
-      updatePlaylistUI();
-    }
-
-    function updatePlaylistUI() {
-      playlistDiv.innerHTML = "";
-      playlist.forEach((song, index) => {
-        const div = document.createElement("div");
-        div.textContent = song;
-        if (index === currentIndex) div.classList.add("active");
-        div.onclick = () => {
-          currentIndex = index;
-          loadMusic(currentIndex);
-          playMusic();
-        };
-        playlistDiv.appendChild(div);
-      });
-    }
-
-    async function playMusic() {
-      try {
-        await audio.play();
-        playBtn.textContent = "⏸️";
-        status.textContent = "TOCANDO";
-      } catch (err) {
-        alert("Erro ao tocar a música.");
-        console.error(err);
-      }
-    }
-
-    function pauseMusic() {
-      audio.pause();
-      playBtn.textContent = "▶️";
-      status.textContent = "PAUSADO";
-    }
-
-    playBtn.onclick = () => {
-      if (audio.paused) {
-        playMusic();
-      } else {
-        pauseMusic();
-      }
-    };
-
-    nextBtn.onclick = () => {
-      currentIndex = (currentIndex + 1) % playlist.length;
-      loadMusic(currentIndex);
-      playMusic();
-    };
-
-    prevBtn.onclick = () => {
-      currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
-      loadMusic(currentIndex);
-      playMusic();
-    };
-
-    volUpBtn.onclick = () => {
-      audio.volume = Math.min(1, audio.volume + 0.1);
-    };
-
-    volDownBtn.onclick = () => {
-      audio.volume = Math.max(0, audio.volume - 0.1);
-    };
-
-    audio.addEventListener("ended", () => {
-      nextBtn.click();
-    });
-
-    // Inicializa
-    loadMusic(currentIndex);
-  </script>
-
-</body>
-</html>
+    function loadMusic
