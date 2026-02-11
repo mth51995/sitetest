@@ -169,7 +169,7 @@
 
     <div class="status" id="status">PARADO</div>
 
-    <audio id="audio" preload="auto" crossorigin="anonymous"></audio>
+    <audio id="audio" preload="auto"></audio>
 
     <div class="playlist" id="playlist"></div>
   </div>
@@ -211,4 +211,81 @@
     let currentIndex = 0;
     audio.volume = 0.8;
 
-    function loadMusic
+    function loadMusic(index) {
+      audio.src = playlist[index];
+      title.textContent = playlist[index];
+      updatePlaylistUI();
+    }
+
+    function updatePlaylistUI() {
+      playlistDiv.innerHTML = "";
+      playlist.forEach((song, index) => {
+        const div = document.createElement("div");
+        div.textContent = song;
+        if (index === currentIndex) div.classList.add("active");
+        div.onclick = () => {
+          currentIndex = index;
+          loadMusic(currentIndex);
+          playMusic();
+        };
+        playlistDiv.appendChild(div);
+      });
+    }
+
+    async function playMusic() {
+      try {
+        await audio.play();
+        playIcon.style.display = "none";
+        pauseIcon.style.display = "block";
+        status.textContent = "TOCANDO";
+      } catch (err) {
+        alert("Erro ao tocar a música.");
+        console.error(err);
+      }
+    }
+
+    function pauseMusic() {
+      audio.pause();
+      playIcon.style.display = "block";
+      pauseIcon.style.display = "none";
+      status.textContent = "PAUSADO";
+    }
+
+    playBtn.onclick = () => {
+      if (audio.paused) {
+        playMusic();
+      } else {
+        pauseMusic();
+      }
+    };
+
+    nextBtn.onclick = () => {
+      currentIndex = (currentIndex + 1) % playlist.length;
+      loadMusic(currentIndex);
+      playMusic();
+    };
+
+    prevBtn.onclick = () => {
+      currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+      loadMusic(currentIndex);
+      playMusic();
+    };
+
+    volUpBtn.onclick = () => {
+      audio.volume = Math.min(1, audio.volume + 0.1);
+    };
+
+    volDownBtn.onclick = () => {
+      audio.volume = Math.max(0, audio.volume - 0.1);
+    };
+
+    audio.addEventListener("ended", () => {
+      nextBtn.click();
+    });
+
+    // Inicializa
+    loadMusic(currentIndex);
+  </script>
+
+</body>
+</html>
