@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mth5 Rádio</title>
+  <title>Mth5 Player</title>
 
-  <!-- Fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
@@ -19,13 +18,20 @@
       background-attachment: fixed;
       color: white;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
 
     header {
       background: rgba(0,0,0,0.8);
       padding: 20px;
+      width: 100%;
       text-align: center;
       box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+      position: absolute;
+      top: 0;
     }
 
     header h1 {
@@ -41,24 +47,20 @@
       color: #00ff7f;
     }
 
-    .container {
-      max-width: 600px;
-      margin: 30px auto;
-      padding: 0 15px;
-    }
-
-    .radio-player {
+    .player-container {
       background: rgba(0,0,0,0.8);
-      padding: 20px;
-      border-radius: 15px;
+      padding: 25px;
+      border-radius: 20px;
       text-align: center;
-      box-shadow: 0 0 20px rgba(0,255,127,0.5);
-      margin-bottom: 25px;
+      box-shadow: 0 0 25px rgba(0,255,127,0.5);
+      max-width: 350px;
+      width: 90%;
     }
 
-    .radio-player h2 {
+    .player-container h2 {
       color: #00ff7f;
       margin-bottom: 15px;
+      font-size: 18px;
     }
 
     .controls {
@@ -66,21 +68,22 @@
       justify-content: center;
       align-items: center;
       gap: 15px;
+      margin-bottom: 10px;
     }
 
     .controls button {
       background: #00ff7f;
       border: none;
       border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      font-size: 22px;
+      width: 65px;
+      height: 65px;
+      font-size: 24px;
       cursor: pointer;
       box-shadow: 0 0 15px rgba(0,255,127,0.8);
     }
 
     .controls input[type="range"] {
-      width: 120px;
+      width: 150px;
     }
 
     .status {
@@ -90,70 +93,14 @@
       font-weight: bold;
     }
 
-    .chat-container {
-      background: rgba(0,0,0,0.8);
-      border-radius: 15px;
-      padding: 15px;
-      box-shadow: 0 0 20px rgba(0,255,127,0.4);
-    }
-
-    .chat-container h3 {
-      text-align: center;
-      color: #00ff7f;
-      margin-bottom: 10px;
-    }
-
-    .chat-messages {
-      height: 200px;
-      overflow-y: auto;
-      background: rgba(255,255,255,0.05);
-      padding: 10px;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      font-size: 14px;
-    }
-
-    .chat-message {
-      margin-bottom: 6px;
-    }
-
-    .chat-message span {
-      color: #00ff7f;
-      font-weight: bold;
-    }
-
-    .chat-input {
-      display: flex;
-      gap: 5px;
-    }
-
-    .chat-input input {
-      flex: 1;
-      padding: 8px;
-      border-radius: 5px;
-      border: none;
-      outline: none;
-    }
-
-    .chat-input button {
-      background: #00ff7f;
-      border: none;
-      border-radius: 5px;
-      padding: 8px 12px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .chat-input button:hover {
-      background: #00cc66;
-    }
-
     footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
       text-align: center;
       padding: 15px;
       font-size: 13px;
       background: rgba(0,0,0,0.8);
-      margin-top: 30px;
     }
   </style>
 </head>
@@ -161,44 +108,27 @@
 <body>
 
   <header>
-    <h1>Mth5 Rádio 📻</h1>
+    <h1>Mth5 Player 🎵</h1>
     <div id="clock"></div>
   </header>
 
-  <div class="container">
+  <div class="player-container">
+    <h2>Som da Liberdade (feat. Tevão Lino & Ivair Filho) (Remix)</h2>
 
-    <div class="radio-player">
-      <h2>🔴 Ao Vivo</h2>
-
-      <div class="controls">
-        <button id="playBtn">▶️</button>
-        <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8">
-      </div>
-
-      <div class="status" id="status">OFF</div>
-
-      <audio id="radio" preload="none" crossorigin="anonymous">
-        <!-- TROQUE PELO LINK DA SUA RÁDIO -->
-        <source src="https://SEU-SERVIDOR:8000/stream" type="audio/mpeg">
-      </audio>
+    <div class="controls">
+      <button id="playBtn">▶️</button>
+      <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8">
     </div>
 
-    <div class="chat-container">
-      <h3>💬 Bate-papo</h3>
+    <div class="status" id="status">PARADO</div>
 
-      <div id="chatMessages" class="chat-messages"></div>
-
-      <div class="chat-input">
-        <input type="text" id="username" placeholder="Seu nome">
-        <input type="text" id="messageInput" placeholder="Digite sua mensagem">
-        <button onclick="sendMessage()">Enviar</button>
-      </div>
-    </div>
-
+    <audio id="audio" preload="auto" crossorigin="anonymous">
+      <source src="Som da Liberdade (feat. Tevão Lino & Ivair Filho) (Remix).mp3" type="audio/mpeg">
+    </audio>
   </div>
 
   <footer>
-    © 2024 Mth5 Rádio
+    © 2024 Mth5
   </footer>
 
   <script>
@@ -212,43 +142,31 @@
     atualizarHora();
     setInterval(atualizarHora, 1000);
 
-    const radio = document.getElementById("radio");
+    const audio = document.getElementById("audio");
     const playBtn = document.getElementById("playBtn");
     const volume = document.getElementById("volume");
     const status = document.getElementById("status");
 
-    playBtn.onclick = () => {
-      if (radio.paused) {
-        radio.play();
-        playBtn.textContent = "⏸️";
-        status.textContent = "AO VIVO";
-      } else {
-        radio.pause();
-        playBtn.textContent = "▶️";
-        status.textContent = "PAUSADO";
+    playBtn.onclick = async () => {
+      try {
+        if (audio.paused) {
+          await audio.play();
+          playBtn.textContent = "⏸️";
+          status.textContent = "TOCANDO";
+        } else {
+          audio.pause();
+          playBtn.textContent = "▶️";
+          status.textContent = "PAUSADO";
+        }
+      } catch (err) {
+        alert("Erro ao reproduzir a música. Verifique o arquivo.");
+        console.error(err);
       }
     };
 
     volume.oninput = () => {
-      radio.volume = volume.value;
+      audio.volume = volume.value;
     };
-
-    function sendMessage() {
-      const user = document.getElementById("username").value || "Anônimo";
-      const message = document.getElementById("messageInput").value;
-
-      if (message.trim() === "") return;
-
-      const chat = document.getElementById("chatMessages");
-      const msgDiv = document.createElement("div");
-      msgDiv.classList.add("chat-message");
-      msgDiv.innerHTML = `<span>${user}:</span> ${message}`;
-
-      chat.appendChild(msgDiv);
-      chat.scrollTop = chat.scrollHeight;
-
-      document.getElementById("messageInput").value = "";
-    }
   </script>
 
 </body>
