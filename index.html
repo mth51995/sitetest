@@ -53,44 +53,64 @@
       border-radius: 20px;
       text-align: center;
       box-shadow: 0 0 25px rgba(0,255,127,0.5);
-      max-width: 350px;
+      max-width: 400px;
       width: 90%;
     }
 
     .player-container h2 {
       color: #00ff7f;
-      margin-bottom: 15px;
-      font-size: 18px;
+      margin-bottom: 10px;
+      font-size: 16px;
     }
 
     .controls {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 15px;
+      gap: 10px;
       margin-bottom: 10px;
+      flex-wrap: wrap;
     }
 
     .controls button {
       background: #00ff7f;
       border: none;
       border-radius: 50%;
-      width: 65px;
-      height: 65px;
-      font-size: 24px;
+      width: 55px;
+      height: 55px;
+      font-size: 20px;
       cursor: pointer;
       box-shadow: 0 0 15px rgba(0,255,127,0.8);
     }
 
-    .controls input[type="range"] {
-      width: 150px;
-    }
-
     .status {
-      margin-top: 10px;
+      margin-top: 8px;
       font-size: 12px;
       color: #00ff7f;
       font-weight: bold;
+    }
+
+    .playlist {
+      margin-top: 15px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 10px;
+      max-height: 160px;
+      overflow-y: auto;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    .playlist div {
+      padding: 6px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      cursor: pointer;
+    }
+
+    .playlist div.active {
+      background: rgba(0,255,127,0.2);
+      font-weight: bold;
+      color: #00ff7f;
     }
 
     footer {
@@ -108,23 +128,26 @@
 <body>
 
   <header>
-    <h1>Mth5 Player 🎵</h1>
+    <h1>Mth5 Player 🎧</h1>
     <div id="clock"></div>
   </header>
 
   <div class="player-container">
-    <h2>Som da Liberdade (feat. Tevão Lino & Ivair Filho) (Remix)</h2>
+    <h2 id="musicTitle">Carregando...</h2>
 
     <div class="controls">
+      <button id="prevBtn">⏮️</button>
       <button id="playBtn">▶️</button>
-      <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8">
+      <button id="nextBtn">⏭️</button>
+      <button id="volDownBtn">🔉</button>
+      <button id="volUpBtn">🔊</button>
     </div>
 
     <div class="status" id="status">PARADO</div>
 
-    <audio id="audio" preload="auto" crossorigin="anonymous">
-      <source src="Som da Liberdade (feat. Tevão Lino & Ivair Filho) (Remix).mp3" type="audio/mpeg">
-    </audio>
+    <audio id="audio" preload="auto" crossorigin="anonymous"></audio>
+
+    <div class="playlist" id="playlist"></div>
   </div>
 
   <footer>
@@ -144,29 +167,96 @@
 
     const audio = document.getElementById("audio");
     const playBtn = document.getElementById("playBtn");
-    const volume = document.getElementById("volume");
+    const nextBtn = document.getElementById("nextBtn");
+    const prevBtn = document.getElementById("prevBtn");
+    const volUpBtn = document.getElementById("volUpBtn");
+    const volDownBtn = document.getElementById("volDownBtn");
     const status = document.getElementById("status");
+    const title = document.getElementById("musicTitle");
+    const playlistDiv = document.getElementById("playlist");
 
-    playBtn.onclick = async () => {
+    const playlist = [
+      "Som da Liberdade (feat. Tevão Lino & Ivair Filho) (Remix).mp3",
+      "Benson Boone - Beautiful Things (Official Music Video) (256).mp3",
+      "infinity.mp3",
+      "Isadora Pompeo - Bênçãos Que Não Têm Fim (Counting My Blessings) [Ao Vivo] - IsadoraPompeoVEVO (youtube).mp3"
+    ];
+
+    let currentIndex = 0;
+    audio.volume = 0.8;
+
+    function loadMusic(index) {
+      audio.src = playlist[index];
+      title.textContent = playlist[index];
+      updatePlaylistUI();
+    }
+
+    function updatePlaylistUI() {
+      playlistDiv.innerHTML = "";
+      playlist.forEach((song, index) => {
+        const div = document.createElement("div");
+        div.textContent = song;
+        if (index === currentIndex) div.classList.add("active");
+        div.onclick = () => {
+          currentIndex = index;
+          loadMusic(currentIndex);
+          playMusic();
+        };
+        playlistDiv.appendChild(div);
+      });
+    }
+
+    async function playMusic() {
       try {
-        if (audio.paused) {
-          await audio.play();
-          playBtn.textContent = "⏸️";
-          status.textContent = "TOCANDO";
-        } else {
-          audio.pause();
-          playBtn.textContent = "▶️";
-          status.textContent = "PAUSADO";
-        }
+        await audio.play();
+        playBtn.textContent = "⏸️";
+        status.textContent = "TOCANDO";
       } catch (err) {
-        alert("Erro ao reproduzir a música. Verifique o arquivo.");
+        alert("Erro ao tocar a música.");
         console.error(err);
+      }
+    }
+
+    function pauseMusic() {
+      audio.pause();
+      playBtn.textContent = "▶️";
+      status.textContent = "PAUSADO";
+    }
+
+    playBtn.onclick = () => {
+      if (audio.paused) {
+        playMusic();
+      } else {
+        pauseMusic();
       }
     };
 
-    volume.oninput = () => {
-      audio.volume = volume.value;
+    nextBtn.onclick = () => {
+      currentIndex = (currentIndex + 1) % playlist.length;
+      loadMusic(currentIndex);
+      playMusic();
     };
+
+    prevBtn.onclick = () => {
+      currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+      loadMusic(currentIndex);
+      playMusic();
+    };
+
+    volUpBtn.onclick = () => {
+      audio.volume = Math.min(1, audio.volume + 0.1);
+    };
+
+    volDownBtn.onclick = () => {
+      audio.volume = Math.max(0, audio.volume - 0.1);
+    };
+
+    audio.addEventListener("ended", () => {
+      nextBtn.click();
+    });
+
+    // Inicializa
+    loadMusic(currentIndex);
   </script>
 
 </body>
