@@ -6,10 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-/* ===== RESET ===== */
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -19,7 +16,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ===== FUNDO EM VÍDEO ===== */
+/* ===== FUNDO ===== */
 #bgVideo {
   position: fixed;
   inset: 0;
@@ -70,8 +67,8 @@ header {
   position: fixed;
   top: 95px;
   left: 12px;
-  width: 210px;
-  background: rgba(0,0,0,0.82);
+  width: 220px;
+  background: rgba(0,0,0,0.85);
   border-radius: 14px;
   padding: 10px;
   box-shadow: 0 0 15px rgba(0,255,127,0.7);
@@ -108,20 +105,15 @@ header {
 .controls {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 14px;
 }
 
 .controls button {
   background: none;
   border: none;
   cursor: pointer;
-}
-
-.controls svg {
-  width: 22px;
-  height: 22px;
-  fill: #00ff7f;
-  filter: drop-shadow(0 0 6px #00ff7f);
+  font-size: 20px;
+  color: #00ff7f;
 }
 
 .volume-bar {
@@ -156,7 +148,6 @@ footer {
   justify-content: space-between;
   align-items: center;
   border-top: 2px solid #00ff7f;
-  box-shadow: 0 0 10px rgba(0,255,127,0.6);
   z-index: 1000;
 }
 
@@ -178,7 +169,6 @@ footer {
   .mini-player {
     width: 92%;
     left: 4%;
-    top: 90px;
   }
 
   .logo {
@@ -190,15 +180,18 @@ footer {
 
 <body>
 
+<!-- FUNDO -->
 <video autoplay muted loop playsinline id="bgVideo">
   <source src="grok.mp4" type="video/mp4">
 </video>
 <div class="overlay"></div>
 
+<!-- CABEÇALHO -->
 <header>
-  <img src="logo.png" class="logo" alt="Radio Mix">
+  <img src="logo.png" class="logo" alt="Rádio Mix">
 </header>
 
+<!-- PLAYER -->
 <div class="mini-player" id="player">
   <div class="radio-name">Rádio Mix</div>
 
@@ -212,16 +205,18 @@ footer {
     <button id="nextBtn">⏭</button>
   </div>
 
-  <input type="range" id="volume" class="volume-bar" min="0" max="1" step="0.01" value="0.8">
+  <input type="range" id="volume" class="volume-bar"
+         min="0" max="1" step="0.01" value="0.8">
 
-  <div class="equalizer" id="equalizer">
+  <div class="equalizer">
     <div class="bar"></div><div class="bar"></div><div class="bar"></div>
     <div class="bar"></div><div class="bar"></div><div class="bar"></div>
   </div>
 
-  <audio id="audio"></audio>
+  <audio id="audio" preload="auto"></audio>
 </div>
 
+<!-- RODAPÉ -->
 <footer>
   <div class="footer-eq">
     <div class="footer-bar"></div><div class="footer-bar"></div>
@@ -239,9 +234,8 @@ footer {
 <script>
 /* ===== RELÓGIO ===== */
 setInterval(() => {
-  const d = new Date();
   document.getElementById("clock").innerText =
-    d.toLocaleTimeString("pt-BR");
+    new Date().toLocaleTimeString("pt-BR");
 }, 1000);
 
 /* ===== PLAYLIST ===== */
@@ -252,26 +246,33 @@ const playlist = [
 ];
 
 let current = 0;
+let isPlaying = false;
+
 const audio = document.getElementById("audio");
+const playBtn = document.getElementById("playBtn");
+const trackName = document.getElementById("trackName");
+const volume = document.getElementById("volume");
+
 const bars = document.querySelectorAll(".bar");
 const footerBars = document.querySelectorAll(".footer-bar");
-const trackName = document.getElementById("trackName");
 
 /* ===== AUDIO CONTEXT ===== */
-let ctx, analyser, data;
+let ctx, analyser, data, source;
 
 function setupAudio() {
   if (ctx) return;
-  ctx = new AudioContext();
+  ctx = new (window.AudioContext || window.webkitAudioContext)();
   analyser = ctx.createAnalyser();
   analyser.fftSize = 64;
   data = new Uint8Array(analyser.frequencyBinCount);
-  const src = ctx.createMediaElementSource(audio);
-  src.connect(analyser);
+  source = ctx.createMediaElementSource(audio);
+  source.connect(analyser);
   analyser.connect(ctx.destination);
 }
 
-function eq() {
+function equalizer() {
+  if (!isPlaying) return;
+
   analyser.getByteFrequencyData(data);
 
   bars.forEach((b, i) => {
@@ -286,34 +287,87 @@ function eq() {
   document.querySelector("footer").style.boxShadow =
     `0 0 ${12 + avg/8}px rgba(0,255,127,0.9)`;
 
-  requestAnimationFrame(eq);
+  requestAnimationFrame(equalizer);
 }
 
-function load() {
+/* ===== PLAYER ===== */
+function loadTrack() {
   audio.src = playlist[current];
   trackName.innerText = playlist[current].replace(".mp3","");
 }
 
-document.getElementById("playBtn").onclick = () => {
+playBtn.onclick = () => {
   setupAudio();
   ctx.resume();
-  audio.paused ? audio.play() : audio.pause();
-  eq();
+
+  if (audio.paused) {
+    audio.play();
+    playBtn.innerText = "⏸";
+    isPlaying = true;
+    equalizer();
+  } else {
+    audio.pause();
+    playBtn.innerText = "▶";
+    isPlaying = false;
+  }
 };
 
 document.getElementById("prevBtn").onclick = () => {
   current = (current - 1 + playlist.length) % playlist.length;
-  load(); audio.play();
+  loadTrack();
+  audio.play();
 };
 
 document.getElementById("nextBtn").onclick = () => {
   current = (current + 1) % playlist.length;
-  load(); audio.play();
+  loadTrack();
+  audio.play();
 };
 
-document.getElementById("volume").oninput = e => audio.volume = e.target.value;
+audio.onended = () => {
+  current = (current + 1) % playlist.length;
+  loadTrack();
+  audio.play();
+};
 
-load();
+volume.oninput = e => audio.volume = e.target.value;
+
+/* ===== DRAG PC + MOBILE ===== */
+const player = document.getElementById("player");
+let dragging = false, offsetX = 0, offsetY = 0;
+
+function startDrag(e) {
+  dragging = true;
+  const r = player.getBoundingClientRect();
+  const x = e.touches ? e.touches[0].clientX : e.clientX;
+  const y = e.touches ? e.touches[0].clientY : e.clientY;
+  offsetX = x - r.left;
+  offsetY = y - r.top;
+}
+
+function onDrag(e) {
+  if (!dragging) return;
+  const x = e.touches ? e.touches[0].clientX : e.clientX;
+  const y = e.touches ? e.touches[0].clientY : e.clientY;
+  player.style.left = (x - offsetX) + "px";
+  player.style.top = (y - offsetY) + "px";
+}
+
+function stopDrag() {
+  dragging = false;
+}
+
+player.addEventListener("mousedown", startDrag);
+document.addEventListener("mousemove", onDrag);
+document.addEventListener("mouseup", stopDrag);
+
+player.addEventListener("touchstart", startDrag, { passive: true });
+document.addEventListener("touchmove", onDrag, { passive: true });
+document.addEventListener("touchend", stopDrag);
+
+/* ===== INIT ===== */
+loadTrack();
+audio.volume = volume.value;
 </script>
 
 </body>
