@@ -3,140 +3,207 @@
 <head>
   <meta charset="UTF-8">
   <title>Mth5 Player</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     body {
-      background: black;
-      color: #00ff99;
+      margin: 0;
+      padding: 0;
       font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      background: url("buldog.png") no-repeat center center fixed;
+      background-size: cover;
+      color: #00ff7f;
+      min-height: 100vh;
     }
-    .player {
-      background: rgba(0,0,0,0.7);
-      padding: 20px;
-      border-radius: 15px;
+
+    header {
       text-align: center;
-      width: 300px;
+      padding: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      text-shadow: 0 0 10px #00ff7f;
     }
+
+    #clock {
+      font-size: 16px;
+      margin-top: 5px;
+    }
+
+    .player-box {
+      max-width: 420px;
+      margin: 40px auto;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 0 20px rgba(0,255,127,0.5);
+      text-align: center;
+    }
+
+    .track-name {
+      margin-bottom: 15px;
+      font-size: 14px;
+      color: #00ff7f;
+    }
+
     .controls {
       display: flex;
       justify-content: center;
-      gap: 15px;
-      margin: 15px 0;
-    }
-    button {
-      background: #00ff99;
-      border: none;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
       align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
     }
-    svg {
-      width: 28px;
-      height: 28px;
-      fill: black;
+
+    .controls button {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      border: none;
+      background: #00ff7f;
+      color: black;
+      font-size: 22px;
+      cursor: pointer;
+      box-shadow: 0 0 12px rgba(0,255,127,0.8);
     }
-    input[type="range"] {
-      width: 100%;
+
+    .controls button:hover {
+      background: #00cc66;
+    }
+
+    .volume-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .volume-container input[type="range"] {
+      width: 150px;
+    }
+
+    .status {
+      margin-top: 10px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 13px;
+      background: rgba(0,0,0,0.7);
+      margin-top: 40px;
     }
   </style>
 </head>
+
 <body>
 
-<div class="player">
-  <div id="status">PARADO</div>
+  <header>
+    Mth5 Player 🎧
+    <div id="clock"></div>
+  </header>
 
-  <div class="controls">
-    <button id="prevBtn">
-      <svg viewBox="0 0 24 24"><path d="M11 18V6L2 12l9 6zm1 0l9-6-9-6v12z"/></svg>
-    </button>
+  <div class="player-box">
+    <div class="track-name" id="trackName">Carregando...</div>
 
-    <button id="playBtn">
-      <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-    </button>
+    <div class="controls">
+      <button id="prevBtn">⏮</button>
+      <button id="playBtn">▶️</button>
+      <button id="nextBtn">⏭</button>
+    </div>
 
-    <button id="nextBtn">
-      <svg viewBox="0 0 24 24"><path d="M13 6v12l9-6-9-6zm-1 0L3 12l9 6V6z"/></svg>
-    </button>
+    <div class="volume-container">
+      🔉
+      <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8">
+      🔊
+    </div>
+
+    <div class="status" id="status">PARADO</div>
+
+    <audio id="audio" preload="auto"></audio>
   </div>
 
-  <label>Volume</label>
-  <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
+  <footer>
+    © 2024 Mth5
+  </footer>
 
-  <audio id="audio"></audio>
-</div>
-
-<script>
-  const playlist = [
-    "som_da_liberdade.mp3",
-    "beautiful_things.mp3",
-    "infinity.mp3",
-    "bencaos_que_nao_tem_fim.mp3"
-  ];
-
-  let currentTrack = 0;
-  const audio = document.getElementById("audio");
-  const playBtn = document.getElementById("playBtn");
-  const prevBtn = document.getElementById("prevBtn");
-  const nextBtn = document.getElementById("nextBtn");
-  const status = document.getElementById("status");
-  const volume = document.getElementById("volume");
-  const playIcon = document.getElementById("playIcon");
-
-  function loadTrack(index) {
-    audio.src = playlist[index];
-    audio.load();
-    status.textContent = "PARADO";
-  }
-
-  function playPause() {
-    if (audio.paused) {
-      audio.play();
-      status.textContent = "TOCANDO";
-      playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-    } else {
-      audio.pause();
-      status.textContent = "PAUSADO";
-      playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+  <script>
+    // Relógio
+    function atualizarHora() {
+      const agora = new Date();
+      const h = String(agora.getHours()).padStart(2, '0');
+      const m = String(agora.getMinutes()).padStart(2, '0');
+      const s = String(agora.getSeconds()).padStart(2, '0');
+      document.getElementById("clock").innerText = `Hora atual: ${h}:${m}:${s}`;
     }
-  }
+    atualizarHora();
+    setInterval(atualizarHora, 1000);
 
-  playBtn.addEventListener("click", playPause);
+    // Player
+    const playlist = [
+      "Som da Liberdade (feat. Tevão Lino & Ivair Filho) (Remix).mp3",
+      "Benson Boone - Beautiful Things (Official Music Video) (256).mp3",
+      "infinity.mp3",
+      "Isadora Pompeo - Bênçãos Que Não Têm Fim (Counting My Blessings) [Ao Vivo] - IsadoraPompeoVEVO (youtube).mp3"
+    ];
 
-  nextBtn.addEventListener("click", () => {
-    currentTrack = (currentTrack + 1) % playlist.length;
+    let currentTrack = 0;
+
+    const audio = document.getElementById("audio");
+    const playBtn = document.getElementById("playBtn");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const volume = document.getElementById("volume");
+    const status = document.getElementById("status");
+    const trackName = document.getElementById("trackName");
+
+    function loadTrack(index) {
+      audio.src = playlist[index];
+      trackName.textContent = playlist[index];
+      status.textContent = "CARREGADO";
+    }
+
+    playBtn.onclick = () => {
+      if (audio.paused) {
+        audio.play();
+        playBtn.textContent = "⏸";
+        status.textContent = "TOCANDO";
+      } else {
+        audio.pause();
+        playBtn.textContent = "▶️";
+        status.textContent = "PAUSADO";
+      }
+    };
+
+    prevBtn.onclick = () => {
+      currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
+      loadTrack(currentTrack);
+      audio.play();
+      playBtn.textContent = "⏸";
+      status.textContent = "TOCANDO";
+    };
+
+    nextBtn.onclick = () => {
+      currentTrack = (currentTrack + 1) % playlist.length;
+      loadTrack(currentTrack);
+      audio.play();
+      playBtn.textContent = "⏸";
+      status.textContent = "TOCANDO";
+    };
+
+    volume.oninput = () => {
+      audio.volume = volume.value;
+    };
+
+    audio.onended = () => {
+      nextBtn.click();
+    };
+
+    // Inicializa
     loadTrack(currentTrack);
-    audio.play();
-    status.textContent = "TOCANDO";
-    playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-  });
-
-  prevBtn.addEventListener("click", () => {
-    currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
-    loadTrack(currentTrack);
-    audio.play();
-    status.textContent = "TOCANDO";
-    playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-  });
-
-  volume.addEventListener("input", () => {
     audio.volume = volume.value;
-  });
-
-  audio.addEventListener("ended", () => {
-    currentTrack = (currentTrack + 1) % playlist.length;
-    loadTrack(currentTrack);
-    audio.play();
-  });
-
-  loadTrack(currentTrack);
-</script>
+  </script>
 
 </body>
 </html>
