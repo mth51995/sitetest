@@ -39,6 +39,7 @@
       z-index: -1;
     }
 
+    /* CABEÇALHO */
     header {
       background: rgba(0,0,0,0.75);
       text-align: center;
@@ -47,31 +48,23 @@
       position: relative;
       z-index: 10;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      gap: 6px;
     }
 
-    /* LOGO MAIOR SEM AUMENTAR O CABEÇALHO */
+    /* LOGO */
     .logo {
-      height: 80px;
-      max-width: 260px;
+      height: 90px;
+      max-width: 95%;
       object-fit: contain;
       filter: drop-shadow(0 0 14px #00ff7f);
-      margin-top: -10px;
-      margin-bottom: -10px;
-    }
-
-    #clock {
-      font-size: 12px;
-      color: #00ff7f;
-      text-shadow: 0 0 6px #00ff7f;
+      transition: transform 0.08s ease;
     }
 
     /* MINI PLAYER */
     .mini-player {
       position: fixed;
-      top: 105px;
+      top: 110px;
       left: 8px;
       width: 190px;
       background: rgba(0,0,0,0.75);
@@ -169,6 +162,12 @@
       background: rgba(0,0,0,0.75);
       color: #00ff7f;
       z-index: 10;
+      box-shadow: 0 0 15px rgba(0,255,127,0.5);
+    }
+
+    #clock {
+      font-size: 12px;
+      text-shadow: 0 0 6px #00ff7f;
     }
 
     /* MOBILE */
@@ -178,14 +177,7 @@
       }
 
       .logo {
-        height: 70px;
-        max-width: 240px;
-        margin-top: -8px;
-        margin-bottom: -8px;
-      }
-
-      #clock {
-        font-size: 11px;
+        height: 80px;
       }
 
       .mini-player {
@@ -224,8 +216,7 @@
   <div class="overlay"></div>
 
   <header>
-    <img src="logo.png" alt="Logo Rádio Mix" class="logo">
-    <div id="clock"></div>
+    <img src="logo.png" alt="Logo Rádio Mix" class="logo" id="logo">
   </header>
 
   <!-- PLAYER FIXO -->
@@ -261,7 +252,7 @@
 
     <input type="range" id="volume" class="volume-bar" min="0" max="1" step="0.01" value="0.8">
 
-    <!-- EQUALIZADOR REAL -->
+    <!-- EQUALIZADOR -->
     <div class="equalizer" id="equalizer">
       <div class="bar"></div>
       <div class="bar"></div>
@@ -276,7 +267,8 @@
   </div>
 
   <footer>
-    @mth5 2024
+    <div>@mth5 2024</div>
+    <div id="clock"></div>
   </footer>
 
   <script>
@@ -310,6 +302,7 @@
     const volume = document.getElementById("volume");
     const trackName = document.getElementById("trackName");
     const bars = document.querySelectorAll(".bar");
+    const logo = document.getElementById("logo");
 
     let audioContext, analyser, source, dataArray;
 
@@ -332,12 +325,19 @@
       analyser.getByteFrequencyData(dataArray);
 
       const step = Math.floor(dataArray.length / bars.length);
+      let total = 0;
 
       bars.forEach((bar, i) => {
         const value = dataArray[i * step] || 0;
         const height = Math.max(4, value / 4);
         bar.style.height = height + "px";
+        total += value;
       });
+
+      // LOGO PULSANDO COM O SOM
+      const avg = total / bars.length;
+      const scale = 1 + avg / 300;
+      logo.style.transform = `scale(${scale})`;
 
       requestAnimationFrame(updateEqualizer);
     }
@@ -360,6 +360,7 @@
       audio.pause();
       playIcon.style.display = "inline";
       pauseIcon.style.display = "none";
+      logo.style.transform = "scale(1)";
     }
 
     playBtn.onclick = () => {
