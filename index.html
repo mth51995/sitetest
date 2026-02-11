@@ -25,6 +25,8 @@
       color: #00ff7f;
       text-shadow: 0 0 10px #00ff7f;
       box-shadow: 0 0 15px rgba(0,255,127,0.5);
+      position: relative;
+      z-index: 10;
     }
 
     #clock {
@@ -35,8 +37,8 @@
     /* MINI PLAYER FIXO */
     .mini-player {
       position: fixed;
-      top: 15px;
-      left: 15px;
+      top: 85px; /* abaixo do cabeçalho */
+      left: 10px;
       width: 210px;
       background: rgba(0,0,0,0.75);
       border-radius: 12px;
@@ -129,6 +131,34 @@
       font-size: 12px;
       background: rgba(0,0,0,0.75);
       color: #00ff7f;
+    }
+
+    /* MELHORIAS MOBILE */
+    @media (max-width: 480px) {
+      header {
+        font-size: 20px;
+        padding: 12px;
+      }
+
+      #clock {
+        font-size: 12px;
+      }
+
+      .mini-player {
+        width: 92%;
+        left: 4%;
+        right: 4%;
+        top: 85px;
+      }
+
+      .controls svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      .volume-bar {
+        height: 6px;
+      }
     }
   </style>
 </head>
