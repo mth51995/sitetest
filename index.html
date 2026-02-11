@@ -1,260 +1,307 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Radio Mix</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>Radio Mix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:black;
-  color:#00ff7f;
-  overflow:hidden;
-}
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: white;
+      min-height: 100vh;
+      background: black;
+      overflow-x: hidden;
+    }
 
-/* CABEÇALHO */
-header{
-  position:fixed;
-  top:0;
-  width:100%;
-  height:70px;
-  background:rgba(0,0,0,.75);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  box-shadow:0 0 15px rgba(0,255,127,.5);
-  z-index:1000;
-}
+    /* FUNDO EM VÍDEO */
+    #bgVideo {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+      filter: brightness(1.4) contrast(1.15);
+    }
 
-.logo{
-  height:90px;
-  margin-top:20px;
-  filter:drop-shadow(0 0 15px #00ff7f);
-}
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: -1;
+    }
 
-/* PLAYER */
-.mini-player{
-  position:fixed;
-  top:100px;
-  left:20px;
-  width:220px;
-  background:rgba(0,0,0,.85);
-  border-radius:15px;
-  padding:10px;
-  box-shadow:0 0 15px rgba(0,255,127,.6);
-  z-index:9999;
-  touch-action:none;
-}
+    /* CABEÇALHO */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 6px 0;
+      background: rgba(0,0,0,0.75);
+      box-shadow: 0 0 15px rgba(0,255,127,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
 
-.radio-name{
-  text-align:center;
-  font-weight:bold;
-  margin-bottom:5px;
-}
+    .logo {
+      height: 60px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 12px #00ff7f);
+      animation: pulse 2.5s infinite;
+    }
 
-.track{
-  font-size:11px;
-  white-space:nowrap;
-  overflow:hidden;
-}
+    @keyframes pulse {
+      0% { transform: scale(1); filter: drop-shadow(0 0 10px #00ff7f); }
+      50% { transform: scale(1.07); filter: drop-shadow(0 0 18px #00ff7f); }
+      100% { transform: scale(1); filter: drop-shadow(0 0 10px #00ff7f); }
+    }
 
-.track span{
-  display:inline-block;
-  animation:scroll 10s linear infinite;
-}
+    /* PLAYER FLUTUANTE */
+    .mini-player {
+      position: fixed;
+      top: 90px;
+      left: 10px;
+      width: 190px;
+      background: rgba(0,0,0,0.8);
+      border-radius: 12px;
+      padding: 8px;
+      box-shadow: 0 0 12px rgba(0,255,127,0.6);
+      z-index: 9999;
+      touch-action: none;
+      user-select: none;
+    }
 
-@keyframes scroll{
-  from{transform:translateX(100%)}
-  to{transform:translateX(-100%)}
-}
+    .radio-name {
+      text-align: center;
+      font-size: 11px;
+      font-weight: bold;
+      color: #00ff7f;
+      margin-bottom: 4px;
+    }
 
-.controls{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-  margin:8px 0;
-}
+    .track-marquee {
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 10px;
+      color: #00ff7f;
+      margin-bottom: 5px;
+    }
 
-.controls button{
-  background:none;
-  border:none;
-  cursor:pointer;
-}
+    .track-marquee span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 9s linear infinite;
+    }
 
-.controls svg{
-  width:26px;
-  height:26px;
-  fill:#00ff7f;
-}
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-100%); }
+    }
 
-input[type=range]{
-  width:100%;
-}
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
 
-.equalizer{
-  display:flex;
-  justify-content:center;
-  gap:3px;
-  height:18px;
-  margin-top:8px;
-}
+    .controls button {
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+    }
 
-.bar{
-  width:4px;
-  background:#00ff7f;
-  height:4px;
-}
+    .controls svg {
+      width: 20px;
+      height: 20px;
+      fill: #00ff7f;
+      filter: drop-shadow(0 0 5px #00ff7f);
+      transition: transform 0.1s;
+    }
 
-/* RODAPÉ */
-footer{
-  position:fixed;
-  bottom:0;
-  width:100%;
-  height:40px;
-  background:rgba(0,0,0,.75);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  box-shadow:0 0 15px rgba(0,255,127,.5);
-}
+    .controls svg:hover {
+      transform: scale(1.15);
+    }
 
-.footer-eq{
-  display:flex;
-  gap:3px;
-}
+    .volume-bar {
+      width: 100%;
+      height: 6px;
+      margin-top: 4px;
+    }
 
-.footer-eq div{
-  width:4px;
-  height:6px;
-  background:#00ff7f;
-}
+    /* EQUALIZADOR DO PLAYER */
+    .equalizer {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 3px;
+      margin-top: 6px;
+      height: 16px;
+    }
 
-/* MOBILE */
-@media(max-width:480px){
-  .mini-player{
-    width:90%;
-    left:5%;
-  }
-}
-</style>
+    .bar {
+      width: 4px;
+      height: 4px;
+      background: #00ff7f;
+      box-shadow: 0 0 6px #00ff7f;
+      transition: height 0.05s;
+    }
+
+    /* RODAPÉ */
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: rgba(0,0,0,0.75);
+      padding: 6px 8px;
+      font-size: 11px;
+      color: #00ff7f;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 0 12px rgba(0,255,127,0.5);
+      z-index: 1000;
+    }
+
+    .footer-eq {
+      display: flex;
+      gap: 3px;
+      height: 14px;
+      align-items: flex-end;
+    }
+
+    .footer-bar {
+      width: 4px;
+      height: 4px;
+      background: #00ff7f;
+      box-shadow: 0 0 6px #00ff7f;
+      transition: height 0.05s;
+    }
+
+    /* MOBILE */
+    @media (max-width: 480px) {
+      .mini-player {
+        width: 92%;
+        left: 4%;
+        top: 85px;
+      }
+
+      .controls svg {
+        width: 22px;
+        height: 22px;
+      }
+
+      .logo {
+        height: 55px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<header>
-  <img src="logo.png" class="logo">
-</header>
+  <!-- VÍDEO DE FUNDO -->
+  <video autoplay muted loop playsinline id="bgVideo">
+    <source src="grok.mp4" type="video/mp4">
+  </video>
+  <div class="overlay"></div>
 
-<div class="mini-player" id="player">
-  <div class="radio-name">Radio Mix</div>
+  <!-- CABEÇALHO -->
+  <header>
+    <img src="logo.png" alt="Radio Mix" class="logo">
+  </header>
 
-  <div class="track">
-    <span id="trackName"></span>
+  <!-- PLAYER -->
+  <div class="mini-player" id="player">
+    <div class="radio-name">Radio Mix</div>
+
+    <div class="track-marquee">
+      <span id="trackName">Carregando música...</span>
+    </div>
+
+    <div class="controls">
+      <button id="prevBtn">⏮</button>
+      <button id="playBtn">▶</button>
+      <button id="nextBtn">⏭</button>
+    </div>
+
+    <input type="range" id="volume" class="volume-bar" min="0" max="1" step="0.01" value="0.8">
+
+    <div class="equalizer" id="equalizer">
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+    </div>
+
+    <audio id="audio" preload="auto"></audio>
   </div>
 
-  <div class="controls">
-    <button id="prev">⏮</button>
-    <button id="play">▶</button>
-    <button id="next">⏭</button>
-  </div>
-
-  <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8">
-
-  <div class="equalizer" id="eq">
-    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-    <div class="bar"></div><div class="bar"></div>
-  </div>
-
-  <audio id="audio" preload="auto"></audio>
-</div>
-
-<footer>
-  <div class="footer-eq" id="footerEq">
-    <div></div><div></div><div></div><div></div>
-  </div>
-</footer>
+  <!-- RODAPÉ -->
+  <footer>
+    <div class="footer-eq">
+      <div class="footer-bar"></div><div class="footer-bar"></div>
+      <div class="footer-bar"></div><div class="footer-bar"></div>
+    </div>
+    <div>© Radio Mix</div>
+    <div class="footer-eq">
+      <div class="footer-bar"></div><div class="footer-bar"></div>
+      <div class="footer-bar"></div><div class="footer-bar"></div>
+    </div>
+  </footer>
 
 <script>
-const playlist=[
- "Som da Liberdade (feat. Tevão Lino & Ivair Filho) (Remix).mp3",
- "Benson Boone - Beautiful Things (Official Music Video) (256).mp3"
+/* PLAYLIST — SOMENTE OS NOMES MUDARAM */
+const playlist = [
+  "Som da Liberdade (feat. Tevão Lino & Ivair Filho) (Remix).mp3",
+  "Benson Boone - Beautiful Things (Official Music Video) (256).mp3"
 ];
 
-let current=0;
-const audio=document.getElementById("audio");
-const trackName=document.getElementById("trackName");
-const playBtn=document.getElementById("play");
-const bars=document.querySelectorAll(".bar");
-const footerBars=document.querySelectorAll(".footer-eq div");
+let currentTrack = 0;
+const audio = document.getElementById("audio");
+const trackName = document.getElementById("trackName");
+const bars = document.querySelectorAll(".bar");
+const footerBars = document.querySelectorAll(".footer-bar");
 
-function loadTrack(){
- audio.src=playlist[current];
- trackName.textContent=playlist[current];
+function loadTrack(i) {
+  audio.src = playlist[i];
+  trackName.textContent = playlist[i];
 }
-loadTrack();
 
-playBtn.onclick=()=>{
- if(audio.paused){
+loadTrack(currentTrack);
+audio.volume = 0.8;
+
+document.getElementById("playBtn").onclick = () => {
+  audio.paused ? audio.play() : audio.pause();
+};
+
+document.getElementById("nextBtn").onclick = () => {
+  currentTrack = (currentTrack + 1) % playlist.length;
+  loadTrack(currentTrack);
   audio.play();
-  playBtn.textContent="⏸";
- }else{
-  audio.pause();
-  playBtn.textContent="▶";
- }
 };
 
-document.getElementById("next").onclick=()=>{
- current=(current+1)%playlist.length;
- loadTrack();
- audio.play();
+document.getElementById("prevBtn").onclick = () => {
+  currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
+  loadTrack(currentTrack);
+  audio.play();
 };
 
-document.getElementById("prev").onclick=()=>{
- current=(current-1+playlist.length)%playlist.length;
- loadTrack();
- audio.play();
+document.getElementById("volume").oninput = e => {
+  audio.volume = e.target.value;
 };
 
-document.getElementById("volume").oninput=e=>{
- audio.volume=e.target.value;
-};
+audio.onended = () => document.getElementById("nextBtn").click();
 
-audio.onended=()=>document.getElementById("next").click();
-
-/* Equalizador fake */
-setInterval(()=>{
- bars.forEach(b=>b.style.height=Math.random()*16+"px");
- footerBars.forEach(b=>b.style.height=Math.random()*16+"px");
-},120);
-
-/* ARRASTAR */
-const player=document.getElementById("player");
-let drag=false,ox=0,oy=0;
-
-player.addEventListener("mousedown",e=>{
- drag=true;
- ox=e.offsetX; oy=e.offsetY;
-});
-document.addEventListener("mousemove",e=>{
- if(!drag)return;
- player.style.left=e.clientX-ox+"px";
- player.style.top=e.clientY-oy+"px";
-});
-document.addEventListener("mouseup",()=>drag=false);
-
-player.addEventListener("touchstart",e=>{
- drag=true;
- ox=e.touches[0].clientX-player.offsetLeft;
- oy=e.touches[0].clientY-player.offsetTop;
-});
-document.addEventListener("touchmove",e=>{
- if(!drag)return;
- player.style.left=e.touches[0].clientX-ox+"px";
- player.style.top=e.touches[0].clientY-oy+"px";
-});
-document.addEventListener("touchend",()=>drag=false);
+/* EQUALIZADOR SIMPLES */
+setInterval(() => {
+  bars.forEach(b => b.style.height = Math.random() * 14 + "px");
+  footerBars.forEach(b => b.style.height = Math.random() * 14 + "px");
+}, 120);
 </script>
 
 </body>
