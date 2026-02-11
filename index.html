@@ -69,7 +69,7 @@
       justify-content: center;
       align-items: center;
       gap: 12px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       flex-wrap: wrap;
     }
 
@@ -90,6 +90,18 @@
       width: 26px;
       height: 26px;
       fill: black;
+    }
+
+    .volume-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .volume-container input[type="range"] {
+      width: 150px;
     }
 
     .status {
@@ -157,14 +169,13 @@
       <button id="nextBtn" title="Próxima">
         <svg viewBox="0 0 24 24"><path d="M6 12l12 7V5zM16 5h2v14h-2z"/></svg>
       </button>
+    </div>
 
-      <button id="volDownBtn" title="Diminuir volume">
-        <svg viewBox="0 0 24 24"><path d="M7 10v4h4l5 5V5l-5 5z"/></svg>
-      </button>
-
-      <button id="volUpBtn" title="Aumentar volume">
-        <svg viewBox="0 0 24 24"><path d="M7 10v4h4l5 5V5l-5 5zM19 9v6h2V9z"/></svg>
-      </button>
+    <div class="volume-container">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="#00ff7f">
+        <path d="M7 10v4h4l5 5V5l-5 5z"/>
+      </svg>
+      <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.8">
     </div>
 
     <div class="status" id="status">PARADO</div>
@@ -193,8 +204,7 @@
     const playBtn = document.getElementById("playBtn");
     const nextBtn = document.getElementById("nextBtn");
     const prevBtn = document.getElementById("prevBtn");
-    const volUpBtn = document.getElementById("volUpBtn");
-    const volDownBtn = document.getElementById("volDownBtn");
+    const volumeSlider = document.getElementById("volumeSlider");
     const status = document.getElementById("status");
     const title = document.getElementById("musicTitle");
     const playlistDiv = document.getElementById("playlist");
@@ -209,7 +219,7 @@
     ];
 
     let currentIndex = 0;
-    audio.volume = 0.8;
+    audio.volume = volumeSlider.value;
 
     function loadMusic(index) {
       audio.src = playlist[index];
@@ -271,12 +281,8 @@
       playMusic();
     };
 
-    volUpBtn.onclick = () => {
-      audio.volume = Math.min(1, audio.volume + 0.1);
-    };
-
-    volDownBtn.onclick = () => {
-      audio.volume = Math.max(0, audio.volume - 0.1);
+    volumeSlider.oninput = () => {
+      audio.volume = volumeSlider.value;
     };
 
     audio.addEventListener("ended", () => {
