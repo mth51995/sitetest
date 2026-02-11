@@ -13,7 +13,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Roboto', sans-serif;
-      background-image: url('buldog.png'); /* sua imagem */
+      background-image: url('buldog.png');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -21,7 +21,6 @@
       min-height: 100vh;
     }
 
-    /* HEADER */
     header {
       background: rgba(0,0,0,0.8);
       padding: 20px;
@@ -42,14 +41,12 @@
       color: #00ff7f;
     }
 
-    /* CONTAINER CENTRAL */
     .container {
       max-width: 600px;
       margin: 30px auto;
       padding: 0 15px;
     }
 
-    /* PLAYER DE RÁDIO */
     .radio-player {
       background: rgba(0,0,0,0.8);
       padding: 20px;
@@ -93,7 +90,6 @@
       font-weight: bold;
     }
 
-    /* CHAT */
     .chat-container {
       background: rgba(0,0,0,0.8);
       border-radius: 15px;
@@ -152,7 +148,6 @@
       background: #00cc66;
     }
 
-    /* FOOTER */
     footer {
       text-align: center;
       padding: 15px;
@@ -165,7 +160,6 @@
 
 <body>
 
-  <!-- HEADER -->
   <header>
     <h1>Mth5 Rádio 📻</h1>
     <div id="clock"></div>
@@ -173,31 +167,22 @@
 
   <div class="container">
 
-    <!-- PLAYER DE RÁDIO -->
     <div class="radio-player">
       <h2>🔴 Ao Vivo</h2>
 
       <div class="controls">
         <button id="playBtn">▶️</button>
-
-        <input
-          type="range"
-          id="volume"
-          min="0"
-          max="1"
-          step="0.01"
-          value="0.8">
+        <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8">
       </div>
 
       <div class="status" id="status">OFF</div>
 
-      <audio id="radio">
+      <audio id="radio" preload="none" crossorigin="anonymous">
         <!-- TROQUE PELO LINK DA SUA RÁDIO -->
         <source src="https://SEU-SERVIDOR:8000/stream" type="audio/mpeg">
       </audio>
     </div>
 
-    <!-- CHAT -->
     <div class="chat-container">
       <h3>💬 Bate-papo</h3>
 
@@ -216,9 +201,7 @@
     © 2024 Mth5 Rádio
   </footer>
 
-  <!-- SCRIPTS -->
   <script>
-    /* RELÓGIO */
     function atualizarHora() {
       const agora = new Date();
       const h = String(agora.getHours()).padStart(2, '0');
@@ -229,7 +212,6 @@
     atualizarHora();
     setInterval(atualizarHora, 1000);
 
-    /* PLAYER */
     const radio = document.getElementById("radio");
     const playBtn = document.getElementById("playBtn");
     const volume = document.getElementById("volume");
@@ -251,7 +233,6 @@
       radio.volume = volume.value;
     };
 
-    /* CHAT SIMPLES */
     function sendMessage() {
       const user = document.getElementById("username").value || "Anônimo";
       const message = document.getElementById("messageInput").value;
@@ -260,7 +241,6 @@
 
       const chat = document.getElementById("chatMessages");
       const msgDiv = document.createElement("div");
-
       msgDiv.classList.add("chat-message");
       msgDiv.innerHTML = `<span>${user}:</span> ${message}`;
 
