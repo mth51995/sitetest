@@ -35,30 +35,30 @@
     /* MINI PLAYER FIXO */
     .mini-player {
       position: fixed;
-      top: 12px;
-      left: 12px;
-      width: 250px;
+      top: 15px;
+      left: 15px;
+      width: 210px;
       background: rgba(0,0,0,0.75);
       border-radius: 12px;
-      padding: 10px;
-      box-shadow: 0 0 15px rgba(0,255,127,0.6);
+      padding: 8px;
+      box-shadow: 0 0 12px rgba(0,255,127,0.6);
       z-index: 9999;
     }
 
     .radio-name {
       text-align: center;
-      font-size: 13px;
+      font-size: 11px;
       font-weight: bold;
       color: #00ff7f;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .track-marquee {
       overflow: hidden;
       white-space: nowrap;
-      font-size: 11px;
+      font-size: 10px;
       color: #00ff7f;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
 
     .track-marquee span {
@@ -76,8 +76,8 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 6px;
+      gap: 6px;
+      margin-bottom: 5px;
     }
 
     .controls button {
@@ -88,10 +88,10 @@
     }
 
     .controls svg {
-      width: 26px;
-      height: 26px;
+      width: 22px;
+      height: 22px;
       fill: #00ff7f;
-      filter: drop-shadow(0 0 6px #00ff7f);
+      filter: drop-shadow(0 0 5px #00ff7f);
       transition: transform 0.1s;
     }
 
@@ -107,16 +107,16 @@
     .leds {
       display: flex;
       justify-content: center;
-      gap: 5px;
-      margin-top: 6px;
+      gap: 4px;
+      margin-top: 5px;
     }
 
     .led {
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: #003300;
-      box-shadow: 0 0 4px #003300;
+      box-shadow: 0 0 3px #003300;
       transition: background 0.1s, box-shadow 0.1s;
     }
 
@@ -271,12 +271,12 @@
         leds.forEach(led => {
           const on = Math.random() > 0.5;
           led.style.background = on ? "#00ff7f" : "#003300";
-          led.style.boxShadow = on ? "0 0 10px #00ff7f" : "0 0 4px #003300";
+          led.style.boxShadow = on ? "0 0 8px #00ff7f" : "0 0 3px #003300";
         });
       } else {
         leds.forEach(led => {
           led.style.background = "#003300";
-          led.style.boxShadow = "0 0 4px #003300";
+          led.style.boxShadow = "0 0 3px #003300";
         });
       }
     }, 140);
