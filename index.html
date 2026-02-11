@@ -68,40 +68,56 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       margin-bottom: 12px;
       flex-wrap: wrap;
     }
 
-    .controls button {
-      background: #00ff7f;
+    .control-btn {
+      background: radial-gradient(circle at top left, #00ff7f, #00cc66);
       border: none;
       border-radius: 50%;
-      width: 56px;
-      height: 56px;
+      width: 64px;
+      height: 64px;
       cursor: pointer;
-      box-shadow: 0 0 15px rgba(0,255,127,0.8);
+      box-shadow: 0 0 18px rgba(0,255,127,0.7);
       display: flex;
       justify-content: center;
       align-items: center;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
     }
 
-    .controls button svg {
-      width: 26px;
-      height: 26px;
-      fill: black;
+    .control-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(0,255,127,0.9);
+    }
+
+    .control-btn:active {
+      transform: scale(0.95);
+    }
+
+    .control-btn svg {
+      width: 28px;
+      height: 28px;
+      fill: white;
     }
 
     .volume-container {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 10px;
       margin-top: 8px;
     }
 
+    .volume-container svg {
+      width: 22px;
+      height: 22px;
+      fill: #00ff7f;
+    }
+
     .volume-container input[type="range"] {
-      width: 150px;
+      width: 160px;
     }
 
     .status {
@@ -157,22 +173,34 @@
     <h2 id="musicTitle">Carregando...</h2>
 
     <div class="controls">
-      <button id="prevBtn" title="Anterior">
-        <svg viewBox="0 0 24 24"><path d="M6 5h2v14H6zM20 12L8 5v14z"/></svg>
+      <!-- Anterior -->
+      <button id="prevBtn" class="control-btn" title="Anterior">
+        <svg viewBox="0 0 24 24">
+          <path d="M6 5h2v14H6zM20 12L8 5v14z"/>
+        </svg>
       </button>
 
-      <button id="playBtn" title="Play/Pause">
-        <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-        <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6zm8-14v14h4V5z"/></svg>
+      <!-- Play / Pause -->
+      <button id="playBtn" class="control-btn" title="Play/Pause">
+        <svg id="playIcon" viewBox="0 0 24 24">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+        <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none;">
+          <path d="M6 19h4V5H6zm8-14v14h4V5z"/>
+        </svg>
       </button>
 
-      <button id="nextBtn" title="Próxima">
-        <svg viewBox="0 0 24 24"><path d="M6 12l12 7V5zM16 5h2v14h-2z"/></svg>
+      <!-- Próxima -->
+      <button id="nextBtn" class="control-btn" title="Próxima">
+        <svg viewBox="0 0 24 24">
+          <path d="M6 12l12 7V5zM16 5h2v14h-2z"/>
+        </svg>
       </button>
     </div>
 
+    <!-- Barra de volume -->
     <div class="volume-container">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="#00ff7f">
+      <svg viewBox="0 0 24 24">
         <path d="M7 10v4h4l5 5V5l-5 5z"/>
       </svg>
       <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.8">
@@ -254,44 +282,4 @@
       }
     }
 
-    function pauseMusic() {
-      audio.pause();
-      playIcon.style.display = "block";
-      pauseIcon.style.display = "none";
-      status.textContent = "PAUSADO";
-    }
-
-    playBtn.onclick = () => {
-      if (audio.paused) {
-        playMusic();
-      } else {
-        pauseMusic();
-      }
-    };
-
-    nextBtn.onclick = () => {
-      currentIndex = (currentIndex + 1) % playlist.length;
-      loadMusic(currentIndex);
-      playMusic();
-    };
-
-    prevBtn.onclick = () => {
-      currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
-      loadMusic(currentIndex);
-      playMusic();
-    };
-
-    volumeSlider.oninput = () => {
-      audio.volume = volumeSlider.value;
-    };
-
-    audio.addEventListener("ended", () => {
-      nextBtn.click();
-    });
-
-    // Inicializa
-    loadMusic(currentIndex);
-  </script>
-
-</body>
-</html>
+    function pauseMusic()
