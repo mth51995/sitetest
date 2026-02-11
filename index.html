@@ -70,7 +70,7 @@ header{
 
 .info{padding:8px}
 
-/* NOME DA MÚSICA (SLIDE) */
+/* NOME DA MÚSICA */
 .track{
   overflow:hidden;
   white-space:nowrap;
@@ -110,7 +110,7 @@ header{
 }
 .play{font-size:26px}
 
-/* VOLUME HORIZONTAL */
+/* VOLUME */
 .volume{
   display:flex;
   align-items:center;
@@ -127,18 +127,18 @@ header{
   accent-color:#1db954;
 }
 
-/* EQ PLAYER */
+/* 🔽 EQ DO PLAYER (MENOR) */
 .eq-player{
   display:flex;
   justify-content:center;
   align-items:flex-end;
-  gap:3px;
-  height:28px;
-  margin-top:6px;
+  gap:2px;
+  height:18px; /* menor */
+  margin-top:4px;
 }
 .eq-player span{
-  width:4px;
-  height:4px;
+  width:3px;   /* mais fino */
+  height:3px;
   background:#1db954;
 }
 
@@ -205,12 +205,12 @@ footer{
       <button id="next">⏭</button>
     </div>
 
-    <!-- VOLUME -->
     <div class="volume">
       <span id="mute">🔊</span>
       <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8">
     </div>
 
+    <!-- EQ MENOR -->
     <div class="eq-player" id="eqPlayer">
       <span></span><span></span><span></span><span></span><span></span>
     </div>
@@ -266,10 +266,11 @@ function animateEQ(){
   let sum=0;
 
   eqPlayer.forEach((b,i)=>{
-    const h=data[i]/4+4;
+    const h=data[i]/6+3; /* menor impacto */
     b.style.height=h+"px";
     sum+=h;
   });
+
   eqLeft.forEach((b,i)=>b.style.height=(data[i]/5+4)+"px");
   eqRight.forEach((b,i)=>b.style.height=(data[i]/5+4)+"px");
 
@@ -322,7 +323,6 @@ volume.oninput=()=>{
   mute.textContent=volume.value==0?"🔇":"🔊";
 };
 
-/* MUDO */
 mute.onclick=()=>{
   if(audio.volume>0){
     lastVolume=audio.volume;
