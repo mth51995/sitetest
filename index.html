@@ -21,9 +21,9 @@ header{
   width:100%;
   padding:6px 0;
   background:rgba(0,0,0,.75);
-  box-shadow:0 0 15px rgba(0,255,127,.5);
   display:flex;
   justify-content:center;
+  box-shadow:0 0 15px rgba(0,255,127,.5);
   z-index:1000;
 }
 
@@ -37,31 +37,45 @@ header{
   position:fixed;
   top:90px;
   left:10px;
-  width:200px;
+  width:220px;
   background:rgba(0,0,0,.85);
-  border-radius:12px;
-  padding:10px;
+  border-radius:14px;
   box-shadow:0 0 12px rgba(0,255,127,.6);
   z-index:9999;
+}
+
+/* BARRA DE ARRASTE */
+.drag-handle{
+  padding:8px;
+  text-align:center;
+  font-size:11px;
+  color:#00ff7f;
+  background:rgba(0,255,127,.08);
+  border-radius:14px 14px 0 0;
+  cursor:grab;
   user-select:none;
+}
+
+.content{
+  padding:10px;
 }
 
 .radio-name{
   text-align:center;
-  font-size:12px;
   font-weight:bold;
   color:#00ff7f;
+  margin-bottom:5px;
 }
 
-.track-marquee{
-  overflow:hidden;
-  white-space:nowrap;
+.track{
   font-size:11px;
+  white-space:nowrap;
+  overflow:hidden;
   color:#00ff7f;
-  margin:6px 0;
+  margin-bottom:6px;
 }
 
-.track-marquee span{
+.track span{
   display:inline-block;
   padding-left:100%;
   animation:marquee 9s linear infinite;
@@ -76,46 +90,23 @@ header{
 .controls{
   display:flex;
   justify-content:center;
-  gap:8px;
+  gap:10px;
   margin-bottom:6px;
 }
 
 .controls button{
-  width:40px;
-  height:40px;
+  width:44px;
+  height:44px;
   border-radius:50%;
-  background:rgba(0,255,127,.15);
+  background:rgba(0,255,127,.2);
   border:1px solid #00ff7f;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  color:#00ff7f;
+  font-size:18px;
   cursor:pointer;
 }
 
-.controls svg{
-  width:22px;
-  height:22px;
-  fill:#00ff7f;
-}
-
-/* VOLUME */
-.volume-bar{
+.volume{
   width:100%;
-}
-
-/* EQUALIZADOR */
-.equalizer{
-  display:flex;
-  justify-content:center;
-  gap:3px;
-  margin-top:6px;
-  height:16px;
-}
-
-.bar{
-  width:4px;
-  height:4px;
-  background:#00ff7f;
 }
 
 /* MOBILE */
@@ -135,35 +126,25 @@ header{
 </header>
 
 <div class="mini-player" id="player">
-  <div class="radio-name">Radio Mix</div>
 
-  <div class="track-marquee">
-    <span id="trackName">Carregando…</span>
+  <div class="drag-handle" id="handle">ARRASTE AQUI</div>
+
+  <div class="content">
+    <div class="radio-name">Radio Mix</div>
+
+    <div class="track">
+      <span id="trackName"></span>
+    </div>
+
+    <div class="controls">
+      <button id="prev">⏮</button>
+      <button id="play">▶</button>
+      <button id="next">⏭</button>
+    </div>
+
+    <input type="range" id="volume" class="volume" min="0" max="1" step="0.01" value="0.8">
+    <audio id="audio" preload="auto"></audio>
   </div>
-
-  <div class="controls">
-    <button id="prevBtn">
-      <svg viewBox="0 0 24 24"><path d="M6 5v14h2V5zm3.5 7L18 19V5z"/></svg>
-    </button>
-
-    <button id="playBtn">
-      <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-      <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>
-    </button>
-
-    <button id="nextBtn">
-      <svg viewBox="0 0 24 24"><path d="M6 5v14l8.5-7L6 5zm10 0v14h2V5z"/></svg>
-    </button>
-  </div>
-
-  <input type="range" id="volume" class="volume-bar" min="0" max="1" step="0.01" value="0.8">
-
-  <div class="equalizer">
-    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-    <div class="bar"></div><div class="bar"></div>
-  </div>
-
-  <audio id="audio" preload="auto"></audio>
 </div>
 
 <script>
@@ -176,72 +157,73 @@ const playlist=[
 let current=0;
 const audio=document.getElementById("audio");
 const trackName=document.getElementById("trackName");
-const playIcon=document.getElementById("playIcon");
-const pauseIcon=document.getElementById("pauseIcon");
+const playBtn=document.getElementById("play");
 
-function loadTrack(){
+function load(){
  audio.src=playlist[current];
  trackName.textContent=playlist[current];
 }
-loadTrack();
+load();
 
-document.getElementById("playBtn").onclick=()=>{
+playBtn.onclick=()=>{
  if(audio.paused){
   audio.play();
-  playIcon.style.display="none";
-  pauseIcon.style.display="block";
+  playBtn.textContent="⏸";
  }else{
   audio.pause();
-  playIcon.style.display="block";
-  pauseIcon.style.display="none";
+  playBtn.textContent="▶";
  }
 };
 
-document.getElementById("nextBtn").onclick=()=>{
+document.getElementById("next").onclick=()=>{
  current=(current+1)%playlist.length;
- loadTrack();
- audio.play();
+ load(); audio.play();
 };
 
-document.getElementById("prevBtn").onclick=()=>{
+document.getElementById("prev").onclick=()=>{
  current=(current-1+playlist.length)%playlist.length;
- loadTrack();
- audio.play();
+ load(); audio.play();
 };
 
 document.getElementById("volume").oninput=e=>{
  audio.volume=e.target.value;
 };
 
-audio.onended=()=>document.getElementById("nextBtn").click();
+audio.onended=()=>document.getElementById("next").click();
 
-/* EQUALIZADOR SIMPLES */
-setInterval(()=>{
- document.querySelectorAll(".bar").forEach(b=>{
-  b.style.height=Math.random()*14+"px";
- });
-},120);
-
-/* ARRASTAR – CORRIGIDO PARA CELULAR */
+/* ARRASTE – FUNCIONA EM CELULAR */
 const player=document.getElementById("player");
-let drag=false,startX=0,startY=0;
+const handle=document.getElementById("handle");
+let dragging=false,ox=0,oy=0;
 
-player.addEventListener("touchstart",e=>{
- if(e.target.closest("button")) return; // NÃO arrasta ao clicar botão
- drag=true;
+handle.addEventListener("touchstart",e=>{
+ dragging=true;
  const t=e.touches[0];
- startX=t.clientX-player.offsetLeft;
- startY=t.clientY-player.offsetTop;
+ ox=t.clientX-player.offsetLeft;
+ oy=t.clientY-player.offsetTop;
 },{passive:true});
 
 document.addEventListener("touchmove",e=>{
- if(!drag) return;
+ if(!dragging) return;
  const t=e.touches[0];
- player.style.left=t.clientX-startX+"px";
- player.style.top=t.clientY-startY+"px";
+ player.style.left=t.clientX-ox+"px";
+ player.style.top=t.clientY-oy+"px";
 },{passive:true});
 
-document.addEventListener("touchend",()=>drag=false);
+document.addEventListener("touchend",()=>dragging=false);
+
+/* PC */
+handle.addEventListener("mousedown",e=>{
+ dragging=true;
+ ox=e.clientX-player.offsetLeft;
+ oy=e.clientY-player.offsetTop;
+});
+document.addEventListener("mousemove",e=>{
+ if(!dragging) return;
+ player.style.left=e.clientX-ox+"px";
+ player.style.top=e.clientY-oy+"px";
+});
+document.addEventListener("mouseup",()=>dragging=false);
 </script>
 
 </body>
