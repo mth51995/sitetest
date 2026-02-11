@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Radio Mix</title>
+  <title>Mth5 Rádio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
@@ -18,51 +18,43 @@
 
     header {
       text-align: center;
-      padding: 15px;
-      font-size: 26px;
+      padding: 20px;
+      font-size: 28px;
       font-weight: bold;
       color: #00ff7f;
       text-shadow: 0 0 10px #00ff7f;
     }
 
     #clock {
-      font-size: 14px;
+      font-size: 16px;
       margin-top: 5px;
     }
 
-    /* MINI PLAYER FIXO */
+    /* PLAYER FIXO */
     .mini-player {
       position: fixed;
-      top: 12px;
-      left: 12px;
-      width: 250px;
-      background: rgba(0,0,0,0.75);
-      border-radius: 12px;
-      padding: 10px;
+      top: 15px;
+      left: 15px;
+      width: 300px;
+      background: rgba(0,0,0,0.85);
+      border-radius: 15px;
+      padding: 12px;
       box-shadow: 0 0 15px rgba(0,255,127,0.6);
       z-index: 9999;
-    }
-
-    .radio-name {
-      text-align: center;
-      font-size: 13px;
-      font-weight: bold;
-      color: #00ff7f;
-      margin-bottom: 6px;
     }
 
     .track-marquee {
       overflow: hidden;
       white-space: nowrap;
-      font-size: 11px;
+      font-size: 12px;
       color: #00ff7f;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
     .track-marquee span {
       display: inline-block;
       padding-left: 100%;
-      animation: marquee 10s linear infinite;
+      animation: marquee 12s linear infinite;
     }
 
     @keyframes marquee {
@@ -72,61 +64,53 @@
 
     .controls {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
     .controls button {
-      background: transparent;
+      background: #00ff7f;
       border: none;
-      padding: 0;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      font-size: 16px;
       cursor: pointer;
+      box-shadow: 0 0 10px rgba(0,255,127,0.8);
     }
 
-    .controls svg {
-      width: 26px;
-      height: 26px;
-      fill: #00ff7f;
-      filter: drop-shadow(0 0 6px #00ff7f);
-      transition: transform 0.1s;
-    }
-
-    .controls svg:hover {
-      transform: scale(1.15);
+    .controls button:hover {
+      background: #00cc66;
     }
 
     .volume-bar {
       width: 100%;
-      margin-top: 4px;
+      margin-top: 5px;
     }
 
     .leds {
       display: flex;
       justify-content: center;
-      gap: 5px;
-      margin-top: 6px;
+      gap: 6px;
+      margin-top: 8px;
     }
 
     .led {
-      width: 8px;
-      height: 8px;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
       background: #003300;
-      box-shadow: 0 0 4px #003300;
+      box-shadow: 0 0 5px #00ff7f;
       transition: background 0.1s, box-shadow 0.1s;
     }
 
     footer {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
       text-align: center;
-      padding: 10px;
-      font-size: 12px;
-      background: rgba(0,0,0,0.75);
-      color: #00ff7f;
+      padding: 15px;
+      font-size: 13px;
+      background: rgba(0,0,0,0.7);
+      margin-top: 80px;
     }
   </style>
 </head>
@@ -134,56 +118,37 @@
 <body>
 
   <header>
-    Radio Mix 📻
+    Mth5 Rádio 📻
     <div id="clock"></div>
   </header>
 
   <!-- PLAYER FIXO -->
   <div class="mini-player">
-    <div class="radio-name">Radio Mix</div>
-
     <div class="track-marquee">
       <span id="trackName">Carregando música...</span>
     </div>
 
     <div class="controls">
-      <button id="prevBtn" title="Anterior">
-        <svg viewBox="0 0 24 24">
-          <path d="M6 5v14h2V5H6zm3.5 7L18 19V5L9.5 12z"/>
-        </svg>
-      </button>
-
-      <button id="playBtn" title="Play/Pause">
-        <svg id="playIcon" viewBox="0 0 24 24">
-          <path d="M8 5v14l11-7z"/>
-        </svg>
-        <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none;">
-          <path d="M6 5h4v14H6zm8 0h4v14h-4z"/>
-        </svg>
-      </button>
-
-      <button id="nextBtn" title="Próxima">
-        <svg viewBox="0 0 24 24">
-          <path d="M6 5v14l8.5-7L6 5zm10 0v14h2V5h-2z"/>
-        </svg>
-      </button>
+      <button id="prevBtn">⏮</button>
+      <button id="playBtn">▶️</button>
+      <button id="nextBtn">⏭</button>
     </div>
 
     <input type="range" id="volume" class="volume-bar" min="0" max="1" step="0.01" value="0.8">
 
     <div class="leds">
-      <div class="led"></div>
-      <div class="led"></div>
-      <div class="led"></div>
-      <div class="led"></div>
-      <div class="led"></div>
+      <div class="led" id="led1"></div>
+      <div class="led" id="led2"></div>
+      <div class="led" id="led3"></div>
+      <div class="led" id="led4"></div>
+      <div class="led" id="led5"></div>
     </div>
 
     <audio id="audio" preload="auto"></audio>
   </div>
 
   <footer>
-    @mth5 2024
+    © 2024 Mth5 Rádio
   </footer>
 
   <script>
@@ -210,8 +175,6 @@
 
     const audio = document.getElementById("audio");
     const playBtn = document.getElementById("playBtn");
-    const playIcon = document.getElementById("playIcon");
-    const pauseIcon = document.getElementById("pauseIcon");
     const prevBtn = document.getElementById("prevBtn");
     const nextBtn = document.getElementById("nextBtn");
     const volume = document.getElementById("volume");
@@ -223,36 +186,28 @@
       trackName.textContent = playlist[index];
     }
 
-    function playMusic() {
-      audio.play();
-      playIcon.style.display = "none";
-      pauseIcon.style.display = "inline";
-    }
-
-    function pauseMusic() {
-      audio.pause();
-      playIcon.style.display = "inline";
-      pauseIcon.style.display = "none";
-    }
-
     playBtn.onclick = () => {
       if (audio.paused) {
-        playMusic();
+        audio.play();
+        playBtn.textContent = "⏸";
       } else {
-        pauseMusic();
+        audio.pause();
+        playBtn.textContent = "▶️";
       }
     };
 
     prevBtn.onclick = () => {
       currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
       loadTrack(currentTrack);
-      playMusic();
+      audio.play();
+      playBtn.textContent = "⏸";
     };
 
     nextBtn.onclick = () => {
       currentTrack = (currentTrack + 1) % playlist.length;
       loadTrack(currentTrack);
-      playMusic();
+      audio.play();
+      playBtn.textContent = "⏸";
     };
 
     volume.oninput = () => {
@@ -263,21 +218,21 @@
       nextBtn.click();
     };
 
-    // LEDs piscando
+    // LEDs piscando com música
     setInterval(() => {
       if (!audio.paused) {
         leds.forEach(led => {
           const on = Math.random() > 0.5;
           led.style.background = on ? "#00ff7f" : "#003300";
-          led.style.boxShadow = on ? "0 0 10px #00ff7f" : "0 0 4px #003300";
+          led.style.boxShadow = on ? "0 0 12px #00ff7f" : "0 0 5px #003300";
         });
       } else {
         leds.forEach(led => {
           led.style.background = "#003300";
-          led.style.boxShadow = "0 0 4px #003300";
+          led.style.boxShadow = "0 0 5px #003300";
         });
       }
-    }, 140);
+    }, 150);
 
     // Inicialização
     loadTrack(currentTrack);
