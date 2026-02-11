@@ -23,7 +23,7 @@
       height: 100%;
       object-fit: cover;
       z-index: -2;
-      filter: brightness(1.45) contrast(1.2);
+      filter: brightness(1.4) contrast(1.15);
     }
 
     .overlay {
@@ -38,7 +38,7 @@
       position: fixed;
       top: 0;
       width: 100%;
-      padding: 4px 0;
+      padding: 6px 0;
       background: rgba(0,0,0,0.75);
       box-shadow: 0 0 15px rgba(0,255,127,0.5);
       display: flex;
@@ -48,26 +48,25 @@
     }
 
     .logo {
-      height: 85px; /* LOGO BEM GRANDE */
-      max-height: 85px;
+      height: 60px;
       object-fit: contain;
-      filter: drop-shadow(0 0 14px #00ff7f);
+      filter: drop-shadow(0 0 12px #00ff7f);
       animation: pulse 2.5s infinite;
     }
 
     @keyframes pulse {
-      0% { transform: scale(1); filter: drop-shadow(0 0 12px #00ff7f); }
-      50% { transform: scale(1.1); filter: drop-shadow(0 0 20px #00ff7f); }
-      100% { transform: scale(1); filter: drop-shadow(0 0 12px #00ff7f); }
+      0% { transform: scale(1); filter: drop-shadow(0 0 10px #00ff7f); }
+      50% { transform: scale(1.07); filter: drop-shadow(0 0 18px #00ff7f); }
+      100% { transform: scale(1); filter: drop-shadow(0 0 10px #00ff7f); }
     }
 
     /* PLAYER FLUTUANTE */
     .mini-player {
       position: fixed;
-      top: 100px;
+      top: 90px;
       left: 10px;
       width: 190px;
-      background: rgba(0,0,0,0.85);
+      background: rgba(0,0,0,0.8);
       border-radius: 12px;
       padding: 8px;
       box-shadow: 0 0 12px rgba(0,255,127,0.6);
@@ -143,7 +142,7 @@
       align-items: flex-end;
       gap: 3px;
       margin-top: 6px;
-      height: 14px;
+      height: 16px;
     }
 
     .bar {
@@ -190,7 +189,7 @@
       .mini-player {
         width: 92%;
         left: 4%;
-        top: 95px;
+        top: 85px;
       }
 
       .controls svg {
@@ -199,7 +198,7 @@
       }
 
       .logo {
-        height: 70px;
+        height: 55px;
       }
     }
   </style>
@@ -266,7 +265,7 @@
 
   <!-- RODAPÉ -->
   <footer>
-    <div class="footer-eq">
+    <div class="footer-eq" id="footerEqLeft">
       <div class="footer-bar"></div><div class="footer-bar"></div><div class="footer-bar"></div><div class="footer-bar"></div>
     </div>
 
@@ -274,18 +273,18 @@
       <span id="clock"></span> • @mth5 2024
     </div>
 
-    <div class="footer-eq">
+    <div class="footer-eq" id="footerEqRight">
       <div class="footer-bar"></div><div class="footer-bar"></div><div class="footer-bar"></div><div class="footer-bar"></div>
     </div>
   </footer>
 
   <script>
-    /* RELÓGIO FORÇADO PARA HORÁRIO LOCAL DO BRASIL */
+    /* RELÓGIO CORRETO */
     function atualizarHora() {
       const agora = new Date();
-      const h = agora.toLocaleString("pt-BR", { hour: "2-digit", hour12: false });
-      const m = agora.toLocaleString("pt-BR", { minute: "2-digit" });
-      const s = agora.toLocaleString("pt-BR", { second: "2-digit" });
+      const h = String(agora.getHours()).padStart(2, '0');
+      const m = String(agora.getMinutes()).padStart(2, '0');
+      const s = String(agora.getSeconds()).padStart(2, '0');
       document.getElementById("clock").innerText = `${h}:${m}:${s}`;
     }
     atualizarHora();
@@ -411,11 +410,11 @@
       if (!isDragging) return;
       isDragging = false;
       const rect = player.getBoundingClientRect();
-      const snap = 20;
-      if (rect.left < snap) player.style.left = "10px";
-      if (window.innerWidth - rect.right < snap) player.style.left = (window.innerWidth - rect.width - 10) + "px";
-      if (rect.top < snap) player.style.top = "100px";
-      if (window.innerHeight - rect.bottom < snap) player.style.top = (window.innerHeight - rect.height - 10) + "px";
+      const snapMargin = 20;
+      if (rect.left < snapMargin) player.style.left = "10px";
+      if (window.innerWidth - rect.right < snapMargin) player.style.left = (window.innerWidth - rect.width - 10) + "px";
+      if (rect.top < snapMargin) player.style.top = "90px";
+      if (window.innerHeight - rect.bottom < snapMargin) player.style.top = (window.innerHeight - rect.height - 10) + "px";
     }
 
     player.addEventListener("mousedown", startDrag);
