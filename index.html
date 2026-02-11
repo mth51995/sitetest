@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Mth5 Player</title>
+  <title>Mth5 Rádio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
@@ -12,7 +12,7 @@
       font-family: Arial, sans-serif;
       background: url("buldog.png") no-repeat center center fixed;
       background-size: cover;
-      color: #00ff7f;
+      color: white;
       min-height: 100vh;
     }
 
@@ -21,6 +21,7 @@
       padding: 20px;
       font-size: 28px;
       font-weight: bold;
+      color: #00ff7f;
       text-shadow: 0 0 10px #00ff7f;
     }
 
@@ -29,62 +30,79 @@
       margin-top: 5px;
     }
 
-    .player-box {
-      max-width: 420px;
-      margin: 40px auto;
-      background: rgba(0, 0, 0, 0.7);
-      border-radius: 20px;
-      padding: 25px;
-      box-shadow: 0 0 20px rgba(0,255,127,0.5);
-      text-align: center;
+    /* PLAYER FIXO */
+    .mini-player {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      width: 300px;
+      background: rgba(0,0,0,0.85);
+      border-radius: 15px;
+      padding: 12px;
+      box-shadow: 0 0 15px rgba(0,255,127,0.6);
+      z-index: 9999;
     }
 
-    .track-name {
-      margin-bottom: 15px;
-      font-size: 14px;
+    .track-marquee {
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 12px;
       color: #00ff7f;
+      margin-bottom: 8px;
+    }
+
+    .track-marquee span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 12s linear infinite;
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-100%); }
     }
 
     .controls {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      gap: 15px;
-      margin-bottom: 15px;
+      margin-bottom: 8px;
     }
 
     .controls button {
-      width: 55px;
-      height: 55px;
-      border-radius: 50%;
-      border: none;
       background: #00ff7f;
-      color: black;
-      font-size: 22px;
+      border: none;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      font-size: 16px;
       cursor: pointer;
-      box-shadow: 0 0 12px rgba(0,255,127,0.8);
+      box-shadow: 0 0 10px rgba(0,255,127,0.8);
     }
 
     .controls button:hover {
       background: #00cc66;
     }
 
-    .volume-container {
+    .volume-bar {
+      width: 100%;
+      margin-top: 5px;
+    }
+
+    .leds {
       display: flex;
-      align-items: center;
       justify-content: center;
-      gap: 10px;
-      margin-top: 10px;
+      gap: 6px;
+      margin-top: 8px;
     }
 
-    .volume-container input[type="range"] {
-      width: 150px;
-    }
-
-    .status {
-      margin-top: 10px;
-      font-size: 13px;
-      font-weight: bold;
+    .led {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #003300;
+      box-shadow: 0 0 5px #00ff7f;
+      transition: background 0.1s, box-shadow 0.1s;
     }
 
     footer {
@@ -92,7 +110,7 @@
       padding: 15px;
       font-size: 13px;
       background: rgba(0,0,0,0.7);
-      margin-top: 40px;
+      margin-top: 80px;
     }
   </style>
 </head>
@@ -100,12 +118,15 @@
 <body>
 
   <header>
-    Mth5 Player 🎧
+    Mth5 Rádio 📻
     <div id="clock"></div>
   </header>
 
-  <div class="player-box">
-    <div class="track-name" id="trackName">Carregando...</div>
+  <!-- PLAYER FIXO -->
+  <div class="mini-player">
+    <div class="track-marquee">
+      <span id="trackName">Carregando música...</span>
+    </div>
 
     <div class="controls">
       <button id="prevBtn">⏮</button>
@@ -113,19 +134,21 @@
       <button id="nextBtn">⏭</button>
     </div>
 
-    <div class="volume-container">
-      🔉
-      <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8">
-      🔊
-    </div>
+    <input type="range" id="volume" class="volume-bar" min="0" max="1" step="0.01" value="0.8">
 
-    <div class="status" id="status">PARADO</div>
+    <div class="leds">
+      <div class="led" id="led1"></div>
+      <div class="led" id="led2"></div>
+      <div class="led" id="led3"></div>
+      <div class="led" id="led4"></div>
+      <div class="led" id="led5"></div>
+    </div>
 
     <audio id="audio" preload="auto"></audio>
   </div>
 
   <footer>
-    © 2024 Mth5
+    © 2024 Mth5 Rádio
   </footer>
 
   <script>
@@ -140,7 +163,7 @@
     atualizarHora();
     setInterval(atualizarHora, 1000);
 
-    // Player
+    // Playlist
     const playlist = [
       "Som da Liberdade (feat. Tevão Lino & Ivair Filho) (Remix).mp3",
       "Benson Boone - Beautiful Things (Official Music Video) (256).mp3",
@@ -155,24 +178,21 @@
     const prevBtn = document.getElementById("prevBtn");
     const nextBtn = document.getElementById("nextBtn");
     const volume = document.getElementById("volume");
-    const status = document.getElementById("status");
     const trackName = document.getElementById("trackName");
+    const leds = document.querySelectorAll(".led");
 
     function loadTrack(index) {
       audio.src = playlist[index];
       trackName.textContent = playlist[index];
-      status.textContent = "CARREGADO";
     }
 
     playBtn.onclick = () => {
       if (audio.paused) {
         audio.play();
         playBtn.textContent = "⏸";
-        status.textContent = "TOCANDO";
       } else {
         audio.pause();
         playBtn.textContent = "▶️";
-        status.textContent = "PAUSADO";
       }
     };
 
@@ -181,7 +201,6 @@
       loadTrack(currentTrack);
       audio.play();
       playBtn.textContent = "⏸";
-      status.textContent = "TOCANDO";
     };
 
     nextBtn.onclick = () => {
@@ -189,7 +208,6 @@
       loadTrack(currentTrack);
       audio.play();
       playBtn.textContent = "⏸";
-      status.textContent = "TOCANDO";
     };
 
     volume.oninput = () => {
@@ -200,7 +218,23 @@
       nextBtn.click();
     };
 
-    // Inicializa
+    // LEDs piscando com música
+    setInterval(() => {
+      if (!audio.paused) {
+        leds.forEach(led => {
+          const on = Math.random() > 0.5;
+          led.style.background = on ? "#00ff7f" : "#003300";
+          led.style.boxShadow = on ? "0 0 12px #00ff7f" : "0 0 5px #003300";
+        });
+      } else {
+        leds.forEach(led => {
+          led.style.background = "#003300";
+          led.style.boxShadow = "0 0 5px #003300";
+        });
+      }
+    }, 150);
+
+    // Inicialização
     loadTrack(currentTrack);
     audio.volume = volume.value;
   </script>
