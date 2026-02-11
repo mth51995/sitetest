@@ -2,157 +2,140 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Rádio Mix</title>
+<title>Radio Mix</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: black;
-  color: white;
-  overflow-x: hidden;
-}
-
-/* FUNDO */
-#bgVideo {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -2;
-}
-
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  z-index: -1;
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:black;
+  color:#00ff7f;
+  overflow:hidden;
 }
 
 /* CABEÇALHO */
-header {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 70px;
-  background: rgba(0,0,0,0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 0 15px rgba(0,255,127,0.6);
-  z-index: 1000;
+header{
+  position:fixed;
+  top:0;
+  width:100%;
+  height:70px;
+  background:rgba(0,0,0,.75);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  box-shadow:0 0 15px rgba(0,255,127,.5);
+  z-index:1000;
 }
 
-.logo {
-  height: 95px;
-  position: absolute;
-  top: -12px;
-  filter: drop-shadow(0 0 12px #00ff7f);
+.logo{
+  height:90px;
+  margin-top:20px;
+  filter:drop-shadow(0 0 15px #00ff7f);
 }
 
 /* PLAYER */
-.mini-player {
-  position: fixed;
-  top: 95px;
-  left: 12px;
-  width: 220px;
-  background: rgba(0,0,0,0.85);
-  border-radius: 14px;
-  padding: 10px;
-  box-shadow: 0 0 15px rgba(0,255,127,0.7);
-  z-index: 9999;
-  touch-action: none;
+.mini-player{
+  position:fixed;
+  top:100px;
+  left:20px;
+  width:220px;
+  background:rgba(0,0,0,.85);
+  border-radius:15px;
+  padding:10px;
+  box-shadow:0 0 15px rgba(0,255,127,.6);
+  z-index:9999;
+  touch-action:none;
 }
 
-.radio-name {
-  text-align: center;
-  color: #00ff7f;
-  font-weight: bold;
-  font-size: 12px;
+.radio-name{
+  text-align:center;
+  font-weight:bold;
+  margin-bottom:5px;
 }
 
-.track-marquee {
-  font-size: 11px;
-  white-space: nowrap;
-  overflow: hidden;
-  margin: 6px 0;
+.track{
+  font-size:11px;
+  white-space:nowrap;
+  overflow:hidden;
 }
 
-.track-marquee span {
-  display: inline-block;
-  padding-left: 100%;
-  animation: marquee 8s linear infinite;
+.track span{
+  display:inline-block;
+  animation:scroll 10s linear infinite;
 }
 
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-100%); }
+@keyframes scroll{
+  from{transform:translateX(100%)}
+  to{transform:translateX(-100%)}
 }
 
-.controls {
-  display: flex;
-  justify-content: center;
-  gap: 14px;
+.controls{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin:8px 0;
 }
 
-.controls button {
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: #00ff7f;
-  cursor: pointer;
+.controls button{
+  background:none;
+  border:none;
+  cursor:pointer;
 }
 
-.volume-bar {
-  width: 100%;
-  margin-top: 6px;
+.controls svg{
+  width:26px;
+  height:26px;
+  fill:#00ff7f;
 }
 
-/* EQUALIZADOR */
-.equalizer {
-  display: flex;
-  justify-content: center;
-  gap: 4px;
-  margin-top: 8px;
-  height: 18px;
+input[type=range]{
+  width:100%;
 }
 
-.bar {
-  width: 4px;
-  background: #00ff7f;
-  box-shadow: 0 0 6px #00ff7f;
+.equalizer{
+  display:flex;
+  justify-content:center;
+  gap:3px;
+  height:18px;
+  margin-top:8px;
+}
+
+.bar{
+  width:4px;
+  background:#00ff7f;
+  height:4px;
 }
 
 /* RODAPÉ */
-footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: rgba(0,0,0,0.8);
-  padding: 6px 10px;
-  font-size: 11px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-top: 2px solid #00ff7f;
-  z-index: 1000;
+footer{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  height:40px;
+  background:rgba(0,0,0,.75);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  box-shadow:0 0 15px rgba(0,255,127,.5);
 }
 
-.footer-bar {
-  width: 4px;
-  background: #00ff7f;
-  box-shadow: 0 0 6px #00ff7f;
+.footer-eq{
+  display:flex;
+  gap:3px;
+}
+
+.footer-eq div{
+  width:4px;
+  height:6px;
+  background:#00ff7f;
 }
 
 /* MOBILE */
-@media (max-width: 480px) {
-  .mini-player {
-    width: 92%;
-    left: 4%;
+@media(max-width:480px){
+  .mini-player{
+    width:90%;
+    left:5%;
   }
 }
 </style>
@@ -160,144 +143,118 @@ footer {
 
 <body>
 
-<video autoplay muted loop playsinline id="bgVideo">
-  <source src="grok.mp4" type="video/mp4">
-</video>
-<div class="overlay"></div>
-
 <header>
   <img src="logo.png" class="logo">
 </header>
 
 <div class="mini-player" id="player">
-  <div class="radio-name">Rádio Mix</div>
+  <div class="radio-name">Radio Mix</div>
 
-  <div class="track-marquee">
-    <span id="trackName">Clique em Play</span>
+  <div class="track">
+    <span id="trackName"></span>
   </div>
 
   <div class="controls">
-    <button id="prevBtn">⏮</button>
-    <button id="playBtn">▶</button>
-    <button id="nextBtn">⏭</button>
+    <button id="prev">⏮</button>
+    <button id="play">▶</button>
+    <button id="next">⏭</button>
   </div>
 
-  <input type="range" id="volume" class="volume-bar" min="0" max="1" step="0.01" value="0.8">
+  <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8">
 
-  <div class="equalizer">
+  <div class="equalizer" id="eq">
     <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+    <div class="bar"></div><div class="bar"></div>
   </div>
 
   <audio id="audio" preload="auto"></audio>
 </div>
 
 <footer>
-  <div id="clock"></div>
+  <div class="footer-eq" id="footerEq">
+    <div></div><div></div><div></div><div></div>
+  </div>
 </footer>
 
 <script>
-/* RELÓGIO */
-setInterval(() => {
-  clock.innerText = new Date().toLocaleTimeString("pt-BR");
-}, 1000);
-
-/* PLAYLIST */
-const playlist = [
-  "infinity.mp3",
-  "Beautiful Things.mp3",
-  "Som da Liberdade.mp3"
+const playlist=[
+ "Som da Liberdade (feat. Tevão Lino & Ivair Filho) (Remix).mp3",
+ "Benson Boone - Beautiful Things (Official Music Video) (256).mp3"
 ];
 
-let index = 0;
-let ctx, analyser, data, source;
-let playing = false;
+let current=0;
+const audio=document.getElementById("audio");
+const trackName=document.getElementById("trackName");
+const playBtn=document.getElementById("play");
+const bars=document.querySelectorAll(".bar");
+const footerBars=document.querySelectorAll(".footer-eq div");
 
-const audio = document.getElementById("audio");
-const playBtn = document.getElementById("playBtn");
-const trackName = document.getElementById("trackName");
-const bars = document.querySelectorAll(".bar");
-
-/* SETUP AUDIO */
-function setupAudioContext() {
-  if (ctx) return;
-  ctx = new (window.AudioContext || window.webkitAudioContext)();
-  analyser = ctx.createAnalyser();
-  analyser.fftSize = 64;
-  data = new Uint8Array(analyser.frequencyBinCount);
-  source = ctx.createMediaElementSource(audio);
-  source.connect(analyser);
-  analyser.connect(ctx.destination);
+function loadTrack(){
+ audio.src=playlist[current];
+ trackName.textContent=playlist[current];
 }
+loadTrack();
 
-/* EQUALIZADOR */
-function animateEQ() {
-  if (!playing) return;
-  analyser.getByteFrequencyData(data);
-  bars.forEach((b, i) => {
-    b.style.height = Math.max(4, data[i] / 4) + "px";
-  });
-  requestAnimationFrame(animateEQ);
-}
-
-/* LOAD */
-function loadTrack() {
-  audio.src = playlist[index];
-  trackName.innerText = playlist[index].replace(".mp3", "");
-}
-
-/* CONTROLES */
-playBtn.onclick = () => {
-  loadTrack();
-  setupAudioContext();
-  ctx.resume();
-
-  if (!playing) {
-    audio.play();
-    playBtn.innerText = "⏸";
-    playing = true;
-    animateEQ();
-  } else {
-    audio.pause();
-    playBtn.innerText = "▶";
-    playing = false;
-  }
-};
-
-prevBtn.onclick = () => {
-  index = (index - 1 + playlist.length) % playlist.length;
-  loadTrack();
+playBtn.onclick=()=>{
+ if(audio.paused){
   audio.play();
+  playBtn.textContent="⏸";
+ }else{
+  audio.pause();
+  playBtn.textContent="▶";
+ }
 };
 
-nextBtn.onclick = () => {
-  index = (index + 1) % playlist.length;
-  loadTrack();
-  audio.play();
+document.getElementById("next").onclick=()=>{
+ current=(current+1)%playlist.length;
+ loadTrack();
+ audio.play();
 };
 
-volume.oninput = e => audio.volume = e.target.value;
+document.getElementById("prev").onclick=()=>{
+ current=(current-1+playlist.length)%playlist.length;
+ loadTrack();
+ audio.play();
+};
 
-/* DRAG */
-const player = document.getElementById("player");
-let drag = false, ox = 0, oy = 0;
+document.getElementById("volume").oninput=e=>{
+ audio.volume=e.target.value;
+};
 
-player.addEventListener("mousedown", e => {
-  drag = true;
-  ox = e.clientX - player.offsetLeft;
-  oy = e.clientY - player.offsetTop;
+audio.onended=()=>document.getElementById("next").click();
+
+/* Equalizador fake */
+setInterval(()=>{
+ bars.forEach(b=>b.style.height=Math.random()*16+"px");
+ footerBars.forEach(b=>b.style.height=Math.random()*16+"px");
+},120);
+
+/* ARRASTAR */
+const player=document.getElementById("player");
+let drag=false,ox=0,oy=0;
+
+player.addEventListener("mousedown",e=>{
+ drag=true;
+ ox=e.offsetX; oy=e.offsetY;
 });
-
-document.addEventListener("mousemove", e => {
-  if (!drag) return;
-  player.style.left = (e.clientX - ox) + "px";
-  player.style.top = (e.clientY - oy) + "px";
+document.addEventListener("mousemove",e=>{
+ if(!drag)return;
+ player.style.left=e.clientX-ox+"px";
+ player.style.top=e.clientY-oy+"px";
 });
+document.addEventListener("mouseup",()=>drag=false);
 
-document.addEventListener("mouseup", () => drag = false);
-
-/* INIT */
-audio.volume = 0.8;
+player.addEventListener("touchstart",e=>{
+ drag=true;
+ ox=e.touches[0].clientX-player.offsetLeft;
+ oy=e.touches[0].clientY-player.offsetTop;
+});
+document.addEventListener("touchmove",e=>{
+ if(!drag)return;
+ player.style.left=e.touches[0].clientX-ox+"px";
+ player.style.top=e.touches[0].clientY-oy+"px";
+});
+document.addEventListener("touchend",()=>drag=false);
 </script>
 
 </body>
