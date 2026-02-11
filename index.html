@@ -27,17 +27,36 @@
       box-shadow: 0 0 15px rgba(0,255,127,0.5);
       position: relative;
       z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .title-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 26px;
+      font-weight: bold;
+    }
+
+    .title-line svg {
+      width: 26px;
+      height: 26px;
+      fill: #00ff7f;
+      filter: drop-shadow(0 0 6px #00ff7f);
     }
 
     #clock {
       font-size: 14px;
-      margin-top: 5px;
+      margin-top: 2px;
     }
 
     /* MINI PLAYER FIXO */
     .mini-player {
       position: fixed;
-      top: 85px; /* abaixo do cabeçalho */
+      top: 85px;
       left: 10px;
       width: 210px;
       background: rgba(0,0,0,0.75);
@@ -133,11 +152,20 @@
       color: #00ff7f;
     }
 
-    /* MELHORIAS MOBILE */
+    /* MOBILE */
     @media (max-width: 480px) {
       header {
         font-size: 20px;
         padding: 12px;
+      }
+
+      .title-line {
+        font-size: 20px;
+      }
+
+      .title-line svg {
+        width: 22px;
+        height: 22px;
       }
 
       #clock {
@@ -148,7 +176,7 @@
         width: 92%;
         left: 4%;
         right: 4%;
-        top: 85px;
+        top: 95px;
       }
 
       .controls svg {
@@ -166,7 +194,13 @@
 <body>
 
   <header>
-    Radio Mix 📻
+    <div class="title-line">
+      Radio Mix
+      <!-- FONE DE OUVIDO SVG -->
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 3a9 9 0 00-9 9v6a3 3 0 003 3h2v-8H6v-1a6 6 0 0112 0v1h-2v8h2a3 3 0 003-3v-6a9 9 0 00-9-9z"/>
+      </svg>
+    </div>
     <div id="clock"></div>
   </header>
 
@@ -282,7 +316,7 @@
     };
 
     nextBtn.onclick = () => {
-      currentTrack = (currentTrack + 1) % playlist.length;
+      currentTrack = (currentTrack + playlist.length) % playlist.length;
       loadTrack(currentTrack);
       playMusic();
     };
