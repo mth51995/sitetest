@@ -48,7 +48,7 @@ header{
   filter:drop-shadow(0 0 10px #00ff7f);
 }
 
-/* PLAYER COMPACTO */
+/* PLAYER */
 .player{
   position:fixed;
   top:90px;
@@ -70,7 +70,7 @@ header{
 
 .info{padding:8px}
 
-/* NOME SLIDE */
+/* NOME DA MÚSICA (SLIDE) */
 .track{
   overflow:hidden;
   white-space:nowrap;
@@ -87,40 +87,43 @@ header{
   to{transform:translateX(-100%)}
 }
 
+/* PROGRESSO */
+.progress input{
+  width:100%;
+  accent-color:#1db954;
+}
+
 /* CONTROLES */
 .controls{
   display:flex;
   justify-content:center;
   align-items:center;
-  gap:12px;
+  gap:14px;
   margin-top:6px;
 }
 .controls button{
   background:none;
   border:none;
-  font-size:20px;
+  font-size:22px;
   color:#1db954;
   cursor:pointer;
 }
 .play{font-size:26px}
 
-/* PROGRESSO */
-.progress input{
-  width:100%;
-  accent-color:#1db954;
-  margin-top:4px;
-}
-
-/* VOLUME VERTICAL */
+/* VOLUME HORIZONTAL */
 .volume{
   display:flex;
-  justify-content:center;
-  margin-top:8px;
+  align-items:center;
+  gap:6px;
+  margin-top:6px;
+}
+.volume span{
+  font-size:16px;
+  color:#1db954;
+  cursor:pointer;
 }
 .volume input{
-  height:70px;
-  writing-mode:bt-lr;
-  -webkit-appearance:slider-vertical;
+  width:70%;
   accent-color:#1db954;
 }
 
@@ -139,7 +142,7 @@ header{
   background:#1db954;
 }
 
-/* RODAPÉ PULSANTE */
+/* RODAPÉ */
 footer{
   position:fixed;
   bottom:0;
@@ -151,7 +154,7 @@ footer{
   align-items:flex-end;
   padding:0 20px;
   box-shadow:0 0 14px rgba(0,255,127,.6);
-  transition:box-shadow .1s, height .1s;
+  transition:height .1s, box-shadow .1s;
 }
 .footer-eq{
   display:flex;
@@ -177,18 +180,15 @@ footer{
 
 <body>
 
-<!-- FUNDO -->
 <video autoplay muted loop playsinline id="bgVideo">
   <source src="grok.mp4" type="video/mp4">
 </video>
 <div class="overlay"></div>
 
-<!-- CABEÇALHO -->
 <header>
   <img src="logo.png" class="logo">
 </header>
 
-<!-- PLAYER -->
 <div class="player" id="player">
   <div class="drag" id="drag">ARRASTE</div>
 
@@ -205,7 +205,9 @@ footer{
       <button id="next">⏭</button>
     </div>
 
+    <!-- VOLUME -->
     <div class="volume">
+      <span id="mute">🔊</span>
       <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8">
     </div>
 
@@ -217,7 +219,6 @@ footer{
   </div>
 </div>
 
-<!-- RODAPÉ -->
 <footer id="footer">
   <div class="footer-eq" id="eqLeft">
     <span></span><span></span><span></span><span></span><span></span>
@@ -240,13 +241,14 @@ const title=document.getElementById("title");
 const play=document.getElementById("play");
 const progress=document.getElementById("progress");
 const volume=document.getElementById("volume");
+const mute=document.getElementById("mute");
 const footer=document.getElementById("footer");
 
 const eqPlayer=document.querySelectorAll("#eqPlayer span");
 const eqLeft=document.querySelectorAll("#eqLeft span");
 const eqRight=document.querySelectorAll("#eqRight span");
 
-let ctx, analyser, data;
+let ctx, analyser, data, lastVolume=0.8;
 
 function setupAudio(){
   if(ctx) return;
@@ -263,18 +265,13 @@ function animateEQ(){
   analyser.getByteFrequencyData(data);
   let sum=0;
 
-  eqPlayer.forEach((bar,i)=>{
+  eqPlayer.forEach((b,i)=>{
     const h=data[i]/4+4;
-    bar.style.height=h+"px";
+    b.style.height=h+"px";
     sum+=h;
   });
-
-  eqLeft.forEach((bar,i)=>{
-    bar.style.height=(data[i]/5+4)+"px";
-  });
-  eqRight.forEach((bar,i)=>{
-    bar.style.height=(data[i]/5+4)+"px";
-  });
+  eqLeft.forEach((b,i)=>b.style.height=(data[i]/5+4)+"px");
+  eqRight.forEach((b,i)=>b.style.height=(data[i]/5+4)+"px");
 
   const pulse=Math.min(70,40+sum/10);
   footer.style.height=pulse+"px";
@@ -319,7 +316,25 @@ audio.ontimeupdate=()=>{
 progress.oninput=e=>{
   audio.currentTime=(e.target.value/100)*audio.duration;
 };
-volume.oninput=()=>audio.volume=volume.value;
+
+volume.oninput=()=>{
+  audio.volume=volume.value;
+  mute.textContent=volume.value==0?"🔇":"🔊";
+};
+
+/* MUDO */
+mute.onclick=()=>{
+  if(audio.volume>0){
+    lastVolume=audio.volume;
+    audio.volume=0;
+    volume.value=0;
+    mute.textContent="🔇";
+  }else{
+    audio.volume=lastVolume;
+    volume.value=lastVolume;
+    mute.textContent="🔊";
+  }
+};
 
 /* ARRASTAR */
 let dragging=false,ox=0,oy=0;
