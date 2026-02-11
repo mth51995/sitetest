@@ -8,7 +8,7 @@
 <style>
 body{
   margin:0;
-  font-family:Arial, Helvetica, sans-serif;
+  font-family:Arial,Helvetica,sans-serif;
   background:black;
   color:white;
   overflow-x:hidden;
@@ -60,7 +60,6 @@ header{
   z-index:9999;
   user-select:none;
 }
-
 .drag{
   text-align:center;
   font-size:11px;
@@ -68,11 +67,7 @@ header{
   color:#1db954;
   cursor:grab;
 }
-
-.info{
-  padding:10px;
-}
-
+.info{padding:10px}
 .title{
   font-size:13px;
   font-weight:bold;
@@ -80,13 +75,6 @@ header{
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
-}
-
-/* PROGRESSO */
-.progress input{
-  width:100%;
-  accent-color:#1db954;
-  margin-top:6px;
 }
 
 /* CONTROLES */
@@ -104,17 +92,14 @@ header{
   color:#1db954;
   cursor:pointer;
 }
-.play{
-  font-size:30px;
-}
+.play{font-size:30px}
 
-/* VOLUME */
-.volume{
-  margin-top:6px;
-}
+/* SLIDERS */
+.progress input,
 .volume input{
   width:100%;
   accent-color:#1db954;
+  margin-top:6px;
 }
 
 /* EQUALIZADOR PLAYER */
@@ -128,45 +113,29 @@ header{
   width:4px;
   height:6px;
   background:#1db954;
-  animation:eq 0.6s infinite alternate;
 }
-.eq-player span:nth-child(2){animation-delay:.1s}
-.eq-player span:nth-child(3){animation-delay:.2s}
-.eq-player span:nth-child(4){animation-delay:.3s}
-.eq-player span:nth-child(5){animation-delay:.4s}
 
 /* RODAPÉ */
 footer{
   position:fixed;
   bottom:0;
   width:100%;
-  height:50px;
+  height:55px;
   background:rgba(0,0,0,.85);
   display:flex;
-  justify-content:center;
+  justify-content:space-between;
   align-items:center;
+  padding:0 20px;
   box-shadow:0 0 12px rgba(0,255,127,.5);
-  z-index:1000;
 }
 .footer-eq{
   display:flex;
-  gap:6px;
+  gap:5px;
 }
 .footer-eq span{
   width:5px;
-  height:8px;
+  height:6px;
   background:#00ff7f;
-  animation:eq 0.7s infinite alternate;
-}
-.footer-eq span:nth-child(2){animation-delay:.1s}
-.footer-eq span:nth-child(3){animation-delay:.2s}
-.footer-eq span:nth-child(4){animation-delay:.3s}
-.footer-eq span:nth-child(5){animation-delay:.4s}
-.footer-eq span:nth-child(6){animation-delay:.5s}
-
-@keyframes eq{
-  from{height:6px}
-  to{height:22px}
 }
 
 /* MOBILE */
@@ -195,7 +164,6 @@ footer{
 <!-- PLAYER -->
 <div class="player" id="player">
   <div class="drag" id="drag">ARRASTE</div>
-
   <div class="info">
     <div class="title" id="title"></div>
 
@@ -209,27 +177,30 @@ footer{
       <button id="next">⏭</button>
     </div>
 
-    <!-- VOLUME -->
     <div class="volume">
       <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8">
     </div>
 
-    <div class="eq-player">
+    <div class="eq-player" id="eqPlayer">
       <span></span><span></span><span></span><span></span><span></span>
     </div>
 
-    <audio id="audio"></audio>
+    <audio id="audio" crossorigin="anonymous"></audio>
   </div>
 </div>
 
 <!-- RODAPÉ -->
 <footer>
-  <div class="footer-eq">
-    <span></span><span></span><span></span><span></span><span></span><span></span>
+  <div class="footer-eq" id="eqLeft">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="footer-eq" id="eqRight">
+    <span></span><span></span><span></span><span></span><span></span>
   </div>
 </footer>
 
 <script>
+/* PLAYLIST */
 const playlist=[
  "Som da Liberdade (feat. Tevão Lino & Ivair Filho) (Remix).mp3",
  "Benson Boone - Beautiful Things (Official Music Video) (256).mp3"
@@ -242,43 +213,77 @@ const play=document.getElementById("play");
 const progress=document.getElementById("progress");
 const volume=document.getElementById("volume");
 
+const eqPlayer=document.querySelectorAll("#eqPlayer span");
+const eqLeft=document.querySelectorAll("#eqLeft span");
+const eqRight=document.querySelectorAll("#eqRight span");
+
+/* AUDIO CONTEXT */
+let ctx, analyser, data;
+
+function setupAudio(){
+  if(ctx) return;
+  ctx=new (window.AudioContext||window.webkitAudioContext)();
+  analyser=ctx.createAnalyser();
+  analyser.fftSize=64;
+  data=new Uint8Array(analyser.frequencyBinCount);
+  const src=ctx.createMediaElementSource(audio);
+  src.connect(analyser);
+  analyser.connect(ctx.destination);
+}
+
+function animateEQ(){
+  analyser.getByteFrequencyData(data);
+  const step=Math.floor(data.length/eqPlayer.length);
+
+  eqPlayer.forEach((bar,i)=>{
+    bar.style.height=Math.max(6,data[i*step]/4)+"px";
+  });
+  eqLeft.forEach((bar,i)=>{
+    bar.style.height=Math.max(6,data[i*step]/5)+"px";
+  });
+  eqRight.forEach((bar,i)=>{
+    bar.style.height=Math.max(6,data[i*step]/5)+"px";
+  });
+  requestAnimationFrame(animateEQ);
+}
+
 function load(){
- audio.src=playlist[current];
- title.textContent=playlist[current];
- audio.volume=volume.value;
+  audio.src=playlist[current];
+  title.textContent=playlist[current];
+  audio.volume=volume.value;
 }
 load();
 
 /* CONTROLES */
 play.onclick=()=>{
- if(audio.paused){
-  audio.play();
-  play.textContent="⏸";
- }else{
-  audio.pause();
-  play.textContent="▶";
- }
+  setupAudio();
+  ctx.resume();
+  if(audio.paused){
+    audio.play();
+    play.textContent="⏸";
+    animateEQ();
+  }else{
+    audio.pause();
+    play.textContent="▶";
+  }
 };
+
 document.getElementById("next").onclick=()=>{
- current=(current+1)%playlist.length;
- load(); audio.play(); play.textContent="⏸";
+  current=(current+1)%playlist.length;
+  load(); audio.play(); play.textContent="⏸";
 };
 document.getElementById("prev").onclick=()=>{
- current=(current-1+playlist.length)%playlist.length;
- load(); audio.play(); play.textContent="⏸";
+  current=(current-1+playlist.length)%playlist.length;
+  load(); audio.play(); play.textContent="⏸";
 };
 
 audio.ontimeupdate=()=>{
- progress.value=(audio.currentTime/audio.duration)*100||0;
+  progress.value=(audio.currentTime/audio.duration)*100||0;
 };
 progress.oninput=e=>{
- audio.currentTime=(e.target.value/100)*audio.duration;
+  audio.currentTime=(e.target.value/100)*audio.duration;
 };
-
-/* VOLUME */
-volume.oninput=()=>{
- audio.volume=volume.value;
-};
+volume.oninput=()=>audio.volume=volume.value;
 
 /* ARRASTAR PLAYER */
 let dragging=false,ox=0,oy=0;
@@ -286,26 +291,26 @@ const player=document.getElementById("player");
 const drag=document.getElementById("drag");
 
 drag.addEventListener("mousedown",e=>{
- dragging=true;
- ox=e.clientX-player.offsetLeft;
- oy=e.clientY-player.offsetTop;
+  dragging=true;
+  ox=e.clientX-player.offsetLeft;
+  oy=e.clientY-player.offsetTop;
 });
 document.addEventListener("mousemove",e=>{
- if(!dragging)return;
- player.style.left=e.clientX-ox+"px";
- player.style.top=e.clientY-oy+"px";
+  if(!dragging)return;
+  player.style.left=e.clientX-ox+"px";
+  player.style.top=e.clientY-oy+"px";
 });
 document.addEventListener("mouseup",()=>dragging=false);
 
 drag.addEventListener("touchstart",e=>{
- dragging=true;
- ox=e.touches[0].clientX-player.offsetLeft;
- oy=e.touches[0].clientY-player.offsetTop;
+  dragging=true;
+  ox=e.touches[0].clientX-player.offsetLeft;
+  oy=e.touches[0].clientY-player.offsetTop;
 },{passive:true});
 document.addEventListener("touchmove",e=>{
- if(!dragging)return;
- player.style.left=e.touches[0].clientX-ox+"px";
- player.style.top=e.touches[0].clientY-oy+"px";
+  if(!dragging)return;
+  player.style.left=e.touches[0].clientX-ox+"px";
+  player.style.top=e.touches[0].clientY-oy+"px";
 },{passive:true});
 document.addEventListener("touchend",()=>dragging=false);
 </script>
