@@ -36,19 +36,19 @@ header{
   top:0;
   width:100%;
   height:70px;
-  background:rgba(0,0,0,.8);
+  background:rgba(0,0,0,.85);
   display:flex;
   justify-content:center;
   align-items:center;
-  box-shadow:0 0 15px rgba(0,255,127,.6);
+  box-shadow:0 0 18px rgba(0,255,127,.6);
   z-index:1000;
 }
 .logo{
-  height:60px;
-  filter:drop-shadow(0 0 12px #00ff7f);
+  height:58px;
+  filter:drop-shadow(0 0 10px #00ff7f);
 }
 
-/* PLAYER PEQUENO */
+/* PLAYER COMPACTO */
 .player{
   position:fixed;
   top:90px;
@@ -58,7 +58,6 @@ header{
   border-radius:12px;
   box-shadow:0 0 18px rgba(0,255,127,.4);
   z-index:9999;
-  user-select:none;
 }
 
 .drag{
@@ -71,7 +70,7 @@ header{
 
 .info{padding:8px}
 
-/* NOME DA MÚSICA SLIDE */
+/* NOME SLIDE */
 .track{
   overflow:hidden;
   white-space:nowrap;
@@ -81,7 +80,7 @@ header{
 .track span{
   display:inline-block;
   padding-left:100%;
-  animation:slide 10s linear infinite;
+  animation:slide 12s linear infinite;
 }
 @keyframes slide{
   from{transform:translateX(0)}
@@ -112,25 +111,26 @@ header{
   margin-top:4px;
 }
 
-/* VOLUME DIAGONAL */
+/* VOLUME VERTICAL */
 .volume{
   display:flex;
   justify-content:center;
-  margin-top:6px;
+  margin-top:8px;
 }
 .volume input{
-  width:80px;
-  transform:rotate(-45deg);
+  height:70px;
+  writing-mode:bt-lr;
+  -webkit-appearance:slider-vertical;
   accent-color:#1db954;
 }
 
-/* EQUALIZADOR PLAYER */
+/* EQ PLAYER */
 .eq-player{
   display:flex;
   justify-content:center;
   align-items:flex-end;
   gap:3px;
-  height:26px;
+  height:28px;
   margin-top:6px;
 }
 .eq-player span{
@@ -139,7 +139,7 @@ header{
   background:#1db954;
 }
 
-/* RODAPÉ */
+/* RODAPÉ PULSANTE */
 footer{
   position:fixed;
   bottom:0;
@@ -150,13 +150,14 @@ footer{
   justify-content:space-between;
   align-items:flex-end;
   padding:0 20px;
-  box-shadow:0 0 12px rgba(0,255,127,.5);
+  box-shadow:0 0 14px rgba(0,255,127,.6);
+  transition:box-shadow .1s, height .1s;
 }
 .footer-eq{
   display:flex;
   align-items:flex-end;
   gap:5px;
-  height:30px;
+  height:32px;
 }
 .footer-eq span{
   width:5px;
@@ -217,7 +218,7 @@ footer{
 </div>
 
 <!-- RODAPÉ -->
-<footer>
+<footer id="footer">
   <div class="footer-eq" id="eqLeft">
     <span></span><span></span><span></span><span></span><span></span>
   </div>
@@ -239,6 +240,7 @@ const title=document.getElementById("title");
 const play=document.getElementById("play");
 const progress=document.getElementById("progress");
 const volume=document.getElementById("volume");
+const footer=document.getElementById("footer");
 
 const eqPlayer=document.querySelectorAll("#eqPlayer span");
 const eqLeft=document.querySelectorAll("#eqLeft span");
@@ -259,17 +261,24 @@ function setupAudio(){
 
 function animateEQ(){
   analyser.getByteFrequencyData(data);
-  const step=Math.floor(data.length/eqPlayer.length);
+  let sum=0;
 
   eqPlayer.forEach((bar,i)=>{
-    bar.style.height=(data[i*step]/4+4)+"px";
+    const h=data[i]/4+4;
+    bar.style.height=h+"px";
+    sum+=h;
   });
+
   eqLeft.forEach((bar,i)=>{
-    bar.style.height=(data[i*step]/5+4)+"px";
+    bar.style.height=(data[i]/5+4)+"px";
   });
   eqRight.forEach((bar,i)=>{
-    bar.style.height=(data[i*step]/5+4)+"px";
+    bar.style.height=(data[i]/5+4)+"px";
   });
+
+  const pulse=Math.min(70,40+sum/10);
+  footer.style.height=pulse+"px";
+  footer.style.boxShadow=`0 0 ${pulse/2}px rgba(0,255,127,.8)`;
 
   requestAnimationFrame(animateEQ);
 }
@@ -294,6 +303,7 @@ play.onclick=()=>{
     play.textContent="▶";
   }
 };
+
 document.getElementById("next").onclick=()=>{
   current=(current+1)%playlist.length;
   load(); audio.play(); play.textContent="⏸";
