@@ -6,222 +6,250 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       color: white;
+      min-height: 100vh;
+      background: black;
       overflow-x: hidden;
     }
 
-    /* Fundo em vídeo */
-    .video-bg {
+    /* FUNDO EM VÍDEO */
+    #bgVideo {
       position: fixed;
-      top: 0;
-      left: 0;
-      min-width: 100%;
-      min-height: 100%;
-      z-index: -2;
+      inset: 0;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      filter: brightness(1.2);
+      z-index: -2;
+      filter: brightness(1.45) contrast(1.2);
     }
 
     .overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       background: rgba(0,0,0,0.4);
       z-index: -1;
     }
 
-    /* Cabeçalho */
+    /* CABEÇALHO */
     header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 4px 0;
       background: rgba(0,0,0,0.75);
-      padding: 10px 20px;
+      box-shadow: 0 0 15px rgba(0,255,127,0.5);
       display: flex;
-      align-items: center;
       justify-content: center;
-      border-bottom: 2px solid #00ff7f;
-      height: 80px;
+      align-items: center;
+      z-index: 1000;
     }
 
-    header img {
-      height: 100%;
-      max-height: 60px;
-      animation: pulse 2s infinite;
+    .logo {
+      height: 85px; /* LOGO BEM GRANDE */
+      max-height: 85px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 14px #00ff7f);
+      animation: pulse 2.5s infinite;
     }
 
     @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.08); }
-      100% { transform: scale(1); }
+      0% { transform: scale(1); filter: drop-shadow(0 0 12px #00ff7f); }
+      50% { transform: scale(1.1); filter: drop-shadow(0 0 20px #00ff7f); }
+      100% { transform: scale(1); filter: drop-shadow(0 0 12px #00ff7f); }
     }
 
-    /* Player flutuante */
-    .player {
+    /* PLAYER FLUTUANTE */
+    .mini-player {
       position: fixed;
       top: 100px;
       left: 10px;
+      width: 190px;
       background: rgba(0,0,0,0.85);
-      border-radius: 15px;
-      padding: 10px 12px;
-      width: 260px;
-      box-shadow: 0 0 15px rgba(0,255,127,0.5);
+      border-radius: 12px;
+      padding: 8px;
+      box-shadow: 0 0 12px rgba(0,255,127,0.6);
+      z-index: 9999;
       touch-action: none;
-      z-index: 999;
+      user-select: none;
     }
 
-    .track-name {
-      font-size: 13px;
+    .radio-name {
+      text-align: center;
+      font-size: 11px;
+      font-weight: bold;
       color: #00ff7f;
-      white-space: nowrap;
-      overflow: hidden;
+      margin-bottom: 4px;
     }
 
-    .track-name span {
+    .track-marquee {
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 10px;
+      color: #00ff7f;
+      margin-bottom: 5px;
+    }
+
+    .track-marquee span {
       display: inline-block;
       padding-left: 100%;
-      animation: scroll 12s linear infinite;
+      animation: marquee 9s linear infinite;
     }
 
-    @keyframes scroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-100%); }
     }
 
     .controls {
       display: flex;
-      align-items: center;
       justify-content: center;
-      gap: 12px;
-      margin: 8px 0;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
     }
 
     .controls button {
-      background: none;
+      background: transparent;
       border: none;
+      padding: 0;
       cursor: pointer;
     }
 
     .controls svg {
-      width: 28px;
-      height: 28px;
+      width: 20px;
+      height: 20px;
       fill: #00ff7f;
+      filter: drop-shadow(0 0 5px #00ff7f);
+      transition: transform 0.1s;
     }
 
-    .volume-container {
-      display: flex;
-      align-items: center;
-      gap: 6px;
+    .controls svg:hover {
+      transform: scale(1.15);
     }
 
-    .volume-container input[type=range] {
-      width: 100px;
+    .volume-bar {
+      width: 100%;
+      height: 6px;
+      margin-top: 4px;
     }
 
-    /* Equalizador do player */
+    /* EQUALIZADOR DO PLAYER */
     .equalizer {
       display: flex;
       justify-content: center;
       align-items: flex-end;
       gap: 3px;
-      height: 25px;
-      margin-top: 5px;
+      margin-top: 6px;
+      height: 14px;
     }
 
     .bar {
       width: 4px;
+      height: 4px;
       background: #00ff7f;
-      height: 5px;
-      border-radius: 3px;
+      box-shadow: 0 0 6px #00ff7f;
+      transition: height 0.05s;
     }
 
-    /* Rodapé */
+    /* RODAPÉ */
     footer {
-      background: rgba(0,0,0,0.75);
-      color: #00ff7f;
-      text-align: center;
-      padding: 10px;
-      font-size: 13px;
       position: fixed;
       bottom: 0;
       width: 100%;
-      border-top: 2px solid #00ff7f;
+      background: rgba(0,0,0,0.75);
+      padding: 6px 8px;
+      font-size: 11px;
+      color: #00ff7f;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 0 12px rgba(0,255,127,0.5);
+      z-index: 1000;
     }
 
     .footer-eq {
       display: flex;
-      justify-content: center;
-      gap: 6px;
-      margin-bottom: 5px;
+      gap: 3px;
+      height: 14px;
+      align-items: flex-end;
     }
 
     .footer-bar {
-      width: 5px;
-      height: 8px;
+      width: 4px;
+      height: 4px;
       background: #00ff7f;
-      border-radius: 3px;
+      box-shadow: 0 0 6px #00ff7f;
+      transition: height 0.05s;
     }
 
-    @media (max-width: 600px) {
-      .player {
-        width: 230px;
+    /* MOBILE */
+    @media (max-width: 480px) {
+      .mini-player {
+        width: 92%;
+        left: 4%;
+        top: 95px;
       }
 
-      header {
+      .controls svg {
+        width: 22px;
+        height: 22px;
+      }
+
+      .logo {
         height: 70px;
-      }
-
-      header img {
-        max-height: 55px;
       }
     }
   </style>
 </head>
+
 <body>
 
-  <!-- Fundo em vídeo -->
-  <video class="video-bg" autoplay muted loop playsinline>
+  <!-- VÍDEO DE FUNDO -->
+  <video autoplay muted loop playsinline id="bgVideo">
     <source src="grok.mp4" type="video/mp4">
   </video>
   <div class="overlay"></div>
 
-  <!-- Cabeçalho -->
+  <!-- CABEÇALHO COM LOGO -->
   <header>
-    <img src="logo.png" alt="Logo Radio Mix">
+    <img src="logo.png" alt="Radio Mix" class="logo">
   </header>
 
-  <!-- Player -->
-  <div class="player" id="player">
-    <div class="track-name" id="trackName">
-      <span>Carregando...</span>
+  <!-- PLAYER FLUTUANTE -->
+  <div class="mini-player" id="player">
+    <div class="radio-name">Radio Mix</div>
+
+    <div class="track-marquee">
+      <span id="trackName">Carregando música...</span>
     </div>
 
     <div class="controls">
-      <button id="prevBtn">
-        <svg viewBox="0 0 24 24"><path d="M6 18V6h2v12H6zm3.5-6L18 6v12l-8.5-6z"/></svg>
+      <button id="prevBtn" title="Anterior">
+        <svg viewBox="0 0 24 24">
+          <path d="M6 5v14h2V5H6zm3.5 7L18 19V5L9.5 12z"/>
+        </svg>
       </button>
 
-      <button id="playBtn">
-        <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      <button id="playBtn" title="Play/Pause">
+        <svg id="playIcon" viewBox="0 0 24 24">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+        <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none;">
+          <path d="M6 5h4v14H6zm8 0h4v14h-4z"/>
+        </svg>
       </button>
 
-      <button id="nextBtn">
-        <svg viewBox="0 0 24 24"><path d="M16 6v12h-2V6h2zM6 18l8.5-6L6 6v12z"/></svg>
+      <button id="nextBtn" title="Próxima">
+        <svg viewBox="0 0 24 24">
+          <path d="M6 5v14l8.5-7L6 5zm10 0v14h2V5h-2z"/>
+        </svg>
       </button>
     </div>
 
-    <div class="volume-container">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="#00ff7f">
-        <path d="M3 10v4h4l5 5V5l-5 5H3z"/>
-      </svg>
-      <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8">
-    </div>
+    <input type="range" id="volume" class="volume-bar" min="0" max="1" step="0.01" value="0.8">
 
     <div class="equalizer" id="equalizer">
       <div class="bar"></div>
@@ -231,36 +259,39 @@
       <div class="bar"></div>
       <div class="bar"></div>
       <div class="bar"></div>
-      <div class="bar"></div>
     </div>
 
-    <audio id="audio"></audio>
+    <audio id="audio" preload="auto" crossorigin="anonymous"></audio>
   </div>
 
-  <!-- Rodapé -->
+  <!-- RODAPÉ -->
   <footer>
-    <div class="footer-eq" id="footerEq">
-      <div class="footer-bar"></div>
-      <div class="footer-bar"></div>
-      <div class="footer-bar"></div>
-      <div class="footer-bar"></div>
-      <div class="footer-bar"></div>
-      <div class="footer-bar"></div>
+    <div class="footer-eq">
+      <div class="footer-bar"></div><div class="footer-bar"></div><div class="footer-bar"></div><div class="footer-bar"></div>
     </div>
-    @mth5 2024 • <span id="clock"></span>
+
+    <div>
+      <span id="clock"></span> • @mth5 2024
+    </div>
+
+    <div class="footer-eq">
+      <div class="footer-bar"></div><div class="footer-bar"></div><div class="footer-bar"></div><div class="footer-bar"></div>
+    </div>
   </footer>
 
   <script>
-    const audio = document.getElementById("audio");
-    const playBtn = document.getElementById("playBtn");
-    const playIcon = document.getElementById("playIcon");
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
-    const volume = document.getElementById("volume");
-    const trackName = document.getElementById("trackName").querySelector("span");
-    const bars = document.querySelectorAll(".bar");
-    const footerBars = document.querySelectorAll(".footer-bar");
+    /* RELÓGIO FORÇADO PARA HORÁRIO LOCAL DO BRASIL */
+    function atualizarHora() {
+      const agora = new Date();
+      const h = agora.toLocaleString("pt-BR", { hour: "2-digit", hour12: false });
+      const m = agora.toLocaleString("pt-BR", { minute: "2-digit" });
+      const s = agora.toLocaleString("pt-BR", { second: "2-digit" });
+      document.getElementById("clock").innerText = `${h}:${m}:${s}`;
+    }
+    atualizarHora();
+    setInterval(atualizarHora, 1000);
 
+    /* PLAYLIST */
     const playlist = [
       "Som da Liberdade (feat. Tevão Lino & Ivair Filho) (Remix).mp3",
       "Benson Boone - Beautiful Things (Official Music Video) (256).mp3",
@@ -269,41 +300,82 @@
     ];
 
     let currentTrack = 0;
-    let isPlaying = false;
+    const audio = document.getElementById("audio");
+    const playBtn = document.getElementById("playBtn");
+    const playIcon = document.getElementById("playIcon");
+    const pauseIcon = document.getElementById("pauseIcon");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const volume = document.getElementById("volume");
+    const trackName = document.getElementById("trackName");
+    const bars = document.querySelectorAll(".bar");
+    const footerBars = document.querySelectorAll(".footer-bar");
+
+    let audioContext, analyser, source, dataArray;
+
+    function setupAudioContext() {
+      if (audioContext) return;
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioContext.createAnalyser();
+      analyser.fftSize = 64;
+      dataArray = new Uint8Array(analyser.frequencyBinCount);
+      source = audioContext.createMediaElementSource(audio);
+      source.connect(analyser);
+      analyser.connect(audioContext.destination);
+    }
+
+    function updateEqualizer() {
+      if (!analyser) return;
+      analyser.getByteFrequencyData(dataArray);
+      const step = Math.floor(dataArray.length / bars.length);
+
+      bars.forEach((bar, i) => {
+        const value = dataArray[i * step] || 0;
+        bar.style.height = Math.max(4, value / 4) + "px";
+      });
+
+      footerBars.forEach((bar, i) => {
+        const value = dataArray[i * step] || 0;
+        bar.style.height = Math.max(4, value / 5) + "px";
+      });
+
+      requestAnimationFrame(updateEqualizer);
+    }
 
     function loadTrack(index) {
       audio.src = playlist[index];
       trackName.textContent = playlist[index];
     }
 
-    loadTrack(currentTrack);
+    function playMusic() {
+      setupAudioContext();
+      audioContext.resume();
+      audio.play().catch(() => {});
+      playIcon.style.display = "none";
+      pauseIcon.style.display = "inline";
+      updateEqualizer();
+    }
+
+    function pauseMusic() {
+      audio.pause();
+      playIcon.style.display = "inline";
+      pauseIcon.style.display = "none";
+    }
 
     playBtn.onclick = () => {
-      if (!isPlaying) {
-        audio.play();
-        playIcon.innerHTML = '<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>';
-        isPlaying = true;
-      } else {
-        audio.pause();
-        playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
-        isPlaying = false;
-      }
-    };
-
-    nextBtn.onclick = () => {
-      currentTrack = (currentTrack + 1) % playlist.length;
-      loadTrack(currentTrack);
-      audio.play();
-      playIcon.innerHTML = '<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>';
-      isPlaying = true;
+      audio.paused ? playMusic() : pauseMusic();
     };
 
     prevBtn.onclick = () => {
       currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
       loadTrack(currentTrack);
-      audio.play();
-      playIcon.innerHTML = '<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>';
-      isPlaying = true;
+      playMusic();
+    };
+
+    nextBtn.onclick = () => {
+      currentTrack = (currentTrack + 1) % playlist.length;
+      loadTrack(currentTrack);
+      playMusic();
     };
 
     volume.oninput = () => {
@@ -314,101 +386,48 @@
       nextBtn.click();
     };
 
-    /* Equalizador real */
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const analyser = audioContext.createAnalyser();
-    const source = audioContext.createMediaElementSource(audio);
-    source.connect(analyser);
-    analyser.connect(audioContext.destination);
-    analyser.fftSize = 64;
-    const bufferLength = analyser.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
-
-    function animateEqualizer() {
-      requestAnimationFrame(animateEqualizer);
-      analyser.getByteFrequencyData(dataArray);
-
-      bars.forEach((bar, i) => {
-        const value = dataArray[i] || 0;
-        bar.style.height = (value / 255) * 25 + "px";
-      });
-
-      footerBars.forEach((bar, i) => {
-        const value = dataArray[i] || 0;
-        bar.style.height = (value / 255) * 15 + "px";
-      });
-    }
-
-    audio.onplay = () => {
-      audioContext.resume();
-      animateEqualizer();
-    };
-
-    /* Hora correta */
-    function updateClock() {
-      const now = new Date();
-      const h = String(now.getHours()).padStart(2, '0');
-      const m = String(now.getMinutes()).padStart(2, '0');
-      const s = String(now.getSeconds()).padStart(2, '0');
-      document.getElementById("clock").textContent = `${h}:${m}:${s}`;
-    }
-    updateClock();
-    setInterval(updateClock, 1000);
-
-    /* Player arrastável com snap */
+    /* PLAYER ARRASTÁVEL + GRUDAR NAS BORDAS */
     const player = document.getElementById("player");
-    let isDragging = false;
-    let offsetX, offsetY;
+    let isDragging = false, offsetX = 0, offsetY = 0;
 
     function startDrag(e) {
       isDragging = true;
-      const touch = e.touches ? e.touches[0] : e;
-      offsetX = touch.clientX - player.getBoundingClientRect().left;
-      offsetY = touch.clientY - player.getBoundingClientRect().top;
-      document.addEventListener("mousemove", drag);
-      document.addEventListener("mouseup", stopDrag);
-      document.addEventListener("touchmove", drag);
-      document.addEventListener("touchend", stopDrag);
+      const rect = player.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      offsetX = clientX - rect.left;
+      offsetY = clientY - rect.top;
     }
 
-    function drag(e) {
+    function onDrag(e) {
       if (!isDragging) return;
-      const touch = e.touches ? e.touches[0] : e;
-      let x = touch.clientX - offsetX;
-      let y = touch.clientY - offsetY;
-
-      const maxX = window.innerWidth - player.offsetWidth;
-      const maxY = window.innerHeight - player.offsetHeight;
-
-      x = Math.max(0, Math.min(x, maxX));
-      y = Math.max(0, Math.min(y, maxY));
-
-      player.style.left = x + "px";
-      player.style.top = y + "px";
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      player.style.left = (clientX - offsetX) + "px";
+      player.style.top = (clientY - offsetY) + "px";
     }
 
     function stopDrag() {
+      if (!isDragging) return;
       isDragging = false;
-      document.removeEventListener("mousemove", drag);
-      document.removeEventListener("mouseup", stopDrag);
-      document.removeEventListener("touchmove", drag);
-      document.removeEventListener("touchend", stopDrag);
-
-      /* Snap automático */
       const rect = player.getBoundingClientRect();
-      const snapThreshold = 50;
-
-      if (rect.left < snapThreshold) player.style.left = "10px";
-      if (window.innerWidth - rect.right < snapThreshold)
-        player.style.left = window.innerWidth - player.offsetWidth - 10 + "px";
-
-      if (rect.top < snapThreshold) player.style.top = "10px";
-      if (window.innerHeight - rect.bottom < snapThreshold)
-        player.style.top = window.innerHeight - player.offsetHeight - 10 + "px";
+      const snap = 20;
+      if (rect.left < snap) player.style.left = "10px";
+      if (window.innerWidth - rect.right < snap) player.style.left = (window.innerWidth - rect.width - 10) + "px";
+      if (rect.top < snap) player.style.top = "100px";
+      if (window.innerHeight - rect.bottom < snap) player.style.top = (window.innerHeight - rect.height - 10) + "px";
     }
 
     player.addEventListener("mousedown", startDrag);
-    player.addEventListener("touchstart", startDrag);
+    document.addEventListener("mousemove", onDrag);
+    document.addEventListener("mouseup", stopDrag);
+    player.addEventListener("touchstart", startDrag, { passive: true });
+    document.addEventListener("touchmove", onDrag, { passive: true });
+    document.addEventListener("touchend", stopDrag);
+
+    /* INICIALIZAÇÃO */
+    loadTrack(currentTrack);
+    audio.volume = volume.value;
   </script>
 
 </body>
