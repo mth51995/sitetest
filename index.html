@@ -8,13 +8,13 @@
 <style>
 body{
   margin:0;
-  font-family:Arial,Helvetica,sans-serif;
+  font-family:Arial, Helvetica, sans-serif;
   background:black;
   color:white;
   overflow-x:hidden;
 }
 
-/* FUNDO EM VÍDEO */
+/* FUNDO */
 #bgVideo{
   position:fixed;
   inset:0;
@@ -48,15 +48,15 @@ header{
   filter:drop-shadow(0 0 12px #00ff7f);
 }
 
-/* PLAYER ESTILO SPOTIFY */
+/* PLAYER */
 .player{
   position:fixed;
   top:90px;
   left:10px;
-  width:280px;
+  width:240px;
   background:#121212;
-  border-radius:18px;
-  box-shadow:0 0 25px rgba(0,255,127,.4);
+  border-radius:14px;
+  box-shadow:0 0 20px rgba(0,255,127,.4);
   z-index:9999;
   user-select:none;
 }
@@ -64,37 +64,29 @@ header{
 .drag{
   text-align:center;
   font-size:11px;
-  padding:6px;
+  padding:5px;
   color:#1db954;
   cursor:grab;
 }
 
-.cover{
-  width:100%;
-  height:180px;
-  background:#000;
-  background-size:cover;
-  background-position:center;
-  border-radius:18px 18px 0 0;
+.info{
+  padding:10px;
 }
 
-.info{
-  padding:12px;
-}
 .title{
-  font-size:14px;
+  font-size:13px;
   font-weight:bold;
   color:#1db954;
-}
-.artist{
-  font-size:11px;
-  color:#aaa;
-  margin-bottom:6px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
+/* PROGRESSO */
 .progress input{
   width:100%;
   accent-color:#1db954;
+  margin-top:6px;
 }
 
 /* CONTROLES */
@@ -102,18 +94,27 @@ header{
   display:flex;
   justify-content:center;
   align-items:center;
-  gap:20px;
+  gap:14px;
   margin-top:8px;
 }
 .controls button{
   background:none;
   border:none;
-  font-size:24px;
+  font-size:22px;
   color:#1db954;
   cursor:pointer;
 }
 .play{
-  font-size:34px;
+  font-size:30px;
+}
+
+/* VOLUME */
+.volume{
+  margin-top:6px;
+}
+.volume input{
+  width:100%;
+  accent-color:#1db954;
 }
 
 /* EQUALIZADOR PLAYER */
@@ -144,17 +145,25 @@ footer{
   display:flex;
   justify-content:center;
   align-items:center;
-  gap:6px;
   box-shadow:0 0 12px rgba(0,255,127,.5);
+  z-index:1000;
+}
+.footer-eq{
+  display:flex;
+  gap:6px;
 }
 .footer-eq span{
-  width:4px;
-  height:6px;
+  width:5px;
+  height:8px;
   background:#00ff7f;
   animation:eq 0.7s infinite alternate;
 }
+.footer-eq span:nth-child(2){animation-delay:.1s}
+.footer-eq span:nth-child(3){animation-delay:.2s}
+.footer-eq span:nth-child(4){animation-delay:.3s}
+.footer-eq span:nth-child(5){animation-delay:.4s}
+.footer-eq span:nth-child(6){animation-delay:.5s}
 
-/* ANIMAÇÃO */
 @keyframes eq{
   from{height:6px}
   to{height:22px}
@@ -185,12 +194,10 @@ footer{
 
 <!-- PLAYER -->
 <div class="player" id="player">
-  <div class="drag" id="drag">ARRASTE AQUI</div>
-  <div class="cover" id="cover"></div>
+  <div class="drag" id="drag">ARRASTE</div>
 
   <div class="info">
     <div class="title" id="title"></div>
-    <div class="artist">Radio Mix</div>
 
     <div class="progress">
       <input type="range" id="progress" value="0">
@@ -200,6 +207,11 @@ footer{
       <button id="prev">⏮</button>
       <button id="play" class="play">▶</button>
       <button id="next">⏭</button>
+    </div>
+
+    <!-- VOLUME -->
+    <div class="volume">
+      <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8">
     </div>
 
     <div class="eq-player">
@@ -213,38 +225,31 @@ footer{
 <!-- RODAPÉ -->
 <footer>
   <div class="footer-eq">
-    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span><span></span>
   </div>
 </footer>
 
 <script>
 const playlist=[
- {
-  title:"Som da Liberdade (Remix)",
-  file:"Som da Liberdade (feat. Tevão Lino & Ivair Filho) (Remix).mp3",
-  cover:"liberdade.jpg"
- },
- {
-  title:"Beautiful Things",
-  file:"Benson Boone - Beautiful Things (Official Music Video) (256).mp3",
-  cover:"beautiful.jpg"
- }
+ "Som da Liberdade (feat. Tevão Lino & Ivair Filho) (Remix).mp3",
+ "Benson Boone - Beautiful Things (Official Music Video) (256).mp3"
 ];
 
 let current=0;
 const audio=document.getElementById("audio");
 const title=document.getElementById("title");
-const cover=document.getElementById("cover");
 const play=document.getElementById("play");
 const progress=document.getElementById("progress");
+const volume=document.getElementById("volume");
 
 function load(){
- audio.src=playlist[current].file;
- title.textContent=playlist[current].title;
- cover.style.backgroundImage=`url('${playlist[current].cover}')`;
+ audio.src=playlist[current];
+ title.textContent=playlist[current];
+ audio.volume=volume.value;
 }
 load();
 
+/* CONTROLES */
 play.onclick=()=>{
  if(audio.paused){
   audio.play();
@@ -254,7 +259,6 @@ play.onclick=()=>{
   play.textContent="▶";
  }
 };
-
 document.getElementById("next").onclick=()=>{
  current=(current+1)%playlist.length;
  load(); audio.play(); play.textContent="⏸";
@@ -271,7 +275,12 @@ progress.oninput=e=>{
  audio.currentTime=(e.target.value/100)*audio.duration;
 };
 
-/* ARRASTAR PC + CELULAR */
+/* VOLUME */
+volume.oninput=()=>{
+ audio.volume=volume.value;
+};
+
+/* ARRASTAR PLAYER */
 let dragging=false,ox=0,oy=0;
 const player=document.getElementById("player");
 const drag=document.getElementById("drag");
