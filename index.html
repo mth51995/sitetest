@@ -100,6 +100,7 @@
       width: 28px;
       height: 28px;
       fill: white;
+      pointer-events: none; /* 🔥 IMPORTANTE: garante clique no botão */
     }
 
     .volume-container {
@@ -173,14 +174,12 @@
     <h2 id="musicTitle">Carregando...</h2>
 
     <div class="controls">
-      <!-- Anterior -->
       <button id="prevBtn" class="control-btn" title="Anterior">
         <svg viewBox="0 0 24 24">
           <path d="M6 5h2v14H6zM20 12L8 5v14z"/>
         </svg>
       </button>
 
-      <!-- Play / Pause -->
       <button id="playBtn" class="control-btn" title="Play/Pause">
         <svg id="playIcon" viewBox="0 0 24 24">
           <path d="M8 5v14l11-7z"/>
@@ -190,7 +189,6 @@
         </svg>
       </button>
 
-      <!-- Próxima -->
       <button id="nextBtn" class="control-btn" title="Próxima">
         <svg viewBox="0 0 24 24">
           <path d="M6 12l12 7V5zM16 5h2v14h-2z"/>
@@ -198,7 +196,6 @@
       </button>
     </div>
 
-    <!-- Barra de volume -->
     <div class="volume-container">
       <svg viewBox="0 0 24 24">
         <path d="M7 10v4h4l5 5V5l-5 5z"/>
@@ -277,9 +274,49 @@
         pauseIcon.style.display = "block";
         status.textContent = "TOCANDO";
       } catch (err) {
-        alert("Erro ao tocar a música.");
+        alert("Erro ao tocar a música. Veja o console (F12).");
         console.error(err);
       }
     }
 
-    function pauseMusic()
+    function pauseMusic() {
+      audio.pause();
+      playIcon.style.display = "block";
+      pauseIcon.style.display = "none";
+      status.textContent = "PAUSADO";
+    }
+
+    playBtn.onclick = () => {
+      if (audio.paused) {
+        playMusic();
+      } else {
+        pauseMusic();
+      }
+    };
+
+    nextBtn.onclick = () => {
+      currentIndex = (currentIndex + 1) % playlist.length;
+      loadMusic(currentIndex);
+      playMusic();
+    };
+
+    prevBtn.onclick = () => {
+      currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+      loadMusic(currentIndex);
+      playMusic();
+    };
+
+    volumeSlider.oninput = () => {
+      audio.volume = volumeSlider.value;
+    };
+
+    audio.addEventListener("ended", () => {
+      nextBtn.click();
+    });
+
+    // Inicializa
+    loadMusic(currentIndex);
+  </script>
+
+</body>
+</html>
