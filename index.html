@@ -8,18 +8,19 @@
   <style>
     body {
       margin: 0;
-      padding: 0;
       font-family: Arial, sans-serif;
       color: white;
       min-height: 100vh;
       overflow-x: hidden;
       background: black;
+      user-select: none;
+      touch-action: manipulation;
     }
 
+    /* VÍDEO DE FUNDO */
     #bgVideo {
       position: fixed;
-      top: 0;
-      left: 0;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -29,47 +30,52 @@
 
     .overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       background: rgba(0,0,0,0.35);
       z-index: -1;
     }
 
+    /* CABEÇALHO */
     header {
       background: rgba(0,0,0,0.75);
       text-align: center;
-      padding: 6px;
+      padding: 6px 10px;
       box-shadow: 0 0 15px rgba(0,255,127,0.5);
       position: relative;
       z-index: 10;
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
 
-    .logo {
-      height: 90px;
-      max-width: 95%;
+    header img {
+      height: 48px;
+      max-width: 85%;
       object-fit: contain;
-      filter: drop-shadow(0 0 14px #00ff7f);
-      transition: transform 0.08s ease;
-      pointer-events: none;
+      filter: drop-shadow(0 0 10px #00ff7f);
+      animation: pulse 1.8s infinite ease-in-out;
     }
 
-    /* PLAYER */
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.08); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.9; }
+    }
+
+    /* PLAYER FLUTUANTE */
     .mini-player {
       position: fixed;
-      top: 120px;
-      left: 12px;
+      top: 90px;
+      left: 10px;
       width: 190px;
       background: rgba(0,0,0,0.75);
       border-radius: 12px;
       padding: 8px;
       box-shadow: 0 0 12px rgba(0,255,127,0.6);
       z-index: 9999;
+      cursor: grab;
       touch-action: none;
+    }
+
+    .mini-player:active {
+      cursor: grabbing;
     }
 
     .radio-name {
@@ -85,7 +91,7 @@
       white-space: nowrap;
       font-size: 10px;
       color: #00ff7f;
-      margin-bottom: 4px;
+      margin-bottom: 5px;
     }
 
     .track-marquee span {
@@ -124,83 +130,94 @@
       pointer-events: none;
     }
 
-    .controls svg:hover {
-      transform: scale(1.15);
+    .controls button:active svg {
+      transform: scale(1.2);
     }
 
     .volume-bar {
       width: 100%;
       height: 6px;
       margin-top: 4px;
-      touch-action: manipulation;
     }
 
+    /* EQUALIZADOR DO PLAYER (MENOR) */
     .equalizer {
       display: flex;
       justify-content: center;
       align-items: flex-end;
-      gap: 2px;
-      margin-top: 4px;
-      height: 12px;
+      gap: 3px;
+      margin-top: 5px;
+      height: 14px;
     }
 
     .bar {
-      width: 3px;
+      width: 4px;
       height: 4px;
       background: #00ff7f;
       box-shadow: 0 0 6px #00ff7f;
       transition: height 0.05s;
     }
 
+    /* RODAPÉ */
     footer {
       position: fixed;
       bottom: 0;
       width: 100%;
       background: rgba(0,0,0,0.75);
       color: #00ff7f;
-      padding: 6px 10px;
       font-size: 11px;
+      padding: 6px 8px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      box-shadow: 0 0 15px rgba(0,255,127,0.5);
+      justify-content: space-between;
       z-index: 10;
     }
 
-    #clock {
-      font-size: 11px;
-      text-shadow: 0 0 6px #00ff7f;
+    .footer-center {
+      text-align: center;
+      flex: 1;
     }
 
     .footer-eq {
       display: flex;
       align-items: flex-end;
       gap: 3px;
-      height: 12px;
+      height: 16px;
     }
 
-    .footer-bar {
+    .footer-eq .bar {
       width: 3px;
       height: 4px;
-      background: #00ff7f;
-      box-shadow: 0 0 6px #00ff7f;
-      transition: height 0.05s;
     }
 
+    /* MOBILE */
     @media (max-width: 480px) {
-      header {
-        padding: 4px;
-      }
-
-      .logo {
-        height: 85px;
+      header img {
+        height: 44px;
       }
 
       .mini-player {
         width: 92%;
         left: 4%;
         right: 4%;
-        top: 115px;
+        top: 90px;
+      }
+
+      .controls svg {
+        width: 22px;
+        height: 22px;
+      }
+
+      .volume-bar {
+        height: 7px;
+      }
+
+      .equalizer {
+        height: 16px;
+      }
+
+      .bar {
+        width: 5px;
       }
     }
   </style>
@@ -214,11 +231,12 @@
   </video>
   <div class="overlay"></div>
 
+  <!-- CABEÇALHO COM LOGO -->
   <header>
-    <img src="logo.png" alt="Logo Rádio Mix" class="logo" id="logo">
+    <img src="logo.png" alt="Radio Mix Logo">
   </header>
 
-  <!-- PLAYER -->
+  <!-- PLAYER FLUTUANTE -->
   <div class="mini-player" id="player">
     <div class="radio-name">Radio Mix</div>
 
@@ -251,7 +269,10 @@
 
     <input type="range" id="volume" class="volume-bar" min="0" max="1" step="0.01" value="0.8">
 
+    <!-- EQUALIZADOR -->
     <div class="equalizer" id="equalizer">
+      <div class="bar"></div>
+      <div class="bar"></div>
       <div class="bar"></div>
       <div class="bar"></div>
       <div class="bar"></div>
@@ -262,39 +283,35 @@
     <audio id="audio" preload="auto" crossorigin="anonymous"></audio>
   </div>
 
+  <!-- RODAPÉ -->
   <footer>
     <div class="footer-eq" id="footerEqLeft">
-      <div class="footer-bar"></div>
-      <div class="footer-bar"></div>
-      <div class="footer-bar"></div>
-      <div class="footer-bar"></div>
-      <div class="footer-bar"></div>
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
     </div>
 
-    <div>@mth5 2024 — <span id="clock"></span></div>
+    <div class="footer-center">
+      <div id="clock"></div>
+      <div>@mth5 2024</div>
+    </div>
 
     <div class="footer-eq" id="footerEqRight">
-      <div class="footer-bar"></div>
-      <div class="footer-bar"></div>
-      <div class="footer-bar"></div>
-      <div class="footer-bar"></div>
-      <div class="footer-bar"></div>
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
     </div>
   </footer>
 
   <script>
-    // Relógio
+    /* RELÓGIO */
     function atualizarHora() {
       const agora = new Date();
       const h = String(agora.getHours()).padStart(2, '0');
       const m = String(agora.getMinutes()).padStart(2, '0');
       const s = String(agora.getSeconds()).padStart(2, '0');
-      document.getElementById("clock").innerText = `${h}:${m}:${s}`;
+      document.getElementById("clock").innerText = `Hora atual: ${h}:${m}:${s}`;
     }
     atualizarHora();
     setInterval(atualizarHora, 1000);
 
-    // Playlist
+    /* PLAYER */
     const playlist = [
       "Som da Liberdade (feat. Tevão Lino & Ivair Filho) (Remix).mp3",
       "Benson Boone - Beautiful Things (Official Music Video) (256).mp3",
@@ -303,7 +320,6 @@
     ];
 
     let currentTrack = 0;
-
     const audio = document.getElementById("audio");
     const playBtn = document.getElementById("playBtn");
     const playIcon = document.getElementById("playIcon");
@@ -312,23 +328,19 @@
     const nextBtn = document.getElementById("nextBtn");
     const volume = document.getElementById("volume");
     const trackName = document.getElementById("trackName");
+
     const bars = document.querySelectorAll(".bar");
-    const footerBarsLeft = document.querySelectorAll("#footerEqLeft .footer-bar");
-    const footerBarsRight = document.querySelectorAll("#footerEqRight .footer-bar");
-    const logo = document.getElementById("logo");
-    const player = document.getElementById("player");
+    const footerBars = document.querySelectorAll(".footer-eq .bar");
 
     let audioContext, analyser, source, dataArray;
 
     function setupAudioContext() {
       if (audioContext) return;
-
       audioContext = new (window.AudioContext || window.webkitAudioContext)();
       analyser = audioContext.createAnalyser();
       analyser.fftSize = 64;
       const bufferLength = analyser.frequencyBinCount;
       dataArray = new Uint8Array(bufferLength);
-
       source = audioContext.createMediaElementSource(audio);
       source.connect(analyser);
       analyser.connect(audioContext.destination);
@@ -337,33 +349,17 @@
     function updateEqualizer() {
       if (!analyser) return;
       analyser.getByteFrequencyData(dataArray);
-
       const step = Math.floor(dataArray.length / bars.length);
-      let total = 0;
 
       bars.forEach((bar, i) => {
         const value = dataArray[i * step] || 0;
-        const height = Math.max(4, value / 6);
-        bar.style.height = height + "px";
-        total += value;
-      });
-
-      const footerStep = Math.floor(dataArray.length / footerBarsLeft.length);
-
-      footerBarsLeft.forEach((bar, i) => {
-        const value = dataArray[i * footerStep] || 0;
         bar.style.height = Math.max(4, value / 5) + "px";
       });
 
-      footerBarsRight.forEach((bar, i) => {
-        const value = dataArray[i * footerStep] || 0;
-        bar.style.height = Math.max(4, value / 5) + "px";
+      footerBars.forEach((bar, i) => {
+        const value = dataArray[i * step] || 0;
+        bar.style.height = Math.max(4, value / 6) + "px";
       });
-
-      // LOGO PULSANDO
-      const avg = total / bars.length;
-      const scale = 1 + avg / 350;
-      logo.style.transform = `scale(${scale})`;
 
       requestAnimationFrame(updateEqualizer);
     }
@@ -376,7 +372,7 @@
     function playMusic() {
       setupAudioContext();
       audioContext.resume();
-      audio.play().catch(err => console.log("Erro ao tocar:", err));
+      audio.play().catch(()=>{});
       playIcon.style.display = "none";
       pauseIcon.style.display = "inline";
       updateEqualizer();
@@ -386,81 +382,98 @@
       audio.pause();
       playIcon.style.display = "inline";
       pauseIcon.style.display = "none";
-      logo.style.transform = "scale(1)";
     }
 
-    playBtn.onclick = () => {
-      if (audio.paused) {
-        playMusic();
-      } else {
-        pauseMusic();
-      }
-    };
+    playBtn.addEventListener("click", () => {
+      if (audio.paused) playMusic();
+      else pauseMusic();
+    });
 
-    prevBtn.onclick = () => {
+    prevBtn.addEventListener("click", () => {
       currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
       loadTrack(currentTrack);
       playMusic();
-    };
+    });
 
-    nextBtn.onclick = () => {
+    nextBtn.addEventListener("click", () => {
       currentTrack = (currentTrack + 1) % playlist.length;
       loadTrack(currentTrack);
       playMusic();
-    };
+    });
 
-    volume.oninput = () => {
+    volume.addEventListener("input", () => {
       audio.volume = volume.value;
-    };
+    });
 
-    audio.onended = () => {
+    audio.addEventListener("ended", () => {
       nextBtn.click();
-    };
+    });
 
-    // Inicialização
     loadTrack(currentTrack);
     audio.volume = volume.value;
 
-    // -------- DRAG APENAS FORA DOS BOTÕES --------
+    /* PLAYER ARRASTÁVEL + GRUDAR NAS BORDAS */
+    const player = document.getElementById("player");
     let isDragging = false;
-    let offsetX, offsetY;
-
-    player.addEventListener("mousedown", startDrag);
-    player.addEventListener("touchstart", startDrag, { passive: false });
+    let offsetX = 0;
+    let offsetY = 0;
 
     function startDrag(e) {
-      if (e.target.closest(".controls") || e.target.closest("input")) return;
-
-      e.preventDefault();
       isDragging = true;
+      const touch = e.touches ? e.touches[0] : e;
       const rect = player.getBoundingClientRect();
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-      offsetX = clientX - rect.left;
-      offsetY = clientY - rect.top;
-
-      document.addEventListener("mousemove", drag);
-      document.addEventListener("touchmove", drag, { passive: false });
-      document.addEventListener("mouseup", stopDrag);
-      document.addEventListener("touchend", stopDrag);
+      offsetX = touch.clientX - rect.left;
+      offsetY = touch.clientY - rect.top;
     }
 
     function drag(e) {
       if (!isDragging) return;
-      e.preventDefault();
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-      player.style.left = clientX - offsetX + "px";
-      player.style.top = clientY - offsetY + "px";
+      const touch = e.touches ? e.touches[0] : e;
+      const x = touch.clientX - offsetX;
+      const y = touch.clientY - offsetY;
+      player.style.left = x + "px";
+      player.style.top = y + "px";
+      player.style.right = "auto";
+      player.style.bottom = "auto";
     }
 
     function stopDrag() {
+      if (!isDragging) return;
       isDragging = false;
-      document.removeEventListener("mousemove", drag);
-      document.removeEventListener("touchmove", drag);
-      document.removeEventListener("mouseup", stopDrag);
-      document.removeEventListener("touchend", stopDrag);
+      snapToEdges();
     }
+
+    function snapToEdges() {
+      const rect = player.getBoundingClientRect();
+      const margin = 8;
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+
+      let newLeft = rect.left;
+      let newTop = rect.top;
+
+      if (rect.left < screenWidth / 2) {
+        newLeft = margin;
+      } else {
+        newLeft = screenWidth - rect.width - margin;
+      }
+
+      if (rect.top < margin) newTop = margin;
+      if (rect.top + rect.height > screenHeight - margin) {
+        newTop = screenHeight - rect.height - margin;
+      }
+
+      player.style.left = newLeft + "px";
+      player.style.top = newTop + "px";
+    }
+
+    player.addEventListener("mousedown", startDrag);
+    document.addEventListener("mousemove", drag);
+    document.addEventListener("mouseup", stopDrag);
+
+    player.addEventListener("touchstart", startDrag, { passive: false });
+    document.addEventListener("touchmove", drag, { passive: false });
+    document.addEventListener("touchend", stopDrag);
   </script>
 
 </body>
