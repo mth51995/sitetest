@@ -13,6 +13,8 @@ body{
   color:white;
   overflow-x:hidden;
 }
+
+/* FUNDO */
 #bgVideo{
   position:fixed;
   inset:0;
@@ -27,6 +29,8 @@ body{
   background:rgba(0,0,0,.45);
   z-index:-1;
 }
+
+/* CABEÇALHO */
 header{
   position:fixed;
   top:0;
@@ -43,6 +47,8 @@ header{
   height:58px;
   filter:drop-shadow(0 0 10px #00ff7f);
 }
+
+/* PLAYER */
 .player{
   position:fixed;
   top:90px;
@@ -53,6 +59,7 @@ header{
   box-shadow:0 0 18px rgba(0,255,127,.4);
   z-index:9999;
 }
+
 .drag{
   text-align:center;
   font-size:10px;
@@ -60,7 +67,10 @@ header{
   color:#1db954;
   cursor:grab;
 }
+
 .info{padding:8px}
+
+/* NOME DA MÚSICA */
 .track{
   overflow:hidden;
   white-space:nowrap;
@@ -76,10 +86,8 @@ header{
   from{transform:translateX(0)}
   to{transform:translateX(-100%)}
 }
-.progress input{
-  width:100%;
-  accent-color:#1db954;
-}
+
+/* CONTROLES */
 .controls{
   display:flex;
   justify-content:center;
@@ -95,6 +103,8 @@ header{
   cursor:pointer;
 }
 .play{font-size:26px}
+
+/* VOLUME */
 .volume{
   display:flex;
   align-items:center;
@@ -110,6 +120,8 @@ header{
   width:70%;
   accent-color:#1db954;
 }
+
+/* EQ DO PLAYER */
 .eq-player{
   display:flex;
   justify-content:center;
@@ -123,6 +135,8 @@ header{
   height:3px;
   background:#1db954;
 }
+
+/* RODAPÉ */
 footer{
   position:fixed;
   bottom:0;
@@ -146,8 +160,13 @@ footer{
   height:4px;
   background:#00ff7f;
 }
+
+/* MOBILE */
 @media(max-width:480px){
-  .player{width:92%;left:4%;}
+  .player{
+    width:92%;
+    left:4%;
+  }
 }
 </style>
 </head>
@@ -168,7 +187,7 @@ footer{
 
   <div class="info">
     <div class="track">
-      <span>🔴 AO VIVO - RÁDIO MIX</span>
+      <span id="title">🔴 AO VIVO - RÁDIO MIX</span>
     </div>
 
     <div class="controls">
@@ -184,29 +203,42 @@ footer{
       <span></span><span></span><span></span><span></span><span></span>
     </div>
 
-    <!-- SUA RÁDIO AQUI -->
-    <audio id="audio" crossorigin="anonymous"
-      src="http://200.236.200.31:8000/stream">
-    </audio>
+    <!-- 🔴 SUA RÁDIO ICECAST -->
+    <audio id="audio" src="http://127.0.0.1:8000/radio" crossorigin="anonymous"></audio>
   </div>
 </div>
 
-<footer>
-  <div class="footer-eq">
+<footer id="footer">
+  <div class="footer-eq" id="eqLeft">
     <span></span><span></span><span></span><span></span><span></span>
   </div>
-  <div class="footer-eq">
+  <div class="footer-eq" id="eqRight">
     <span></span><span></span><span></span><span></span><span></span>
   </div>
 </footer>
 
 <script>
-const audio=document.getElementById("audio");
-const play=document.getElementById("play");
-const volume=document.getElementById("volume");
-const mute=document.getElementById("mute");
+const audio = document.getElementById("audio");
+const play = document.getElementById("play");
+const volume = document.getElementById("volume");
+const mute = document.getElementById("mute");
 
-play.onclick=()=>{
+let ctx, analyser, data, lastVolume = 0.8;
+
+function setupAudio(){
+  if(ctx) return;
+  ctx = new (window.AudioContext || window.webkitAudioContext)();
+  analyser = ctx.createAnalyser();
+  analyser.fftSize = 64;
+  data = new Uint8Array(analyser.frequencyBinCount);
+  const src = ctx.createMediaElementSource(audio);
+  src.connect(analyser);
+  analyser.connect(ctx.destination);
+}
+
+play.onclick = ()=>{
+  setupAudio();
+  ctx.resume();
   if(audio.paused){
     audio.play();
     play.textContent="⏸";
@@ -223,12 +255,13 @@ volume.oninput=()=>{
 
 mute.onclick=()=>{
   if(audio.volume>0){
+    lastVolume=audio.volume;
     audio.volume=0;
     volume.value=0;
     mute.textContent="🔇";
   }else{
-    audio.volume=0.8;
-    volume.value=0.8;
+    audio.volume=lastVolume;
+    volume.value=lastVolume;
     mute.textContent="🔊";
   }
 };
