@@ -13,8 +13,6 @@ body{
   color:white;
   overflow-x:hidden;
 }
-
-/* FUNDO */
 #bgVideo{
   position:fixed;
   inset:0;
@@ -29,8 +27,6 @@ body{
   background:rgba(0,0,0,.45);
   z-index:-1;
 }
-
-/* CABEÇALHO */
 header{
   position:fixed;
   top:0;
@@ -47,8 +43,6 @@ header{
   height:58px;
   filter:drop-shadow(0 0 10px #00ff7f);
 }
-
-/* PLAYER */
 .player{
   position:fixed;
   top:90px;
@@ -59,7 +53,6 @@ header{
   box-shadow:0 0 18px rgba(0,255,127,.4);
   z-index:9999;
 }
-
 .drag{
   text-align:center;
   font-size:10px;
@@ -67,10 +60,7 @@ header{
   color:#1db954;
   cursor:grab;
 }
-
 .info{padding:8px}
-
-/* NOME DA MÚSICA */
 .track{
   overflow:hidden;
   white-space:nowrap;
@@ -86,14 +76,10 @@ header{
   from{transform:translateX(0)}
   to{transform:translateX(-100%)}
 }
-
-/* PROGRESSO */
 .progress input{
   width:100%;
   accent-color:#1db954;
 }
-
-/* CONTROLES */
 .controls{
   display:flex;
   justify-content:center;
@@ -109,8 +95,6 @@ header{
   cursor:pointer;
 }
 .play{font-size:26px}
-
-/* VOLUME */
 .volume{
   display:flex;
   align-items:center;
@@ -126,23 +110,19 @@ header{
   width:70%;
   accent-color:#1db954;
 }
-
-/* 🔽 EQ DO PLAYER (MENOR) */
 .eq-player{
   display:flex;
   justify-content:center;
   align-items:flex-end;
   gap:2px;
-  height:18px; /* menor */
+  height:18px;
   margin-top:4px;
 }
 .eq-player span{
-  width:3px;   /* mais fino */
+  width:3px;
   height:3px;
   background:#1db954;
 }
-
-/* RODAPÉ */
 footer{
   position:fixed;
   bottom:0;
@@ -154,7 +134,6 @@ footer{
   align-items:flex-end;
   padding:0 20px;
   box-shadow:0 0 14px rgba(0,255,127,.6);
-  transition:height .1s, box-shadow .1s;
 }
 .footer-eq{
   display:flex;
@@ -167,13 +146,8 @@ footer{
   height:4px;
   background:#00ff7f;
 }
-
-/* MOBILE */
 @media(max-width:480px){
-  .player{
-    width:92%;
-    left:4%;
-  }
+  .player{width:92%;left:4%;}
 }
 </style>
 </head>
@@ -193,16 +167,12 @@ footer{
   <div class="drag" id="drag">ARRASTE</div>
 
   <div class="info">
-    <div class="track"><span id="title"></span></div>
-
-    <div class="progress">
-      <input type="range" id="progress" value="0">
+    <div class="track">
+      <span>🔴 AO VIVO - RÁDIO MIX</span>
     </div>
 
     <div class="controls">
-      <button id="prev">⏮</button>
       <button id="play" class="play">▶</button>
-      <button id="next">⏭</button>
     </div>
 
     <div class="volume">
@@ -210,112 +180,40 @@ footer{
       <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8">
     </div>
 
-    <!-- EQ MENOR -->
     <div class="eq-player" id="eqPlayer">
       <span></span><span></span><span></span><span></span><span></span>
     </div>
 
-    <audio id="audio" crossorigin="anonymous"></audio>
+    <!-- SUA RÁDIO AQUI -->
+    <audio id="audio" crossorigin="anonymous"
+      src="http://200.236.200.31:8000/stream">
+    </audio>
   </div>
 </div>
 
-<footer id="footer">
-  <div class="footer-eq" id="eqLeft">
+<footer>
+  <div class="footer-eq">
     <span></span><span></span><span></span><span></span><span></span>
   </div>
-  <div class="footer-eq" id="eqRight">
+  <div class="footer-eq">
     <span></span><span></span><span></span><span></span><span></span>
   </div>
 </footer>
 
 <script>
-/* PLAYLIST */
-const playlist=[
- "Som da Liberdade (feat. Tevão Lino & Ivair Filho) (Remix).mp3",
- "Benson Boone - Beautiful Things (Official Music Video) (256).mp3"
-];
-
-let current=0;
 const audio=document.getElementById("audio");
-const title=document.getElementById("title");
 const play=document.getElementById("play");
-const progress=document.getElementById("progress");
 const volume=document.getElementById("volume");
 const mute=document.getElementById("mute");
-const footer=document.getElementById("footer");
 
-const eqPlayer=document.querySelectorAll("#eqPlayer span");
-const eqLeft=document.querySelectorAll("#eqLeft span");
-const eqRight=document.querySelectorAll("#eqRight span");
-
-let ctx, analyser, data, lastVolume=0.8;
-
-function setupAudio(){
-  if(ctx) return;
-  ctx=new (window.AudioContext||window.webkitAudioContext)();
-  analyser=ctx.createAnalyser();
-  analyser.fftSize=64;
-  data=new Uint8Array(analyser.frequencyBinCount);
-  const src=ctx.createMediaElementSource(audio);
-  src.connect(analyser);
-  analyser.connect(ctx.destination);
-}
-
-function animateEQ(){
-  analyser.getByteFrequencyData(data);
-  let sum=0;
-
-  eqPlayer.forEach((b,i)=>{
-    const h=data[i]/6+3; /* menor impacto */
-    b.style.height=h+"px";
-    sum+=h;
-  });
-
-  eqLeft.forEach((b,i)=>b.style.height=(data[i]/5+4)+"px");
-  eqRight.forEach((b,i)=>b.style.height=(data[i]/5+4)+"px");
-
-  const pulse=Math.min(70,40+sum/10);
-  footer.style.height=pulse+"px";
-  footer.style.boxShadow=`0 0 ${pulse/2}px rgba(0,255,127,.8)`;
-
-  requestAnimationFrame(animateEQ);
-}
-
-function load(){
-  audio.src=playlist[current];
-  title.textContent=playlist[current];
-  audio.volume=volume.value;
-}
-load();
-
-/* CONTROLES */
 play.onclick=()=>{
-  setupAudio();
-  ctx.resume();
   if(audio.paused){
     audio.play();
     play.textContent="⏸";
-    animateEQ();
   }else{
     audio.pause();
     play.textContent="▶";
   }
-};
-
-document.getElementById("next").onclick=()=>{
-  current=(current+1)%playlist.length;
-  load(); audio.play(); play.textContent="⏸";
-};
-document.getElementById("prev").onclick=()=>{
-  current=(current-1+playlist.length)%playlist.length;
-  load(); audio.play(); play.textContent="⏸";
-};
-
-audio.ontimeupdate=()=>{
-  progress.value=(audio.currentTime/audio.duration)*100||0;
-};
-progress.oninput=e=>{
-  audio.currentTime=(e.target.value/100)*audio.duration;
 };
 
 volume.oninput=()=>{
@@ -325,45 +223,15 @@ volume.oninput=()=>{
 
 mute.onclick=()=>{
   if(audio.volume>0){
-    lastVolume=audio.volume;
     audio.volume=0;
     volume.value=0;
     mute.textContent="🔇";
   }else{
-    audio.volume=lastVolume;
-    volume.value=lastVolume;
+    audio.volume=0.8;
+    volume.value=0.8;
     mute.textContent="🔊";
   }
 };
-
-/* ARRASTAR */
-let dragging=false,ox=0,oy=0;
-const player=document.getElementById("player");
-const drag=document.getElementById("drag");
-
-drag.addEventListener("mousedown",e=>{
-  dragging=true;
-  ox=e.clientX-player.offsetLeft;
-  oy=e.clientY-player.offsetTop;
-});
-document.addEventListener("mousemove",e=>{
-  if(!dragging)return;
-  player.style.left=e.clientX-ox+"px";
-  player.style.top=e.clientY-oy+"px";
-});
-document.addEventListener("mouseup",()=>dragging=false);
-
-drag.addEventListener("touchstart",e=>{
-  dragging=true;
-  ox=e.touches[0].clientX-player.offsetLeft;
-  oy=e.touches[0].clientY-player.offsetTop;
-},{passive:true});
-document.addEventListener("touchmove",e=>{
-  if(!dragging)return;
-  player.style.left=e.touches[0].clientX-ox+"px";
-  player.style.top=e.touches[0].clientY-oy+"px";
-},{passive:true});
-document.addEventListener("touchend",()=>dragging=false);
 </script>
 
 </body>
