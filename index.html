@@ -11,7 +11,7 @@ body{
   font-family:Arial,Helvetica,sans-serif;
   background:black;
   color:white;
-  overflow:hidden;
+  overflow-x:hidden;
 }
 
 /* FUNDO */
@@ -48,20 +48,6 @@ header{
   filter:drop-shadow(0 0 10px #00ff7f);
 }
 
-/* PLAYER CENTRAL */
-.player-embed{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  width:320px;
-  max-width:90%;
-  background:rgba(0,0,0,.8);
-  padding:15px;
-  border-radius:15px;
-  box-shadow:0 0 25px rgba(0,255,127,.6);
-}
-
 /* RODAPÉ */
 footer{
   position:fixed;
@@ -69,7 +55,30 @@ footer{
   width:100%;
   height:55px;
   background:rgba(0,0,0,.85);
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  padding:0 20px;
   box-shadow:0 0 14px rgba(0,255,127,.6);
+}
+.footer-eq{
+  display:flex;
+  align-items:flex-end;
+  gap:5px;
+  height:32px;
+}
+.footer-eq span{
+  width:5px;
+  height:4px;
+  background:#00ff7f;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+  .player{
+    width:92%;
+    left:4%;
+  }
 }
 </style>
 </head>
@@ -85,18 +94,22 @@ footer{
   <img src="logo.png" class="logo">
 </header>
 
-<!-- 🔴 PLAYER OFICIAL CASTER.FM -->
-<div class="player-embed">
-  <iframe 
-    src="https://cloud.caster.fm/player/a111497a-a595-480c-83a1-b7700175e615"
-    width="100%" 
-    height="150" 
-    frameborder="0" 
-    scrolling="no">
-  </iframe>
+<!-- 🔴 PLAYER SUBSTITUÍDO PELO CASTER.FM EMBED -->
+<div data-type="newStreamPlayer" data-publicToken="b9f4cbcd-7132-4ee9-8bbe-628c42c1b718" data-theme="light" data-color="e81e4d" data-channelId="" data-rendered="false" class="cstrEmbed">
+  <a href="https://www.caster.fm">Shoutcast Hosting</a> 
+  <a href="https://www.caster.fm">Stream Hosting</a> 
+  <a href="https://www.caster.fm">Radio Server Hosting</a>
 </div>
+<script src="//cdn.cloud.caster.fm//widgets/embed.js"></script>
 
-<footer></footer>
+<footer id="footer">
+  <div class="footer-eq" id="eqLeft">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="footer-eq" id="eqRight">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+</footer>
 
 </body>
 </html>
