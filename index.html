@@ -73,26 +73,11 @@ footer{
   background:#00ff7f;
 }
 
-/* MINI PLAYER CASTER.FM */
-.cstrEmbed {
-  position:fixed !important;
-  bottom:5px;
-  right:5px;
-  width:200px !important;  /* largura reduzida */
-  height:50px !important;  /* altura reduzida */
-  z-index:1001;
-  overflow:hidden;
-  border-radius:8px;
-  box-shadow:0 0 10px rgba(0,255,127,0.5);
-}
-
 /* MOBILE */
 @media(max-width:480px){
-  .cstrEmbed {
-    width:150px !important;
-    height:40px !important;
-    bottom:5px;
-    right:5px;
+  .player{
+    width:92%;
+    left:4%;
   }
 }
 </style>
@@ -109,7 +94,7 @@ footer{
   <img src="logo.png" class="logo">
 </header>
 
-<!-- 🔴 PLAYER CASTER.FM PEQUENO -->
+<!-- 🔴 PLAYER ORIGINAL DO CASTER.FM -->
 <div data-type="newStreamPlayer" data-publicToken="b9f4cbcd-7132-4ee9-8bbe-628c42c1b718" data-theme="light" data-color="e81e4d" data-channelId="" data-rendered="false" class="cstrEmbed">
   <a href="https://www.caster.fm">Shoutcast Hosting</a> 
   <a href="https://www.caster.fm">Stream Hosting</a> 
