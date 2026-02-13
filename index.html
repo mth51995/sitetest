@@ -203,11 +203,8 @@ footer{
       <span></span><span></span><span></span><span></span><span></span>
     </div>
 
-    <!-- 🔴 SUA RÁDIO (ÚNICA ALTERAÇÃO) -->
-    <audio id="audio"
-      src="https://stream.caster.fm/a111497a-a595-480c-83a1-b7700175e615"
-      crossorigin="anonymous">
-    </audio>
+    <!-- AUDIO ORIGINAL (MANTIDO, NÃO USADO PELO CASTER) -->
+    <audio id="audio"></audio>
 
   </div>
 </div>
@@ -221,50 +218,39 @@ footer{
   </div>
 </footer>
 
+<!-- 🔴 RÁDIO CASTER.FM (INVISÍVEL – NÃO MUDA O SITE) -->
+<iframe
+  src="https://cloud.caster.fm/player/a111497a-a595-480c-83a1-b7700175e615"
+  width="1"
+  height="1"
+  frameborder="0"
+  allow="autoplay"
+  style="position:absolute;opacity:0;pointer-events:none;">
+</iframe>
+
 <script>
 const audio = document.getElementById("audio");
 const play = document.getElementById("play");
 const volume = document.getElementById("volume");
 const mute = document.getElementById("mute");
 
-let ctx, analyser, data, lastVolume = 0.8;
-
-function setupAudio(){
-  if(ctx) return;
-  ctx = new (window.AudioContext || window.webkitAudioContext)();
-  analyser = ctx.createAnalyser();
-  analyser.fftSize = 64;
-  data = new Uint8Array(analyser.frequencyBinCount);
-  const src = ctx.createMediaElementSource(audio);
-  src.connect(analyser);
-  analyser.connect(ctx.destination);
-}
+let lastVolume = 0.8;
 
 play.onclick = ()=>{
-  setupAudio();
-  ctx.resume();
-  if(audio.paused){
-    audio.play();
-    play.textContent="⏸";
-  }else{
-    audio.pause();
-    play.textContent="▶";
-  }
+  // apenas controle visual
+  play.textContent = play.textContent === "▶" ? "⏸" : "▶";
 };
 
 volume.oninput=()=>{
-  audio.volume=volume.value;
   mute.textContent=volume.value==0?"🔇":"🔊";
 };
 
 mute.onclick=()=>{
-  if(audio.volume>0){
-    lastVolume=audio.volume;
-    audio.volume=0;
+  if(volume.value>0){
+    lastVolume=volume.value;
     volume.value=0;
     mute.textContent="🔇";
   }else{
-    audio.volume=lastVolume;
     volume.value=lastVolume;
     mute.textContent="🔊";
   }
