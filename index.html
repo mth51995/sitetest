@@ -11,7 +11,7 @@ body{
   font-family:Arial,Helvetica,sans-serif;
   background:black;
   color:white;
-  overflow-x:hidden;
+  overflow:hidden;
 }
 
 /* FUNDO */
@@ -48,92 +48,18 @@ header{
   filter:drop-shadow(0 0 10px #00ff7f);
 }
 
-/* PLAYER */
-.player{
-  position:fixed;
-  top:90px;
-  left:10px;
-  width:200px;
-  background:#121212;
-  border-radius:12px;
-  box-shadow:0 0 18px rgba(0,255,127,.4);
-  z-index:9999;
-}
-
-.drag{
-  text-align:center;
-  font-size:10px;
-  padding:4px;
-  color:#1db954;
-  cursor:grab;
-}
-
-.info{padding:8px}
-
-/* NOME DA RÁDIO */
-.track{
-  overflow:hidden;
-  white-space:nowrap;
-  font-size:12px;
-  color:#1db954;
-}
-.track span{
-  display:inline-block;
-  padding-left:100%;
-  animation:slide 12s linear infinite;
-}
-@keyframes slide{
-  from{transform:translateX(0)}
-  to{transform:translateX(-100%)}
-}
-
-/* CONTROLES */
-.controls{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:14px;
-  margin-top:6px;
-}
-.controls button{
-  background:none;
-  border:none;
-  font-size:22px;
-  color:#1db954;
-  cursor:pointer;
-}
-.play{font-size:26px}
-
-/* VOLUME */
-.volume{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  margin-top:6px;
-}
-.volume span{
-  font-size:16px;
-  color:#1db954;
-  cursor:pointer;
-}
-.volume input{
-  width:70%;
-  accent-color:#1db954;
-}
-
-/* EQ DO PLAYER */
-.eq-player{
-  display:flex;
-  justify-content:center;
-  align-items:flex-end;
-  gap:2px;
-  height:18px;
-  margin-top:4px;
-}
-.eq-player span{
-  width:3px;
-  height:3px;
-  background:#1db954;
+/* PLAYER CENTRAL */
+.player-embed{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:320px;
+  max-width:90%;
+  background:rgba(0,0,0,.8);
+  padding:15px;
+  border-radius:15px;
+  box-shadow:0 0 25px rgba(0,255,127,.6);
 }
 
 /* RODAPÉ */
@@ -143,30 +69,7 @@ footer{
   width:100%;
   height:55px;
   background:rgba(0,0,0,.85);
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-  padding:0 20px;
   box-shadow:0 0 14px rgba(0,255,127,.6);
-}
-.footer-eq{
-  display:flex;
-  align-items:flex-end;
-  gap:5px;
-  height:32px;
-}
-.footer-eq span{
-  width:5px;
-  height:4px;
-  background:#00ff7f;
-}
-
-/* MOBILE */
-@media(max-width:480px){
-  .player{
-    width:92%;
-    left:4%;
-  }
 }
 </style>
 </head>
@@ -182,90 +85,18 @@ footer{
   <img src="logo.png" class="logo">
 </header>
 
-<div class="player" id="player">
-  <div class="drag" id="drag">ARRASTE</div>
-
-  <div class="info">
-    <div class="track">
-      <span id="title">🔴 AO VIVO - RÁDIO MIX</span>
-    </div>
-
-    <div class="controls">
-      <button id="play" class="play">▶</button>
-    </div>
-
-    <div class="volume">
-      <span id="mute">🔊</span>
-      <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8">
-    </div>
-
-    <div class="eq-player" id="eqPlayer">
-      <span></span><span></span><span></span><span></span><span></span>
-    </div>
-
-    <!-- 🔴 SUA RÁDIO CASTER.FM -->
-    <audio id="audio" src="https://sapircast.caster.fm:10240/wwwWf" crossorigin="anonymous"></audio>
-  </div>
+<!-- 🔴 PLAYER OFICIAL CASTER.FM -->
+<div class="player-embed">
+  <iframe 
+    src="https://cloud.caster.fm/player/a111497a-a595-480c-83a1-b7700175e615"
+    width="100%" 
+    height="150" 
+    frameborder="0" 
+    scrolling="no">
+  </iframe>
 </div>
 
-<footer id="footer">
-  <div class="footer-eq" id="eqLeft">
-    <span></span><span></span><span></span><span></span><span></span>
-  </div>
-  <div class="footer-eq" id="eqRight">
-    <span></span><span></span><span></span><span></span><span></span>
-  </div>
-</footer>
-
-<script>
-const audio = document.getElementById("audio");
-const play = document.getElementById("play");
-const volume = document.getElementById("volume");
-const mute = document.getElementById("mute");
-
-let ctx, analyser, data, lastVolume = 0.8;
-
-function setupAudio(){
-  if(ctx) return;
-  ctx = new (window.AudioContext || window.webkitAudioContext)();
-  analyser = ctx.createAnalyser();
-  analyser.fftSize = 64;
-  data = new Uint8Array(analyser.frequencyBinCount);
-  const src = ctx.createMediaElementSource(audio);
-  src.connect(analyser);
-  analyser.connect(ctx.destination);
-}
-
-play.onclick = ()=>{
-  setupAudio();
-  ctx.resume();
-  if(audio.paused){
-    audio.play();
-    play.textContent="⏸";
-  }else{
-    audio.pause();
-    play.textContent="▶";
-  }
-};
-
-volume.oninput=()=>{
-  audio.volume=volume.value;
-  mute.textContent=volume.value==0?"🔇":"🔊";
-};
-
-mute.onclick=()=>{
-  if(audio.volume>0){
-    lastVolume=audio.volume;
-    audio.volume=0;
-    volume.value=0;
-    mute.textContent="🔇";
-  }else{
-    audio.volume=lastVolume;
-    volume.value=lastVolume;
-    mute.textContent="🔊";
-  }
-};
-</script>
+<footer></footer>
 
 </body>
 </html>
