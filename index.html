@@ -10,19 +10,21 @@ body {
   background: #f2f2f2;
 }
 .container {
-  width: 380px;
-  margin: 30px auto;
+  width: 420px;
+  margin: 20px auto;
   background: #fff;
-  padding: 20px;
+  padding: 15px;
   border-radius: 8px;
 }
 h2,h3 {
   text-align: center;
 }
+.hidden { display:none; }
+
 input, button {
   width: 100%;
   padding: 10px;
-  margin: 8px 0;
+  margin: 6px 0;
 }
 button {
   background: #0066ff;
@@ -30,26 +32,33 @@ button {
   border: none;
   cursor: pointer;
 }
-button:disabled {
-  background: #999;
-}
-.hidden {
-  display: none;
-}
-.curso {
-  background: #eee;
+.folder {
+  border: 1px solid #ddd;
   padding: 10px;
   margin: 10px 0;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-.aula {
-  background: #ddd;
-  padding: 8px;
+.folder img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+.video-thumb {
+  background: #000;
+  color: #fff;
+  padding: 10px;
   margin: 6px 0;
+  cursor: pointer;
 }
-.ok {
-  color: green;
-  font-weight: bold;
+video {
+  width: 100%;
+  margin-top: 10px;
+}
+.back {
+  background: #999;
 }
 .logout {
   background: #e74c3c;
@@ -65,7 +74,7 @@ button:disabled {
   <input id="loginEmail" type="email" placeholder="Email">
   <input id="loginSenha" type="password" placeholder="Senha">
   <button onclick="login()">Entrar</button>
-  <p onclick="mostrarCadastro()" style="text-align:center;cursor:pointer">Criar conta</p>
+  <p onclick="mostrarCadastro()" style="cursor:pointer;text-align:center">Criar conta</p>
 </div>
 
 <!-- CADASTRO -->
@@ -75,78 +84,74 @@ button:disabled {
   <input id="cadEmail" type="email" placeholder="Email">
   <input id="cadSenha" type="password" placeholder="Senha">
   <button onclick="cadastrar()">Cadastrar</button>
-  <p onclick="mostrarLogin()" style="text-align:center;cursor:pointer">Já tenho conta</p>
+  <p onclick="mostrarLogin()" style="cursor:pointer;text-align:center">Já tenho conta</p>
 </div>
 
 <!-- DASHBOARD -->
 <div class="container hidden" id="dashboard">
   <h2 id="bemvindo"></h2>
 
-  <h3>Meus Cursos</h3>
-
-  <div class="curso" onclick="abrirCurso('eletricista')">
-    Eletricista Predial
+  <div class="folder" onclick="abrirCurso('eletricista')">
+    <img src="eletricista.jpg">
+    <div>📁 Eletricista Predial</div>
   </div>
 
-  <div class="curso" onclick="abrirCurso('ar')">
-    Viver de Ar Condicionado
+  <div class="folder" onclick="abrirCurso('ar')">
+    <img src="ar.jpg">
+    <div>📁 Viver de Ar Condicionado</div>
   </div>
 
   <button class="logout" onclick="logout()">Sair</button>
 </div>
 
-<!-- CURSO -->
-<div class="container hidden" id="cursoBox">
+<!-- MÓDULOS -->
+<div class="container hidden" id="modulosBox">
   <h2 id="cursoTitulo"></h2>
+  <div id="listaModulos"></div>
+  <button class="back" onclick="voltarDashboard()">Voltar</button>
+</div>
 
-  <div id="listaAulas"></div>
-
-  <p id="contador"></p>
-  <button id="btnProxima" onclick="proximaAula()" disabled>
-    Próxima aula
-  </button>
-
-  <button onclick="voltar()">Voltar</button>
+<!-- AULAS -->
+<div class="container hidden" id="aulasBox">
+  <h3 id="moduloTitulo"></h3>
+  <div id="listaVideos"></div>
+  <video id="player" controls></video>
+  <button class="back" onclick="voltarModulos()">Voltar</button>
 </div>
 
 <script>
 const cursos = {
   eletricista: {
     nome: "Eletricista Predial",
-    aulas: [
-      "Introdução",
-      "Ferramentas",
-      "Instalações",
-      "Quadro de energia"
-    ]
+    modulos: {
+      "Módulo 1 - Introdução": [
+        { titulo: "Boas-vindas", video: "https://www.w3schools.com/html/mov_bbb.mp4" },
+        { titulo: "Ferramentas", video: "https://www.w3schools.com/html/movie.mp4" }
+      ],
+      "Módulo 2 - Instalações": [
+        { titulo: "Tomadas", video: "https://www.w3schools.com/html/mov_bbb.mp4" }
+      ]
+    }
   },
   ar: {
     nome: "Viver de Ar Condicionado",
-    aulas: [
-      "Mercado",
-      "Tipos de ar",
-      "Instalação",
-      "Manutenção"
-    ]
+    modulos: {
+      "Módulo 1 - Mercado": [
+        { titulo: "Introdução", video: "https://www.w3schools.com/html/movie.mp4" }
+      ],
+      "Módulo 2 - Instalação": [
+        { titulo: "Split", video: "https://www.w3schools.com/html/mov_bbb.mp4" }
+      ]
+    }
   }
 };
 
 let cursoAtual = "";
-let aulaAtual = 0;
-let timer = null;
+let moduloAtual = "";
 
 function cadastrar() {
   let users = JSON.parse(localStorage.getItem("users")) || [];
-  const nome = cadNome.value;
-  const email = cadEmail.value;
-  const senha = cadSenha.value;
-
-  if (users.find(u => u.email === email)) {
-    alert("Email já cadastrado");
-    return;
-  }
-
-  users.push({ nome, email, senha, progresso: {} });
+  users.push({ nome: cadNome.value, email: cadEmail.value, senha: cadSenha.value });
   localStorage.setItem("users", JSON.stringify(users));
   alert("Cadastro realizado");
   mostrarLogin();
@@ -154,16 +159,8 @@ function cadastrar() {
 
 function login() {
   let users = JSON.parse(localStorage.getItem("users")) || [];
-  const user = users.find(u =>
-    u.email === loginEmail.value &&
-    u.senha === loginSenha.value
-  );
-
-  if (!user) {
-    alert("Dados inválidos");
-    return;
-  }
-
+  let user = users.find(u => u.email === loginEmail.value && u.senha === loginSenha.value);
+  if (!user) return alert("Dados inválidos");
   localStorage.setItem("logado", JSON.stringify(user));
   entrar(user);
 }
@@ -177,70 +174,50 @@ function entrar(user) {
 
 function abrirCurso(id) {
   cursoAtual = id;
-  aulaAtual = 0;
   dashboard.classList.add("hidden");
-  cursoBox.classList.remove("hidden");
+  modulosBox.classList.remove("hidden");
   cursoTitulo.innerText = cursos[id].nome;
-  carregarAulas();
-  iniciarContador();
+  listaModulos.innerHTML = "";
+
+  for (let modulo in cursos[id].modulos) {
+    listaModulos.innerHTML += `
+      <div class="folder" onclick="abrirModulo('${modulo}')">
+        📂 ${modulo}
+      </div>
+    `;
+  }
 }
 
-function carregarAulas() {
-  const user = JSON.parse(localStorage.getItem("logado"));
-  listaAulas.innerHTML = "";
+function abrirModulo(nome) {
+  moduloAtual = nome;
+  modulosBox.classList.add("hidden");
+  aulasBox.classList.remove("hidden");
+  moduloTitulo.innerText = nome;
+  listaVideos.innerHTML = "";
 
-  cursos[cursoAtual].aulas.forEach((aula, index) => {
-    const concluida = user.progresso?.[cursoAtual]?.includes(index);
-    listaAulas.innerHTML += `
-      <div class="aula">
-        ${aula} ${concluida ? "<span class='ok'>✔</span>" : ""}
+  cursos[cursoAtual].modulos[nome].forEach(v => {
+    listaVideos.innerHTML += `
+      <div class="video-thumb" onclick="playVideo('${v.video}')">
+        🎬 ${v.titulo}
       </div>
     `;
   });
 }
 
-function iniciarContador() {
-  let tempo = 10;
-  btnProxima.disabled = true;
-  contador.innerText = "Próxima aula em " + tempo + "s";
-
-  timer = setInterval(() => {
-    tempo--;
-    contador.innerText = "Próxima aula em " + tempo + "s";
-
-    if (tempo === 0) {
-      clearInterval(timer);
-      contador.innerText = "";
-      btnProxima.disabled = false;
-    }
-  }, 1000);
+function playVideo(url) {
+  player.src = url;
+  player.play();
 }
 
-function proximaAula() {
-  let user = JSON.parse(localStorage.getItem("logado"));
-
-  if (!user.progresso[cursoAtual]) {
-    user.progresso[cursoAtual] = [];
-  }
-
-  if (!user.progresso[cursoAtual].includes(aulaAtual)) {
-    user.progresso[cursoAtual].push(aulaAtual);
-  }
-
-  localStorage.setItem("logado", JSON.stringify(user));
-
-  let users = JSON.parse(localStorage.getItem("users"));
-  users = users.map(u => u.email === user.email ? user : u);
-  localStorage.setItem("users", JSON.stringify(users));
-
-  aulaAtual++;
-  carregarAulas();
-  iniciarContador();
-}
-
-function voltar() {
-  cursoBox.classList.add("hidden");
+function voltarDashboard() {
+  modulosBox.classList.add("hidden");
   dashboard.classList.remove("hidden");
+}
+
+function voltarModulos() {
+  aulasBox.classList.add("hidden");
+  modulosBox.classList.remove("hidden");
+  player.pause();
 }
 
 function logout() {
@@ -252,7 +229,8 @@ function mostrarLogin() {
   loginBox.classList.remove("hidden");
   cadastroBox.classList.add("hidden");
   dashboard.classList.add("hidden");
-  cursoBox.classList.add("hidden");
+  modulosBox.classList.add("hidden");
+  aulasBox.classList.add("hidden");
 }
 
 function mostrarCadastro() {
