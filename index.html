@@ -1,115 +1,164 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Radio Mix</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>Mini Plataforma - Cadastro</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f1f1f1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
 
-<style>
-body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:black;
-  color:white;
-  overflow-x:hidden;
-}
+    .box {
+      background: #fff;
+      padding: 25px;
+      width: 320px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
 
-/* FUNDO */
-#bgVideo{
-  position:fixed;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  z-index:-2;
-}
-.overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.45);
-  z-index:-1;
-}
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-/* CABEÇALHO */
-header{
-  position:fixed;
-  top:0;
-  width:100%;
-  height:70px;
-  background:rgba(0,0,0,.85);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  box-shadow:0 0 18px rgba(0,255,127,.6);
-  z-index:1000;
-}
-.logo{
-  height:58px;
-  filter:drop-shadow(0 0 10px #00ff7f);
-}
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+    }
 
-/* RODAPÉ */
-footer{
-  position:fixed;
-  bottom:0;
-  width:100%;
-  height:55px;
-  background:rgba(0,0,0,.85);
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-  padding:0 20px;
-  box-shadow:0 0 14px rgba(0,255,127,.6);
-}
-.footer-eq{
-  display:flex;
-  align-items:flex-end;
-  gap:5px;
-  height:32px;
-}
-.footer-eq span{
-  width:5px;
-  height:4px;
-  background:#00ff7f;
-}
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #4CAF50;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
 
-/* MOBILE */
-@media(max-width:480px){
-  .player{
-    width:92%;
-    left:4%;
-  }
-}
-</style>
+    button:hover {
+      background: #45a049;
+    }
+
+    .link {
+      text-align: center;
+      margin-top: 10px;
+      cursor: pointer;
+      color: blue;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
-
 <body>
 
-<video autoplay muted loop playsinline id="bgVideo">
-  <source src="grok.mp4" type="video/mp4">
-</video>
-<div class="overlay"></div>
-
-<header>
-  <img src="logo.png" class="logo">
-</header>
-
-<!-- 🔴 PLAYER SUBSTITUÍDO PELO CASTER.FM EMBED -->
-<div data-type="newStreamPlayer" data-publicToken="b9f4cbcd-7132-4ee9-8bbe-628c42c1b718" data-theme="light" data-color="e81e4d" data-channelId="" data-rendered="false" class="cstrEmbed">
-  <a href="https://www.caster.fm">Shoutcast Hosting</a> 
-  <a href="https://www.caster.fm">Stream Hosting</a> 
-  <a href="https://www.caster.fm">Radio Server Hosting</a>
-</div>
-<script src="//cdn.cloud.caster.fm//widgets/embed.js"></script>
-
-<footer id="footer">
-  <div class="footer-eq" id="eqLeft">
-    <span></span><span></span><span></span><span></span><span></span>
+  <!-- CADASTRO -->
+  <div class="box" id="cadastroBox">
+    <h2>Cadastrar</h2>
+    <input type="text" id="cadNome" placeholder="Nome">
+    <input type="email" id="cadEmail" placeholder="Email">
+    <input type="password" id="cadSenha" placeholder="Senha">
+    <button onclick="cadastrar()">Cadastrar</button>
+    <div class="link" onclick="mostrarLogin()">Já tenho conta</div>
   </div>
-  <div class="footer-eq" id="eqRight">
-    <span></span><span></span><span></span><span></span><span></span>
+
+  <!-- LOGIN -->
+  <div class="box hidden" id="loginBox">
+    <h2>Login</h2>
+    <input type="email" id="logEmail" placeholder="Email">
+    <input type="password" id="logSenha" placeholder="Senha">
+    <button onclick="login()">Entrar</button>
+    <div class="link" onclick="mostrarCadastro()">Criar conta</div>
   </div>
-</footer>
+
+  <!-- ÁREA LOGADA -->
+  <div class="box hidden" id="areaBox">
+    <h2>Bem-vindo!</h2>
+    <p id="usuarioNome"></p>
+    <button onclick="logout()">Sair</button>
+  </div>
+
+<script>
+  function cadastrar() {
+    const nome = document.getElementById("cadNome").value;
+    const email = document.getElementById("cadEmail").value;
+    const senha = document.getElementById("cadSenha").value;
+
+    if (!nome || !email || !senha) {
+      alert("Preencha todos os campos");
+      return;
+    }
+
+    let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+    if (usuarios.find(u => u.email === email)) {
+      alert("Email já cadastrado");
+      return;
+    }
+
+    usuarios.push({ nome, email, senha });
+    localStorage.setItem("usuarios", JSON.stringify(usuarios));
+
+    alert("Cadastro realizado com sucesso!");
+    mostrarLogin();
+  }
+
+  function login() {
+    const email = document.getElementById("logEmail").value;
+    const senha = document.getElementById("logSenha").value;
+
+    let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+    const usuario = usuarios.find(u => u.email === email && u.senha === senha);
+
+    if (!usuario) {
+      alert("Email ou senha inválidos");
+      return;
+    }
+
+    localStorage.setItem("usuarioLogado", JSON.stringify(usuario));
+    entrar(usuario);
+  }
+
+  function entrar(usuario) {
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("cadastroBox").classList.add("hidden");
+    document.getElementById("areaBox").classList.remove("hidden");
+    document.getElementById("usuarioNome").innerText = "Olá, " + usuario.nome;
+  }
+
+  function logout() {
+    localStorage.removeItem("usuarioLogado");
+    mostrarLogin();
+  }
+
+  function mostrarLogin() {
+    document.getElementById("cadastroBox").classList.add("hidden");
+    document.getElementById("areaBox").classList.add("hidden");
+    document.getElementById("loginBox").classList.remove("hidden");
+  }
+
+  function mostrarCadastro() {
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("areaBox").classList.add("hidden");
+    document.getElementById("cadastroBox").classList.remove("hidden");
+  }
+
+  // Auto login
+  const usuarioSalvo = JSON.parse(localStorage.getItem("usuarioLogado"));
+  if (usuarioSalvo) {
+    entrar(usuarioSalvo);
+  }
+</script>
 
 </body>
 </html>
