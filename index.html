@@ -8,138 +8,113 @@
 <style>
 body{margin:0;font-family:Arial;background:#f4f6f8}
 .hidden{display:none}
-header{background:#fff;padding:15px;font-weight:bold;display:flex;justify-content:space-between;align-items:center}
+header{background:#fff;padding:15px;font-weight:bold}
 .container{max-width:1200px;margin:auto;padding:20px}
 button{background:#2d72ff;color:#fff;border:none;border-radius:5px;padding:10px 15px;cursor:pointer}
 input,select{width:100%;padding:10px;margin:5px 0}
 
 /* LOGIN */
-.login{max-width:360px;margin:80px auto;background:#fff;padding:25px;border-radius:8px}
+#login{max-width:360px;margin:80px auto;background:#fff;padding:25px;border-radius:8px}
 
-/* CURSOS */
-.courses{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
-.course{background:#fff;border-radius:8px;overflow:hidden;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.1)}
+/* DASHBOARD */
+.courses{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+.course{background:#fff;border-radius:8px;overflow:hidden;cursor:pointer}
 .course img{width:100%;height:150px;object-fit:cover}
 .course div{padding:15px;font-weight:bold}
 
-/* LAYOUT CURSO */
-.course-layout{display:grid;grid-template-columns:300px 1fr;gap:20px}
-.sidebar{background:#fff;border-radius:8px;padding:10px;height:80vh;overflow:auto}
+/* CURSO */
+.layout{display:grid;grid-template-columns:280px 1fr;gap:20px}
+.sidebar{background:#fff;border-radius:8px;padding:10px;height:75vh;overflow:auto}
 .module{border-bottom:1px solid #eee}
 .module h4{margin:0;padding:10px;cursor:pointer}
-.lesson{padding:8px 15px;cursor:pointer;font-size:14px}
+.lesson{padding:8px 15px;cursor:pointer}
 .lesson.done{color:#28a745;font-weight:bold}
-.lesson:hover{background:#f0f0f0}
-
-/* PLAYER */
-.player-box{background:#fff;border-radius:8px;padding:15px}
+.player{background:#fff;border-radius:8px;padding:15px}
 video{width:100%;border-radius:8px}
 
 /* ADMIN */
-.admin-box{background:#fff;padding:15px;border-radius:8px;margin-bottom:15px}
-
-/* PROGRESSO */
-.progress{height:10px;background:#ddd;border-radius:5px;overflow:hidden;margin:10px 0}
-.progress span{display:block;height:100%;background:#28a745;width:0}
-
 .admin-msg{color:#28a745;font-weight:bold}
+.admin-box{background:#fff;padding:15px;border-radius:8px;margin-bottom:15px}
 </style>
 </head>
 
 <body>
 
-<header>
-  <span>🎓 Cursos Online Grátis</span>
-  <span id="adminMsg" class="admin-msg hidden">✔ Você está como administrador</span>
-</header>
+<header>🎓 Cursos Online Grátis</header>
 
 <!-- LOGIN -->
-<div class="login" id="loginBox">
-  <h2>Entrar</h2>
-  <input id="user" placeholder="Usuário">
-  <input id="pass" type="password" placeholder="Senha">
-  <button onclick="login()">Entrar</button>
+<div id="login">
+<h2>Entrar</h2>
+<input id="user" placeholder="Usuário">
+<input id="pass" type="password" placeholder="Senha">
+<button onclick="login()">Entrar</button>
+</div>
+
+<!-- ADMIN -->
+<div class="container hidden" id="admin">
+<p class="admin-msg">✔ Você está como administrador</p>
+
+<div class="admin-box">
+<h3>Criar Módulo</h3>
+<input id="moduloNome" placeholder="Nome do módulo">
+<button onclick="criarModulo()">Criar Módulo</button>
+</div>
+
+<div class="admin-box">
+<h3>Criar Aula</h3>
+<select id="moduloSelect"></select>
+<input id="aulaNome" placeholder="Nome da aula">
+<input type="file" id="videoFile" accept="video/mp4">
+<button onclick="criarAula()">Criar Aula</button>
+</div>
 </div>
 
 <!-- DASHBOARD -->
 <div class="container hidden" id="dashboard">
-  <h2>Meus Cursos</h2>
-  <div class="courses" id="listaCursos"></div>
+<h2>Meus Cursos</h2>
+<div class="courses" id="listaCursos"></div>
 </div>
 
 <!-- CURSO -->
 <div class="container hidden" id="curso">
-  <button onclick="voltar()">← Voltar</button>
-  <h2 id="cursoNome"></h2>
-  <div class="progress"><span id="barra"></span></div>
-
-  <div class="course-layout">
-    <div class="sidebar" id="sidebar"></div>
-
-    <div class="player-box">
-      <h3 id="aulaTitulo">Selecione uma aula</h3>
-      <video id="player" controls></video>
-    </div>
-  </div>
+<button onclick="voltar()">← Voltar</button>
+<h2 id="cursoNome"></h2>
+<div class="layout">
+<div class="sidebar" id="sidebar"></div>
+<div class="player">
+<h3 id="aulaTitulo">Selecione uma aula</h3>
+<video id="player" controls></video>
 </div>
-
-<!-- ADMIN -->
-<div class="container hidden" id="adminBox">
-  <h2>👨‍💻 Painel do Administrador</h2>
-
-  <div class="admin-box">
-    <h3>Criar Curso</h3>
-    <input id="cursoNomeAdmin" placeholder="Nome do curso">
-    <input id="cursoImgAdmin" placeholder="URL da imagem">
-    <button onclick="criarCurso()">Criar Curso</button>
-  </div>
+</div>
 </div>
 
 <script>
-const ADMIN_USER="admin";
-const ADMIN_PASS="123356";
+const ADMIN_USER="admin", ADMIN_PASS="123356";
 
-/* CURSOS PRONTOS */
-let cursos = JSON.parse(localStorage.getItem("cursos")) || {
- "eletricista":{
+let cursos={
+ eletricista:{
   nome:"Eletricista Predial",
   img:"https://via.placeholder.com/400x250?text=Eletricista+Predial",
-  modulos:[
-   {nome:"Introdução",aulas:[
-    {nome:"Apresentação",video:"https://www.w3schools.com/html/mov_bbb.mp4"},
-    {nome:"Ferramentas",video:"https://www.w3schools.com/html/mov_bbb.mp4"}
-   ]},
-   {nome:"Instalações",aulas:[
-    {nome:"Tomadas",video:"https://www.w3schools.com/html/mov_bbb.mp4"}
-   ]}
-  ]
- },
- "ar":{
-  nome:"Viver de Ar Condicionado",
-  img:"https://via.placeholder.com/400x250?text=Ar+Condicionado",
-  modulos:[
-   {nome:"Início",aulas:[
-    {nome:"Mercado",video:"https://www.w3schools.com/html/mov_bbb.mp4"}
-   ]}
-  ]
+  modulos:[]
  }
 };
 
-let assistidas = JSON.parse(localStorage.getItem("assistidas")) || [];
-let cursoAtual="";
+let cursoAtual="eletricista";
+let assistidas=[];
 
-localStorage.setItem("cursos",JSON.stringify(cursos));
+function esconderTudo(){
+ login.classList.add("hidden");
+ admin.classList.add("hidden");
+ dashboard.classList.add("hidden");
+ curso.classList.add("hidden");
+}
 
 function login(){
- const u=user.value.trim();
- const p=pass.value.trim();
-
- loginBox.classList.add("hidden");
-
- if(u===ADMIN_USER && p===ADMIN_PASS){
-  adminBox.classList.remove("hidden");
-  adminMsg.classList.remove("hidden");
- } else {
+ esconderTudo();
+ if(user.value==="admin" && pass.value==="123356"){
+  admin.classList.remove("hidden");
+  atualizarSelect();
+ }else{
   dashboard.classList.remove("hidden");
   renderCursos();
  }
@@ -149,20 +124,19 @@ function renderCursos(){
  listaCursos.innerHTML="";
  for(let id in cursos){
   listaCursos.innerHTML+=`
-   <div class="course" onclick="abrirCurso('${id}')">
-    <img src="${cursos[id].img}">
-    <div>${cursos[id].nome}</div>
-   </div>`;
+  <div class="course" onclick="abrirCurso('${id}')">
+   <img src="${cursos[id].img}">
+   <div>${cursos[id].nome}</div>
+  </div>`;
  }
 }
 
 function abrirCurso(id){
  cursoAtual=id;
- dashboard.classList.add("hidden");
+ esconderTudo();
  curso.classList.remove("hidden");
  cursoNome.innerText=cursos[id].nome;
  renderSidebar();
- atualizarBarra();
 }
 
 function renderSidebar(){
@@ -170,46 +144,53 @@ function renderSidebar(){
  cursos[cursoAtual].modulos.forEach((m,mi)=>{
   let aulas="";
   m.aulas.forEach((a,ai)=>{
-   let key=`${cursoAtual}-${mi}-${ai}`;
+   let key=`${mi}-${ai}`;
    aulas+=`<div class="lesson ${assistidas.includes(key)?"done":""}"
-    onclick="play('${a.video}','${a.nome}','${key}')">▶ ${a.nome}</div>`;
+    onclick="play('${a.video}','${a.nome}','${key}')">${a.nome}</div>`;
   });
   sidebar.innerHTML+=`
-   <div class="module">
-    <h4 onclick="this.nextElementSibling.classList.toggle('hidden')">${m.nome}</h4>
-    <div>${aulas}</div>
-   </div>`;
+  <div class="module">
+   <h4 onclick="this.nextElementSibling.classList.toggle('hidden')">${m.nome}</h4>
+   <div>${aulas}</div>
+  </div>`;
  });
 }
 
 function play(src,nome,key){
  aulaTitulo.innerText=nome;
  player.src=src;
- if(!assistidas.includes(key)){
-  assistidas.push(key);
-  localStorage.setItem("assistidas",JSON.stringify(assistidas));
-  atualizarBarra();
-  renderSidebar();
- }
-}
-
-function atualizarBarra(){
- let total=0;
- cursos[cursoAtual].modulos.forEach(m=>total+=m.aulas.length);
- barra.style.width=(assistidas.length/total)*100+"%";
+ if(!assistidas.includes(key)) assistidas.push(key);
+ renderSidebar();
 }
 
 function voltar(){
- curso.classList.add("hidden");
+ esconderTudo();
  dashboard.classList.remove("hidden");
- player.src="";
 }
 
-function criarCurso(){
- const id=cursoNomeAdmin.value.toLowerCase().replace(/\s+/g,"-");
- cursos[id]={nome:cursoNomeAdmin.value,img:cursoImgAdmin.value,modulos:[]};
- localStorage.setItem("cursos",JSON.stringify(cursos));
- alert("Curso criado!");
+function criarModulo(){
+ cursos[cursoAtual].modulos.push({nome:moduloNome.value,aulas:[]});
+ moduloNome.value="";
+ atualizarSelect();
+ alert("Módulo criado");
+}
+
+function atualizarSelect(){
+ moduloSelect.innerHTML="";
+ cursos[cursoAtual].modulos.forEach((m,i)=>{
+  moduloSelect.innerHTML+=`<option value="${i}">${m.nome}</option>`;
+ });
+}
+
+function criarAula(){
+ const mid=moduloSelect.value;
+ const file=videoFile.files[0];
+ if(!file) return alert("Selecione um vídeo");
+ const url=URL.createObjectURL(file);
+ cursos[cursoAtual].modulos[mid].aulas.push({nome:aulaNome.value,video:url});
+ aulaNome.value="";
+ videoFile.value="";
+ alert("Aula criada");
 }
 </script>
 
