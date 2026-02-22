@@ -8,8 +8,8 @@
 <style>
 body{margin:0;font-family:Arial;background:#f4f6f8}
 .hidden{display:none}
-header{padding:15px;background:#fff;text-align:center;font-weight:bold}
-.container{max-width:1200px;margin:auto;padding:20px}
+header{background:#fff;padding:15px;text-align:center;font-weight:bold}
+.container{max-width:1100px;margin:auto;padding:20px}
 
 /* LOGIN */
 .login{max-width:360px;margin:80px auto;background:#fff;padding:25px;border-radius:8px}
@@ -23,15 +23,21 @@ button{background:#2d72ff;color:#fff;border:none;border-radius:5px}
 .course div{padding:15px}
 
 /* MÓDULOS */
-.module{background:#fff;border-radius:8px;margin-bottom:15px;overflow:hidden}
-.module-header{display:flex;align-items:center;cursor:pointer}
-.module-header img{width:120px;height:80px;object-fit:cover}
-.module-header h3{margin:0;padding:15px}
-.lessons{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;padding:15px}
-.lesson{background:#f1f1f1;border-radius:6px;overflow:hidden;cursor:pointer}
+.module{background:#fff;border-radius:8px;margin-bottom:10px;overflow:hidden}
+.module-header{
+ display:flex;align-items:center;justify-content:space-between;
+ padding:15px;cursor:pointer;border-bottom:1px solid #eee
+}
+.module-header h3{margin:0;font-size:16px}
+.module-header span{font-size:18px}
+.module-content{display:none;padding:15px}
+
+/* AULAS */
+.lessons{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.lesson{background:#f1f1f1;border-radius:6px;cursor:pointer;overflow:hidden}
 .lesson.done{border:3px solid #28a745}
 .lesson img{width:100%;height:100px;object-fit:cover}
-.lesson span{display:block;padding:8px;font-size:14px}
+.lesson p{margin:0;padding:8px;font-size:14px;text-align:center}
 
 /* PLAYER */
 iframe{width:100%;height:420px;margin-top:20px;border-radius:8px}
@@ -49,8 +55,8 @@ iframe{width:100%;height:420px;margin-top:20px;border-radius:8px}
 <!-- LOGIN -->
 <div class="login" id="login">
   <h2>Entrar</h2>
-  <input id="email" placeholder="Email">
-  <input id="senha" type="password" placeholder="Senha">
+  <input placeholder="Email">
+  <input type="password" placeholder="Senha">
   <button onclick="entrar()">Entrar</button>
 </div>
 
@@ -70,22 +76,20 @@ iframe{width:100%;height:420px;margin-top:20px;border-radius:8px}
 </div>
 
 <script>
-const cursos = {
+const cursos={
  eletricista:{
   nome:"Eletricista Predial",
   imagem:"https://picsum.photos/600/400?1",
   modulos:[
    {
     nome:"Introdução",
-    imagem:"https://picsum.photos/400/200?2",
     aulas:[
      {nome:"Apresentação",video:"M7lc1UVf-VE"},
      {nome:"Ferramentas",video:"ScMzIvxBSi4"}
     ]
    },
    {
-    nome:"Instalações",
-    imagem:"https://picsum.photos/400/200?3",
+    nome:"Instalações Elétricas",
     aulas:[
      {nome:"Tomadas",video:"ysz5S6PUM-U"},
      {nome:"Disjuntores",video:"aqz-KE-bpKQ"}
@@ -95,11 +99,12 @@ const cursos = {
  }
 };
 
-let cursoAtual="",assistidas=JSON.parse(localStorage.getItem("assistidas"))||[];
+let cursoAtual="";
+let assistidas=JSON.parse(localStorage.getItem("assistidas"))||[];
 
 function entrar(){
- document.getElementById("login").classList.add("hidden");
- document.getElementById("dashboard").classList.remove("hidden");
+ login.classList.add("hidden");
+ dashboard.classList.remove("hidden");
  renderCursos();
 }
 
@@ -133,18 +138,28 @@ function renderModulos(){
     <div class="lesson ${assistidas.includes(key)?"done":""}"
      onclick="play('${a.video}','${key}')">
      <img src="https://img.youtube.com/vi/${a.video}/mqdefault.jpg">
-     <span>${a.nome}</span>
+     <p>${a.nome}</p>
     </div>`;
   });
 
   modulos.innerHTML+=`
    <div class="module">
-    <div class="module-header">
-     <img src="${m.imagem}">
+    <div class="module-header" onclick="toggleModulo(${mi})">
      <h3>${m.nome}</h3>
+     <span id="icon-${mi}">▶</span>
     </div>
-    <div class="lessons">${aulasHTML}</div>
+    <div class="module-content" id="mod-${mi}">
+     <div class="lessons">${aulasHTML}</div>
+    </div>
    </div>`;
+ });
+}
+
+function toggleModulo(i){
+ document.querySelectorAll(".module-content").forEach((m,idx)=>{
+  m.style.display = idx===i && m.style.display!=="block" ? "block":"none";
+  document.getElementById("icon-"+idx).innerText =
+   idx===i && m.style.display==="block" ? "▼":"▶";
  });
 }
 
