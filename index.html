@@ -5,241 +5,133 @@
 <title>Área de Membros</title>
 
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f2f2f2;
-}
-.container {
-  width: 420px;
-  margin: 20px auto;
-  background: #fff;
-  padding: 15px;
-  border-radius: 8px;
-}
-h2,h3 {
-  text-align: center;
-}
-.hidden { display:none; }
+body { font-family: Arial, sans-serif; background:#f2f2f2; }
+.container { width:420px; margin:15px auto; background:#fff; padding:15px; border-radius:8px; }
+.hidden{display:none}
+h2,h3{text-align:center}
 
-input, button {
-  width: 100%;
-  padding: 10px;
-  margin: 6px 0;
-}
-button {
-  background: #0066ff;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-}
-.folder {
-  border: 1px solid #ddd;
-  padding: 10px;
-  margin: 10px 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.folder img {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-}
-.video-thumb {
-  background: #000;
-  color: #fff;
-  padding: 10px;
-  margin: 6px 0;
-  cursor: pointer;
-}
-video {
-  width: 100%;
-  margin-top: 10px;
-}
-.back {
-  background: #999;
-}
-.logout {
-  background: #e74c3c;
-}
+.folder{border:1px solid #ddd;padding:10px;margin:8px 0;cursor:pointer}
+.images{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:10px 0}
+.images img{width:100%;height:60px;object-fit:cover;border-radius:4px}
+
+.video{padding:8px;border:1px solid #ddd;margin:6px 0;cursor:pointer}
+.done{background:#d4edda;color:#155724}
+.progress{height:10px;background:#ddd;border-radius:5px;margin:10px 0}
+.bar{height:10px;background:#28a745;width:0%;border-radius:5px}
+
+button{width:100%;padding:10px;margin-top:8px;border:none;background:#0066ff;color:#fff;cursor:pointer}
+.back{background:#999}
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
 <div class="container" id="loginBox">
-  <h2>Login</h2>
-  <input id="loginEmail" type="email" placeholder="Email">
-  <input id="loginSenha" type="password" placeholder="Senha">
-  <button onclick="login()">Entrar</button>
-  <p onclick="mostrarCadastro()" style="cursor:pointer;text-align:center">Criar conta</p>
+<h2>Login</h2>
+<input id="email" placeholder="Email">
+<input id="senha" type="password" placeholder="Senha">
+<button onclick="login()">Entrar</button>
 </div>
 
-<!-- CADASTRO -->
-<div class="container hidden" id="cadastroBox">
-  <h2>Cadastro</h2>
-  <input id="cadNome" placeholder="Nome">
-  <input id="cadEmail" type="email" placeholder="Email">
-  <input id="cadSenha" type="password" placeholder="Senha">
-  <button onclick="cadastrar()">Cadastrar</button>
-  <p onclick="mostrarLogin()" style="cursor:pointer;text-align:center">Já tenho conta</p>
-</div>
-
-<!-- DASHBOARD -->
 <div class="container hidden" id="dashboard">
-  <h2 id="bemvindo"></h2>
-
-  <div class="folder" onclick="abrirCurso('eletricista')">
-    <img src="eletricista.jpg">
-    <div>📁 Eletricista Predial</div>
-  </div>
-
-  <div class="folder" onclick="abrirCurso('ar')">
-    <img src="ar.jpg">
-    <div>📁 Viver de Ar Condicionado</div>
-  </div>
-
-  <button class="logout" onclick="logout()">Sair</button>
+<h2>Cursos</h2>
+<div class="folder" onclick="abrirCurso('eletricista')">📁 Eletricista Predial</div>
+<div class="folder" onclick="abrirCurso('ar')">📁 Viver de Ar Condicionado</div>
 </div>
 
-<!-- MÓDULOS -->
-<div class="container hidden" id="modulosBox">
-  <h2 id="cursoTitulo"></h2>
-  <div id="listaModulos"></div>
-  <button class="back" onclick="voltarDashboard()">Voltar</button>
-</div>
+<div class="container hidden" id="cursoBox">
+<h2 id="cursoTitulo"></h2>
 
-<!-- AULAS -->
-<div class="container hidden" id="aulasBox">
-  <h3 id="moduloTitulo"></h3>
-  <div id="listaVideos"></div>
-  <video id="player" controls></video>
-  <button class="back" onclick="voltarModulos()">Voltar</button>
+<div class="images" id="galeria"></div>
+
+<div class="progress"><div class="bar" id="barra"></div></div>
+
+<div id="listaVideos"></div>
+
+<div id="contador"></div>
+
+<iframe id="player" width="100%" height="220"
+allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+<button class="back" onclick="voltar()">Voltar</button>
 </div>
 
 <script>
-const cursos = {
-  eletricista: {
-    nome: "Eletricista Predial",
-    modulos: {
-      "Módulo 1 - Introdução": [
-        { titulo: "Boas-vindas", video: "https://www.w3schools.com/html/mov_bbb.mp4" },
-        { titulo: "Ferramentas", video: "https://www.w3schools.com/html/movie.mp4" }
-      ],
-      "Módulo 2 - Instalações": [
-        { titulo: "Tomadas", video: "https://www.w3schools.com/html/mov_bbb.mp4" }
-      ]
-    }
-  },
-  ar: {
-    nome: "Viver de Ar Condicionado",
-    modulos: {
-      "Módulo 1 - Mercado": [
-        { titulo: "Introdução", video: "https://www.w3schools.com/html/movie.mp4" }
-      ],
-      "Módulo 2 - Instalação": [
-        { titulo: "Split", video: "https://www.w3schools.com/html/mov_bbb.mp4" }
-      ]
-    }
-  }
+const cursos={
+eletricista:{
+nome:"Eletricista Predial",
+imgs:[1,2,3,4,5,6,7,8].map(i=>`https://picsum.photos/200?e=${i}`),
+videos:["M7lc1UVf-VE","ScMzIvxBSi4","ysz5S6PUM-U","E7wJTI-1dvQ","aqz-KE-bpKQ"]
+},
+ar:{
+nome:"Viver de Ar Condicionado",
+imgs:[11,12,13,14,15,16,17,18].map(i=>`https://picsum.photos/200?a=${i}`),
+videos:["ysz5S6PUM-U","aqz-KE-bpKQ","M7lc1UVf-VE","ScMzIvxBSi4","E7wJTI-1dvQ"]
+}
 };
 
-let cursoAtual = "";
-let moduloAtual = "";
+let cursoAtual="",videoAtual=0,assistidos={};
 
-function cadastrar() {
-  let users = JSON.parse(localStorage.getItem("users")) || [];
-  users.push({ nome: cadNome.value, email: cadEmail.value, senha: cadSenha.value });
-  localStorage.setItem("users", JSON.stringify(users));
-  alert("Cadastro realizado");
-  mostrarLogin();
+function login(){
+document.getElementById("loginBox").classList.add("hidden");
+document.getElementById("dashboard").classList.remove("hidden");
 }
 
-function login() {
-  let users = JSON.parse(localStorage.getItem("users")) || [];
-  let user = users.find(u => u.email === loginEmail.value && u.senha === loginSenha.value);
-  if (!user) return alert("Dados inválidos");
-  localStorage.setItem("logado", JSON.stringify(user));
-  entrar(user);
+function abrirCurso(id){
+cursoAtual=id;videoAtual=0;
+assistidos=JSON.parse(localStorage.getItem(id))||{};
+dashboard.classList.add("hidden");
+cursoBox.classList.remove("hidden");
+cursoTitulo.innerText=cursos[id].nome;
+galeria.innerHTML=cursos[id].imgs.map(i=>`<img src="${i}">`).join("");
+renderVideos();
+playVideo(0);
 }
 
-function entrar(user) {
-  loginBox.classList.add("hidden");
-  cadastroBox.classList.add("hidden");
-  dashboard.classList.remove("hidden");
-  bemvindo.innerText = "Olá, " + user.nome;
+function renderVideos(){
+listaVideos.innerHTML="";
+cursos[cursoAtual].videos.forEach((v,i)=>{
+listaVideos.innerHTML+=`
+<div class="video ${assistidos[i]?'done':''}" onclick="playVideo(${i})">
+🎬 Aula ${i+1} ${assistidos[i]?'✔':''}
+</div>`;
+});
+updateBar();
 }
 
-function abrirCurso(id) {
-  cursoAtual = id;
-  dashboard.classList.add("hidden");
-  modulosBox.classList.remove("hidden");
-  cursoTitulo.innerText = cursos[id].nome;
-  listaModulos.innerHTML = "";
-
-  for (let modulo in cursos[id].modulos) {
-    listaModulos.innerHTML += `
-      <div class="folder" onclick="abrirModulo('${modulo}')">
-        📂 ${modulo}
-      </div>
-    `;
-  }
+function playVideo(i){
+videoAtual=i;
+player.src=`https://www.youtube.com/embed/${cursos[cursoAtual].videos[i]}?autoplay=1&enablejsapi=1`;
+startCheck();
 }
 
-function abrirModulo(nome) {
-  moduloAtual = nome;
-  modulosBox.classList.add("hidden");
-  aulasBox.classList.remove("hidden");
-  moduloTitulo.innerText = nome;
-  listaVideos.innerHTML = "";
-
-  cursos[cursoAtual].modulos[nome].forEach(v => {
-    listaVideos.innerHTML += `
-      <div class="video-thumb" onclick="playVideo('${v.video}')">
-        🎬 ${v.titulo}
-      </div>
-    `;
-  });
+function startCheck(){
+setTimeout(()=>{
+assistidos[videoAtual]=true;
+localStorage.setItem(cursoAtual,JSON.stringify(assistidos));
+renderVideos();
+if(videoAtual+1<cursos[cursoAtual].videos.length){
+let t=5;
+contador.innerText=`Próximo vídeo em ${t}s`;
+let c=setInterval(()=>{
+t--;contador.innerText=`Próximo vídeo em ${t}s`;
+if(t===0){clearInterval(c);contador.innerText="";playVideo(videoAtual+1);}
+},1000);
+}
+},10000); // 10s simulação
 }
 
-function playVideo(url) {
-  player.src = url;
-  player.play();
+function updateBar(){
+const total=cursos[cursoAtual].videos.length;
+const done=Object.keys(assistidos).length;
+barra.style.width=((done/total)*100)+"%";
 }
 
-function voltarDashboard() {
-  modulosBox.classList.add("hidden");
-  dashboard.classList.remove("hidden");
+function voltar(){
+cursoBox.classList.add("hidden");
+dashboard.classList.remove("hidden");
+player.src="";
 }
-
-function voltarModulos() {
-  aulasBox.classList.add("hidden");
-  modulosBox.classList.remove("hidden");
-  player.pause();
-}
-
-function logout() {
-  localStorage.removeItem("logado");
-  mostrarLogin();
-}
-
-function mostrarLogin() {
-  loginBox.classList.remove("hidden");
-  cadastroBox.classList.add("hidden");
-  dashboard.classList.add("hidden");
-  modulosBox.classList.add("hidden");
-  aulasBox.classList.add("hidden");
-}
-
-function mostrarCadastro() {
-  loginBox.classList.add("hidden");
-  cadastroBox.classList.remove("hidden");
-}
-
-const salvo = JSON.parse(localStorage.getItem("logado"));
-if (salvo) entrar(salvo);
 </script>
 
 </body>
