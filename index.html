@@ -14,7 +14,7 @@ button{background:#2d72ff;color:#fff;border:none;border-radius:5px;padding:10px 
 input,select{width:100%;padding:10px;margin:5px 0}
 
 /* LOGIN */
-#login{max-width:360px;margin:80px auto;background:#fff;padding:25px;border-radius:8px}
+#loginBox{max-width:360px;margin:80px auto;background:#fff;padding:25px;border-radius:8px}
 
 /* DASHBOARD */
 .courses{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
@@ -43,11 +43,11 @@ video{width:100%;border-radius:8px}
 <header>🎓 Cursos Online Grátis</header>
 
 <!-- LOGIN -->
-<div id="login">
+<div id="loginBox">
 <h2>Entrar</h2>
 <input id="user" placeholder="Usuário">
 <input id="pass" type="password" placeholder="Senha">
-<button onclick="login()">Entrar</button>
+<button onclick="fazerLogin()">Entrar</button>
 </div>
 
 <!-- ADMIN -->
@@ -89,7 +89,8 @@ video{width:100%;border-radius:8px}
 </div>
 
 <script>
-const ADMIN_USER="admin", ADMIN_PASS="123356";
+const ADMIN_USER="admin";
+const ADMIN_PASS="123356";
 
 let cursos={
  eletricista:{
@@ -103,61 +104,68 @@ let cursoAtual="eletricista";
 let assistidas=[];
 
 function esconderTudo(){
- login.classList.add("hidden");
- admin.classList.add("hidden");
- dashboard.classList.add("hidden");
- curso.classList.add("hidden");
+ document.getElementById("loginBox").classList.add("hidden");
+ document.getElementById("admin").classList.add("hidden");
+ document.getElementById("dashboard").classList.add("hidden");
+ document.getElementById("curso").classList.add("hidden");
 }
 
-function login(){
+function fazerLogin(){
+ const u=document.getElementById("user").value.trim();
+ const p=document.getElementById("pass").value.trim();
+
  esconderTudo();
- if(user.value==="admin" && pass.value==="123356"){
-  admin.classList.remove("hidden");
+
+ if(u===ADMIN_USER && p===ADMIN_PASS){
+  document.getElementById("admin").classList.remove("hidden");
   atualizarSelect();
- }else{
-  dashboard.classList.remove("hidden");
+ } else {
+  document.getElementById("dashboard").classList.remove("hidden");
   renderCursos();
  }
 }
 
 function renderCursos(){
- listaCursos.innerHTML="";
+ const lista=document.getElementById("listaCursos");
+ lista.innerHTML="";
  for(let id in cursos){
-  listaCursos.innerHTML+=`
-  <div class="course" onclick="abrirCurso('${id}')">
-   <img src="${cursos[id].img}">
-   <div>${cursos[id].nome}</div>
-  </div>`;
+  lista.innerHTML+=`
+   <div class="course" onclick="abrirCurso('${id}')">
+    <img src="${cursos[id].img}">
+    <div>${cursos[id].nome}</div>
+   </div>`;
  }
 }
 
 function abrirCurso(id){
  cursoAtual=id;
  esconderTudo();
- curso.classList.remove("hidden");
- cursoNome.innerText=cursos[id].nome;
+ document.getElementById("curso").classList.remove("hidden");
+ document.getElementById("cursoNome").innerText=cursos[id].nome;
  renderSidebar();
 }
 
 function renderSidebar(){
+ const sidebar=document.getElementById("sidebar");
  sidebar.innerHTML="";
  cursos[cursoAtual].modulos.forEach((m,mi)=>{
   let aulas="";
   m.aulas.forEach((a,ai)=>{
    let key=`${mi}-${ai}`;
    aulas+=`<div class="lesson ${assistidas.includes(key)?"done":""}"
-    onclick="play('${a.video}','${a.nome}','${key}')">${a.nome}</div>`;
+    onclick="playAula('${a.video}','${a.nome}','${key}')">${a.nome}</div>`;
   });
   sidebar.innerHTML+=`
-  <div class="module">
-   <h4 onclick="this.nextElementSibling.classList.toggle('hidden')">${m.nome}</h4>
-   <div>${aulas}</div>
-  </div>`;
+   <div class="module">
+    <h4 onclick="this.nextElementSibling.classList.toggle('hidden')">${m.nome}</h4>
+    <div>${aulas}</div>
+   </div>`;
  });
 }
 
-function play(src,nome,key){
- aulaTitulo.innerText=nome;
+function playAula(src,nome,key){
+ document.getElementById("aulaTitulo").innerText=nome;
+ const player=document.getElementById("player");
  player.src=src;
  if(!assistidas.includes(key)) assistidas.push(key);
  renderSidebar();
@@ -165,7 +173,7 @@ function play(src,nome,key){
 
 function voltar(){
  esconderTudo();
- dashboard.classList.remove("hidden");
+ document.getElementById("dashboard").classList.remove("hidden");
 }
 
 function criarModulo(){
@@ -176,15 +184,16 @@ function criarModulo(){
 }
 
 function atualizarSelect(){
- moduloSelect.innerHTML="";
+ const sel=document.getElementById("moduloSelect");
+ sel.innerHTML="";
  cursos[cursoAtual].modulos.forEach((m,i)=>{
-  moduloSelect.innerHTML+=`<option value="${i}">${m.nome}</option>`;
+  sel.innerHTML+=`<option value="${i}">${m.nome}</option>`;
  });
 }
 
 function criarAula(){
- const mid=moduloSelect.value;
- const file=videoFile.files[0];
+ const mid=document.getElementById("moduloSelect").value;
+ const file=document.getElementById("videoFile").files[0];
  if(!file) return alert("Selecione um vídeo");
  const url=URL.createObjectURL(file);
  cursos[cursoAtual].modulos[mid].aulas.push({nome:aulaNome.value,video:url});
