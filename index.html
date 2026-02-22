@@ -2,135 +2,250 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Área de Membros</title>
+<title>Plataforma de Cursos</title>
 
 <style>
-body { font-family: Arial, sans-serif; background:#f2f2f2; }
-.container { width:420px; margin:15px auto; background:#fff; padding:15px; border-radius:8px; }
+:root{
+  --primary:#2d72ff;
+  --bg:#f4f6f8;
+  --card:#ffffff;
+  --success:#28a745;
+  --text:#333;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+header{
+  background:#fff;
+  padding:15px;
+  text-align:center;
+  font-weight:bold;
+  box-shadow:0 2px 5px rgba(0,0,0,.05);
+}
+.container{
+  max-width:1000px;
+  margin:auto;
+  padding:20px;
+}
 .hidden{display:none}
-h2,h3{text-align:center}
 
-.folder{border:1px solid #ddd;padding:10px;margin:8px 0;cursor:pointer}
-.images{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:10px 0}
-.images img{width:100%;height:60px;object-fit:cover;border-radius:4px}
+/* LOGIN */
+.login-box{
+  max-width:360px;
+  margin:80px auto;
+  background:#fff;
+  padding:25px;
+  border-radius:8px;
+  box-shadow:0 10px 25px rgba(0,0,0,.1);
+}
+input,button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+}
+button{
+  background:var(--primary);
+  border:none;
+  color:#fff;
+  cursor:pointer;
+  border-radius:4px;
+}
 
-.video{padding:8px;border:1px solid #ddd;margin:6px 0;cursor:pointer}
-.done{background:#d4edda;color:#155724}
-.progress{height:10px;background:#ddd;border-radius:5px;margin:10px 0}
-.bar{height:10px;background:#28a745;width:0%;border-radius:5px}
+/* DASHBOARD */
+.courses{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
+}
+.course-card{
+  background:var(--card);
+  border-radius:8px;
+  overflow:hidden;
+  box-shadow:0 5px 15px rgba(0,0,0,.08);
+  cursor:pointer;
+}
+.course-card img{
+  width:100%;
+  height:140px;
+  object-fit:cover;
+}
+.course-info{
+  padding:15px;
+}
+.progress{
+  height:8px;
+  background:#ddd;
+  border-radius:4px;
+  overflow:hidden;
+}
+.progress div{
+  height:100%;
+  background:var(--success);
+  width:0%;
+}
 
-button{width:100%;padding:10px;margin-top:8px;border:none;background:#0066ff;color:#fff;cursor:pointer}
-.back{background:#999}
+/* CURSO */
+.course-header{
+  display:flex;
+  gap:20px;
+  margin-bottom:20px;
+}
+.course-header img{
+  width:200px;
+  height:120px;
+  object-fit:cover;
+  border-radius:8px;
+}
+.module{
+  background:#fff;
+  padding:15px;
+  border-radius:6px;
+  margin-bottom:10px;
+  cursor:pointer;
+}
+.lesson{
+  padding:10px;
+  border-bottom:1px solid #eee;
+}
+.lesson.done{
+  color:var(--success);
+  font-weight:bold;
+}
+.player{
+  background:#000;
+  margin-top:20px;
+}
+iframe{
+  width:100%;
+  height:420px;
+}
+.back{
+  margin-top:15px;
+  background:#777;
+}
 </style>
 </head>
 
 <body>
 
-<div class="container" id="loginBox">
-<h2>Login</h2>
-<input id="email" placeholder="Email">
-<input id="senha" type="password" placeholder="Senha">
-<button onclick="login()">Entrar</button>
+<header>🎓 Plataforma de Cursos</header>
+
+<!-- LOGIN -->
+<div class="login-box" id="login">
+  <h2>Entrar</h2>
+  <input placeholder="Email">
+  <input type="password" placeholder="Senha">
+  <button onclick="entrar()">Acessar</button>
 </div>
 
+<!-- DASHBOARD -->
 <div class="container hidden" id="dashboard">
-<h2>Cursos</h2>
-<div class="folder" onclick="abrirCurso('eletricista')">📁 Eletricista Predial</div>
-<div class="folder" onclick="abrirCurso('ar')">📁 Viver de Ar Condicionado</div>
+  <h2>Meus Cursos</h2>
+  <div class="courses" id="listaCursos"></div>
 </div>
 
-<div class="container hidden" id="cursoBox">
-<h2 id="cursoTitulo"></h2>
+<!-- CURSO -->
+<div class="container hidden" id="curso">
+  <button class="back" onclick="voltar()">← Voltar</button>
+  <div class="course-header">
+    <img id="cursoImg">
+    <div>
+      <h2 id="cursoNome"></h2>
+      <div class="progress"><div id="cursoBarra"></div></div>
+    </div>
+  </div>
 
-<div class="images" id="galeria"></div>
+  <div id="modulos"></div>
 
-<div class="progress"><div class="bar" id="barra"></div></div>
-
-<div id="listaVideos"></div>
-
-<div id="contador"></div>
-
-<iframe id="player" width="100%" height="220"
-allow="autoplay; encrypted-media" allowfullscreen></iframe>
-
-<button class="back" onclick="voltar()">Voltar</button>
+  <div class="player">
+    <iframe id="player" allowfullscreen></iframe>
+  </div>
 </div>
 
 <script>
 const cursos={
-eletricista:{
-nome:"Eletricista Predial",
-imgs:[1,2,3,4,5,6,7,8].map(i=>`https://picsum.photos/200?e=${i}`),
-videos:["M7lc1UVf-VE","ScMzIvxBSi4","ysz5S6PUM-U","E7wJTI-1dvQ","aqz-KE-bpKQ"]
-},
-ar:{
-nome:"Viver de Ar Condicionado",
-imgs:[11,12,13,14,15,16,17,18].map(i=>`https://picsum.photos/200?a=${i}`),
-videos:["ysz5S6PUM-U","aqz-KE-bpKQ","M7lc1UVf-VE","ScMzIvxBSi4","E7wJTI-1dvQ"]
-}
+ eletricista:{
+  nome:"Eletricista Predial",
+  img:"https://picsum.photos/400?1",
+  videos:["M7lc1UVf-VE","ScMzIvxBSi4","ysz5S6PUM-U","E7wJTI-1dvQ","aqz-KE-bpKQ"]
+ },
+ ar:{
+  nome:"Viver de Ar Condicionado",
+  img:"https://picsum.photos/400?2",
+  videos:["ysz5S6PUM-U","aqz-KE-bpKQ","M7lc1UVf-VE","ScMzIvxBSi4","E7wJTI-1dvQ"]
+ }
 };
 
-let cursoAtual="",videoAtual=0,assistidos={};
+let atual="",assistidos={};
 
-function login(){
-document.getElementById("loginBox").classList.add("hidden");
-document.getElementById("dashboard").classList.remove("hidden");
+function entrar(){
+ login.classList.add("hidden");
+ dashboard.classList.remove("hidden");
+ renderCursos();
+}
+
+function renderCursos(){
+ listaCursos.innerHTML="";
+ for(let id in cursos){
+  let done=(JSON.parse(localStorage.getItem(id))||[]).length;
+  let total=cursos[id].videos.length;
+  let perc=(done/total)*100;
+  listaCursos.innerHTML+=`
+   <div class="course-card" onclick="abrirCurso('${id}')">
+    <img src="${cursos[id].img}">
+    <div class="course-info">
+     <strong>${cursos[id].nome}</strong>
+     <div class="progress"><div style="width:${perc}%"></div></div>
+    </div>
+   </div>`;
+ }
 }
 
 function abrirCurso(id){
-cursoAtual=id;videoAtual=0;
-assistidos=JSON.parse(localStorage.getItem(id))||{};
-dashboard.classList.add("hidden");
-cursoBox.classList.remove("hidden");
-cursoTitulo.innerText=cursos[id].nome;
-galeria.innerHTML=cursos[id].imgs.map(i=>`<img src="${i}">`).join("");
-renderVideos();
-playVideo(0);
+ atual=id;
+ assistidos=JSON.parse(localStorage.getItem(id))||[];
+ dashboard.classList.add("hidden");
+ curso.classList.remove("hidden");
+ cursoNome.innerText=cursos[id].nome;
+ cursoImg.src=cursos[id].img;
+ atualizarBarra();
+ renderModulos();
 }
 
-function renderVideos(){
-listaVideos.innerHTML="";
-cursos[cursoAtual].videos.forEach((v,i)=>{
-listaVideos.innerHTML+=`
-<div class="video ${assistidos[i]?'done':''}" onclick="playVideo(${i})">
-🎬 Aula ${i+1} ${assistidos[i]?'✔':''}
-</div>`;
-});
-updateBar();
+function renderModulos(){
+ modulos.innerHTML="";
+ cursos[atual].videos.forEach((v,i)=>{
+  modulos.innerHTML+=`
+   <div class="lesson ${assistidos.includes(i)?'done':''}"
+        onclick="play(${i})">
+    Aula ${i+1} ${assistidos.includes(i)?'✔':''}
+   </div>`;
+ });
 }
 
-function playVideo(i){
-videoAtual=i;
-player.src=`https://www.youtube.com/embed/${cursos[cursoAtual].videos[i]}?autoplay=1&enablejsapi=1`;
-startCheck();
+function play(i){
+ player.src=`https://www.youtube.com/embed/${cursos[atual].videos[i]}?autoplay=1`;
+ if(!assistidos.includes(i)){
+  assistidos.push(i);
+  localStorage.setItem(atual,JSON.stringify(assistidos));
+  atualizarBarra();
+  renderModulos();
+ }
 }
 
-function startCheck(){
-setTimeout(()=>{
-assistidos[videoAtual]=true;
-localStorage.setItem(cursoAtual,JSON.stringify(assistidos));
-renderVideos();
-if(videoAtual+1<cursos[cursoAtual].videos.length){
-let t=5;
-contador.innerText=`Próximo vídeo em ${t}s`;
-let c=setInterval(()=>{
-t--;contador.innerText=`Próximo vídeo em ${t}s`;
-if(t===0){clearInterval(c);contador.innerText="";playVideo(videoAtual+1);}
-},1000);
-}
-},10000); // 10s simulação
-}
-
-function updateBar(){
-const total=cursos[cursoAtual].videos.length;
-const done=Object.keys(assistidos).length;
-barra.style.width=((done/total)*100)+"%";
+function atualizarBarra(){
+ cursoBarra.style.width=(assistidos.length/cursos[atual].videos.length)*100+"%";
 }
 
 function voltar(){
-cursoBox.classList.add("hidden");
-dashboard.classList.remove("hidden");
-player.src="";
+ curso.classList.add("hidden");
+ dashboard.classList.remove("hidden");
+ player.src="";
+ renderCursos();
 }
 </script>
 
