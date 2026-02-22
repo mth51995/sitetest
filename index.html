@@ -1,163 +1,194 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Mini Plataforma - Cadastro</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f1f1f1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .box {
-      background: #fff;
-      padding: 25px;
-      width: 320px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-    }
-
-    button {
-      width: 100%;
-      padding: 10px;
-      background: #4CAF50;
-      border: none;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    button:hover {
-      background: #45a049;
-    }
-
-    .link {
-      text-align: center;
-      margin-top: 10px;
-      cursor: pointer;
-      color: blue;
-    }
-
-    .hidden {
-      display: none;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Área de Membros</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+}
+.container {
+  width: 360px;
+  margin: auto;
+  margin-top: 60px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+}
+h2 {
+  text-align: center;
+}
+input, button {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+}
+button {
+  background: #2b7cff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+button:hover {
+  background: #1f5fd1;
+}
+.hidden {
+  display: none;
+}
+.curso {
+  background: #eee;
+  padding: 10px;
+  margin: 10px 0;
+  cursor: pointer;
+}
+.aula {
+  background: #ddd;
+  padding: 8px;
+  margin: 5px 0;
+}
+.logout {
+  background: #e74c3c;
+}
+</style>
 </head>
+
 <body>
 
-  <!-- CADASTRO -->
-  <div class="box" id="cadastroBox">
-    <h2>Cadastrar</h2>
-    <input type="text" id="cadNome" placeholder="Nome">
-    <input type="email" id="cadEmail" placeholder="Email">
-    <input type="password" id="cadSenha" placeholder="Senha">
-    <button onclick="cadastrar()">Cadastrar</button>
-    <div class="link" onclick="mostrarLogin()">Já tenho conta</div>
-  </div>
+<!-- LOGIN -->
+<div class="container" id="loginBox">
+  <h2>Login</h2>
+  <input id="loginEmail" placeholder="Email">
+  <input id="loginSenha" type="password" placeholder="Senha">
+  <button onclick="login()">Entrar</button>
+  <p onclick="mostrarCadastro()" style="cursor:pointer;text-align:center;">Criar conta</p>
+</div>
 
-  <!-- LOGIN -->
-  <div class="box hidden" id="loginBox">
-    <h2>Login</h2>
-    <input type="email" id="logEmail" placeholder="Email">
-    <input type="password" id="logSenha" placeholder="Senha">
-    <button onclick="login()">Entrar</button>
-    <div class="link" onclick="mostrarCadastro()">Criar conta</div>
-  </div>
+<!-- CADASTRO -->
+<div class="container hidden" id="cadastroBox">
+  <h2>Cadastro</h2>
+  <input id="cadNome" placeholder="Nome">
+  <input id="cadEmail" placeholder="Email">
+  <input id="cadSenha" type="password" placeholder="Senha">
+  <button onclick="cadastrar()">Cadastrar</button>
+  <p onclick="mostrarLogin()" style="cursor:pointer;text-align:center;">Já tenho conta</p>
+</div>
 
-  <!-- ÁREA LOGADA -->
-  <div class="box hidden" id="areaBox">
-    <h2>Bem-vindo!</h2>
-    <p id="usuarioNome"></p>
-    <button onclick="logout()">Sair</button>
-  </div>
+<!-- DASHBOARD -->
+<div class="container hidden" id="dashboard">
+  <h2 id="bemvindo"></h2>
+
+  <h3>Meus Cursos</h3>
+
+  <div class="curso" onclick="abrirCurso(0)">Curso de Introdução</div>
+  <div class="curso" onclick="abrirCurso(1)">Curso Avançado</div>
+
+  <button class="logout" onclick="logout()">Sair</button>
+</div>
+
+<!-- CURSO -->
+<div class="container hidden" id="cursoBox">
+  <h2 id="cursoTitulo"></h2>
+
+  <div id="aulas"></div>
+
+  <button onclick="voltarDashboard()">Voltar</button>
+</div>
 
 <script>
-  function cadastrar() {
-    const nome = document.getElementById("cadNome").value;
-    const email = document.getElementById("cadEmail").value;
-    const senha = document.getElementById("cadSenha").value;
+const cursos = [
+  {
+    nome: "Curso de Introdução",
+    aulas: [
+      "Aula 1 - Boas-vindas",
+      "Aula 2 - Conceitos Básicos",
+      "Aula 3 - Primeiros Passos"
+    ]
+  },
+  {
+    nome: "Curso Avançado",
+    aulas: [
+      "Aula 1 - Estratégias",
+      "Aula 2 - Escala",
+      "Aula 3 - Profissionalização"
+    ]
+  }
+];
 
-    if (!nome || !email || !senha) {
-      alert("Preencha todos os campos");
-      return;
-    }
+function cadastrar() {
+  const nome = cadNome.value;
+  const email = cadEmail.value;
+  const senha = cadSenha.value;
 
-    let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-
-    if (usuarios.find(u => u.email === email)) {
-      alert("Email já cadastrado");
-      return;
-    }
-
-    usuarios.push({ nome, email, senha });
-    localStorage.setItem("usuarios", JSON.stringify(usuarios));
-
-    alert("Cadastro realizado com sucesso!");
-    mostrarLogin();
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+  if (users.find(u => u.email === email)) {
+    alert("Email já cadastrado");
+    return;
   }
 
-  function login() {
-    const email = document.getElementById("logEmail").value;
-    const senha = document.getElementById("logSenha").value;
+  users.push({ nome, email, senha });
+  localStorage.setItem("users", JSON.stringify(users));
+  alert("Cadastro realizado");
+  mostrarLogin();
+}
 
-    let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+function login() {
+  const email = loginEmail.value;
+  const senha = loginSenha.value;
+  let users = JSON.parse(localStorage.getItem("users")) || [];
 
-    const usuario = usuarios.find(u => u.email === email && u.senha === senha);
-
-    if (!usuario) {
-      alert("Email ou senha inválidos");
-      return;
-    }
-
-    localStorage.setItem("usuarioLogado", JSON.stringify(usuario));
-    entrar(usuario);
+  const user = users.find(u => u.email === email && u.senha === senha);
+  if (!user) {
+    alert("Dados inválidos");
+    return;
   }
 
-  function entrar(usuario) {
-    document.getElementById("loginBox").classList.add("hidden");
-    document.getElementById("cadastroBox").classList.add("hidden");
-    document.getElementById("areaBox").classList.remove("hidden");
-    document.getElementById("usuarioNome").innerText = "Olá, " + usuario.nome;
-  }
+  localStorage.setItem("logado", JSON.stringify(user));
+  entrar(user);
+}
 
-  function logout() {
-    localStorage.removeItem("usuarioLogado");
-    mostrarLogin();
-  }
+function entrar(user) {
+  loginBox.classList.add("hidden");
+  cadastroBox.classList.add("hidden");
+  dashboard.classList.remove("hidden");
+  bemvindo.innerText = "Olá, " + user.nome;
+}
 
-  function mostrarLogin() {
-    document.getElementById("cadastroBox").classList.add("hidden");
-    document.getElementById("areaBox").classList.add("hidden");
-    document.getElementById("loginBox").classList.remove("hidden");
-  }
+function abrirCurso(index) {
+  dashboard.classList.add("hidden");
+  cursoBox.classList.remove("hidden");
+  cursoTitulo.innerText = cursos[index].nome;
+  aulas.innerHTML = "";
 
-  function mostrarCadastro() {
-    document.getElementById("loginBox").classList.add("hidden");
-    document.getElementById("areaBox").classList.add("hidden");
-    document.getElementById("cadastroBox").classList.remove("hidden");
-  }
+  cursos[index].aulas.forEach(a => {
+    aulas.innerHTML += `<div class="aula">${a}</div>`;
+  });
+}
 
-  // Auto login
-  const usuarioSalvo = JSON.parse(localStorage.getItem("usuarioLogado"));
-  if (usuarioSalvo) {
-    entrar(usuarioSalvo);
-  }
+function voltarDashboard() {
+  cursoBox.classList.add("hidden");
+  dashboard.classList.remove("hidden");
+}
+
+function logout() {
+  localStorage.removeItem("logado");
+  mostrarLogin();
+}
+
+function mostrarLogin() {
+  cadastroBox.classList.add("hidden");
+  dashboard.classList.add("hidden");
+  cursoBox.classList.add("hidden");
+  loginBox.classList.remove("hidden");
+}
+
+function mostrarCadastro() {
+  loginBox.classList.add("hidden");
+  cadastroBox.classList.remove("hidden");
+}
+
+const salvo = JSON.parse(localStorage.getItem("logado"));
+if (salvo) entrar(salvo);
 </script>
 
 </body>
