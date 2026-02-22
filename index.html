@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <title>Área de Membros</title>
+
 <style>
 body {
   font-family: Arial, sans-serif;
-  background: #f4f4f4;
+  background: #f2f2f2;
 }
 .container {
-  width: 360px;
-  margin: auto;
-  margin-top: 60px;
+  width: 380px;
+  margin: 30px auto;
   background: #fff;
   padding: 20px;
   border-radius: 8px;
 }
-h2 {
+h2,h3 {
   text-align: center;
 }
 input, button {
@@ -25,13 +25,13 @@ input, button {
   margin: 8px 0;
 }
 button {
-  background: #2b7cff;
+  background: #0066ff;
   color: #fff;
   border: none;
   cursor: pointer;
 }
-button:hover {
-  background: #1f5fd1;
+button:disabled {
+  background: #999;
 }
 .hidden {
   display: none;
@@ -45,7 +45,11 @@ button:hover {
 .aula {
   background: #ddd;
   padding: 8px;
-  margin: 5px 0;
+  margin: 6px 0;
+}
+.ok {
+  color: green;
+  font-weight: bold;
 }
 .logout {
   background: #e74c3c;
@@ -58,20 +62,20 @@ button:hover {
 <!-- LOGIN -->
 <div class="container" id="loginBox">
   <h2>Login</h2>
-  <input id="loginEmail" placeholder="Email">
+  <input id="loginEmail" type="email" placeholder="Email">
   <input id="loginSenha" type="password" placeholder="Senha">
   <button onclick="login()">Entrar</button>
-  <p onclick="mostrarCadastro()" style="cursor:pointer;text-align:center;">Criar conta</p>
+  <p onclick="mostrarCadastro()" style="text-align:center;cursor:pointer">Criar conta</p>
 </div>
 
 <!-- CADASTRO -->
 <div class="container hidden" id="cadastroBox">
   <h2>Cadastro</h2>
   <input id="cadNome" placeholder="Nome">
-  <input id="cadEmail" placeholder="Email">
+  <input id="cadEmail" type="email" placeholder="Email">
   <input id="cadSenha" type="password" placeholder="Senha">
   <button onclick="cadastrar()">Cadastrar</button>
-  <p onclick="mostrarLogin()" style="cursor:pointer;text-align:center;">Já tenho conta</p>
+  <p onclick="mostrarLogin()" style="text-align:center;cursor:pointer">Já tenho conta</p>
 </div>
 
 <!-- DASHBOARD -->
@@ -80,8 +84,13 @@ button:hover {
 
   <h3>Meus Cursos</h3>
 
-  <div class="curso" onclick="abrirCurso(0)">Curso de Introdução</div>
-  <div class="curso" onclick="abrirCurso(1)">Curso Avançado</div>
+  <div class="curso" onclick="abrirCurso('eletricista')">
+    Eletricista Predial
+  </div>
+
+  <div class="curso" onclick="abrirCurso('ar')">
+    Viver de Ar Condicionado
+  </div>
 
   <button class="logout" onclick="logout()">Sair</button>
 </div>
@@ -90,54 +99,66 @@ button:hover {
 <div class="container hidden" id="cursoBox">
   <h2 id="cursoTitulo"></h2>
 
-  <div id="aulas"></div>
+  <div id="listaAulas"></div>
 
-  <button onclick="voltarDashboard()">Voltar</button>
+  <p id="contador"></p>
+  <button id="btnProxima" onclick="proximaAula()" disabled>
+    Próxima aula
+  </button>
+
+  <button onclick="voltar()">Voltar</button>
 </div>
 
 <script>
-const cursos = [
-  {
-    nome: "Curso de Introdução",
+const cursos = {
+  eletricista: {
+    nome: "Eletricista Predial",
     aulas: [
-      "Aula 1 - Boas-vindas",
-      "Aula 2 - Conceitos Básicos",
-      "Aula 3 - Primeiros Passos"
+      "Introdução",
+      "Ferramentas",
+      "Instalações",
+      "Quadro de energia"
     ]
   },
-  {
-    nome: "Curso Avançado",
+  ar: {
+    nome: "Viver de Ar Condicionado",
     aulas: [
-      "Aula 1 - Estratégias",
-      "Aula 2 - Escala",
-      "Aula 3 - Profissionalização"
+      "Mercado",
+      "Tipos de ar",
+      "Instalação",
+      "Manutenção"
     ]
   }
-];
+};
+
+let cursoAtual = "";
+let aulaAtual = 0;
+let timer = null;
 
 function cadastrar() {
+  let users = JSON.parse(localStorage.getItem("users")) || [];
   const nome = cadNome.value;
   const email = cadEmail.value;
   const senha = cadSenha.value;
 
-  let users = JSON.parse(localStorage.getItem("users")) || [];
   if (users.find(u => u.email === email)) {
     alert("Email já cadastrado");
     return;
   }
 
-  users.push({ nome, email, senha });
+  users.push({ nome, email, senha, progresso: {} });
   localStorage.setItem("users", JSON.stringify(users));
   alert("Cadastro realizado");
   mostrarLogin();
 }
 
 function login() {
-  const email = loginEmail.value;
-  const senha = loginSenha.value;
   let users = JSON.parse(localStorage.getItem("users")) || [];
+  const user = users.find(u =>
+    u.email === loginEmail.value &&
+    u.senha === loginSenha.value
+  );
 
-  const user = users.find(u => u.email === email && u.senha === senha);
   if (!user) {
     alert("Dados inválidos");
     return;
@@ -154,18 +175,70 @@ function entrar(user) {
   bemvindo.innerText = "Olá, " + user.nome;
 }
 
-function abrirCurso(index) {
+function abrirCurso(id) {
+  cursoAtual = id;
+  aulaAtual = 0;
   dashboard.classList.add("hidden");
   cursoBox.classList.remove("hidden");
-  cursoTitulo.innerText = cursos[index].nome;
-  aulas.innerHTML = "";
+  cursoTitulo.innerText = cursos[id].nome;
+  carregarAulas();
+  iniciarContador();
+}
 
-  cursos[index].aulas.forEach(a => {
-    aulas.innerHTML += `<div class="aula">${a}</div>`;
+function carregarAulas() {
+  const user = JSON.parse(localStorage.getItem("logado"));
+  listaAulas.innerHTML = "";
+
+  cursos[cursoAtual].aulas.forEach((aula, index) => {
+    const concluida = user.progresso?.[cursoAtual]?.includes(index);
+    listaAulas.innerHTML += `
+      <div class="aula">
+        ${aula} ${concluida ? "<span class='ok'>✔</span>" : ""}
+      </div>
+    `;
   });
 }
 
-function voltarDashboard() {
+function iniciarContador() {
+  let tempo = 10;
+  btnProxima.disabled = true;
+  contador.innerText = "Próxima aula em " + tempo + "s";
+
+  timer = setInterval(() => {
+    tempo--;
+    contador.innerText = "Próxima aula em " + tempo + "s";
+
+    if (tempo === 0) {
+      clearInterval(timer);
+      contador.innerText = "";
+      btnProxima.disabled = false;
+    }
+  }, 1000);
+}
+
+function proximaAula() {
+  let user = JSON.parse(localStorage.getItem("logado"));
+
+  if (!user.progresso[cursoAtual]) {
+    user.progresso[cursoAtual] = [];
+  }
+
+  if (!user.progresso[cursoAtual].includes(aulaAtual)) {
+    user.progresso[cursoAtual].push(aulaAtual);
+  }
+
+  localStorage.setItem("logado", JSON.stringify(user));
+
+  let users = JSON.parse(localStorage.getItem("users"));
+  users = users.map(u => u.email === user.email ? user : u);
+  localStorage.setItem("users", JSON.stringify(users));
+
+  aulaAtual++;
+  carregarAulas();
+  iniciarContador();
+}
+
+function voltar() {
   cursoBox.classList.add("hidden");
   dashboard.classList.remove("hidden");
 }
@@ -176,10 +249,10 @@ function logout() {
 }
 
 function mostrarLogin() {
+  loginBox.classList.remove("hidden");
   cadastroBox.classList.add("hidden");
   dashboard.classList.add("hidden");
   cursoBox.classList.add("hidden");
-  loginBox.classList.remove("hidden");
 }
 
 function mostrarCadastro() {
