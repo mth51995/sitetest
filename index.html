@@ -75,12 +75,13 @@ let assistidas=JSON.parse(localStorage.getItem("assistidas"))||[];
 let playerYT,aulaAtualKey="",intervalo;
 
 function entrar(){
-let e=document.getElementById("email").value;
-let s=document.getElementById("senha").value;
-if(e==="admin"&&s==="123"){
-login.classList.add("hidden");
-dashboard.classList.remove("hidden");
-renderCursos();
+ try{
+  login.classList.add("hidden");
+  dashboard.classList.remove("hidden");
+  renderCursos();
+ }catch(e){
+  alert("Erro ao iniciar: "+e.message);
+ }
 }else alert("Login inválido");
 }
 
