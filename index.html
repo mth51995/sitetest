@@ -24,10 +24,12 @@ button{background:#2d72ff;color:#fff;border:none;border-radius:5px}
 .lesson.done{border:3px solid #28a745}
 .lesson img{width:100%;height:100px;object-fit:cover}
 .lesson p{margin:0;padding:8px;font-size:14px;text-align:center}
-iframe{width:100%;height:420px;margin-top:20px;border-radius:8px}
+iframe{width:100%;height:56.25vw;max-height:420px;margin-top:20px;border-radius:8px}
 .progress{height:10px;background:#ddd;border-radius:5px;overflow:hidden;margin:15px 0}
-.progress span{display:block;height:100%;background:#28a745;width:0}
-</style>
+.progress span{display:block;height:100%;background:#28a745;width:0}@media (max-width:768px){ header{position:sticky;top:0;z-index:5} .container{padding:12px} .login{margin:40px 10px} .courses{grid-template-columns:repeat(2,1fr);gap:12px} .course img{height:120px} .lessons{grid-template-columns:repeat(2,1fr)} .lesson img{height:90px} button{padding:14px;font-size:16px} iframe{border-radius:6px} }
+
+@media (max-width:420px){ .courses{grid-template-columns:1fr} .lessons{grid-template-columns:1fr} header{font-size:18px} } </style>
+
 </head>
 <body>
 <header>🎓 Plataforma de Cursos</header><div class="login" id="login">
