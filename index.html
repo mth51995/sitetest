@@ -1,81 +1,130 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Eletricista e Ar Condicionado</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Volt Elétrica | Instalações Elétricas e Ar Condicionado</title>
 
 <style>
 
 body{
-font-family: Arial, sans-serif;
 margin:0;
-background:#f4f4f4;
+font-family:Arial;
+background:#f5f5f5;
 }
 
 header{
-background:#0a2540;
+background:#111;
+color:white;
+padding:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo{
+font-size:24px;
+font-weight:bold;
+color:#ff6a00;
+}
+
+.menu a{
+color:white;
+margin-left:20px;
+text-decoration:none;
+}
+
+.hero{
+background:#ff6a00;
 color:white;
 text-align:center;
-padding:40px 20px;
+padding:80px 20px;
 }
 
-header h1{
-margin:0;
-font-size:32px;
+.hero h1{
+font-size:42px;
+margin-bottom:20px;
 }
 
-header p{
-font-size:18px;
+.hero p{
+font-size:20px;
 }
 
 .botao{
-display:inline-block;
-background:#25D366;
+background:#111;
 color:white;
-padding:15px 25px;
-margin-top:20px;
+padding:15px 30px;
 text-decoration:none;
-font-weight:bold;
 border-radius:5px;
+display:inline-block;
+margin-top:25px;
+font-weight:bold;
 }
 
 section{
-padding:40px 20px;
-max-width:1000px;
+max-width:1100px;
 margin:auto;
+padding:60px 20px;
+}
+
+.titulo{
+text-align:center;
+font-size:32px;
+margin-bottom:40px;
 }
 
 .servicos{
 display:grid;
-grid-template-columns:1fr 1fr;
-gap:20px;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
 }
 
 .card{
 background:white;
-padding:20px;
-border-radius:8px;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
+padding:30px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
-h2{
+.card h3{
+color:#ff6a00;
+}
+
+.vantagens{
+background:#111;
+color:white;
 text-align:center;
-margin-bottom:30px;
+}
+
+.vantagens div{
+margin-bottom:15px;
+}
+
+.cta{
+background:#ff6a00;
+text-align:center;
+color:white;
 }
 
 footer{
-background:#0a2540;
+background:#111;
 color:white;
 text-align:center;
-padding:20px;
+padding:30px;
 }
 
-@media(max-width:700px){
-.servicos{
-grid-template-columns:1fr;
-}
+.whatsapp{
+position:fixed;
+bottom:20px;
+right:20px;
+background:#25D366;
+color:white;
+padding:15px 20px;
+border-radius:50px;
+text-decoration:none;
+font-weight:bold;
 }
 
 </style>
@@ -86,114 +135,81 @@ grid-template-columns:1fr;
 
 <header>
 
-<h1>⚡ Eletricista & Ar Condicionado</h1>
+<div class="logo">⚡ VOLT ELÉTRICA</div>
 
-<p>Instalação, manutenção elétrica e higienização de ar condicionado</p>
-
-<a class="botao" href="https://wa.me/5511999999999">
-Falar no WhatsApp
-</a>
+<div class="menu">
+<a href="#servicos">Serviços</a>
+<a href="#contato">Contato</a>
+</div>
 
 </header>
 
-<section>
+<section class="hero">
 
-<h2>Sobre o Serviço</h2>
+<h1>Instalações Elétricas e Ar Condicionado</h1>
 
-<p style="text-align:center;">
-Trabalho com serviços profissionais de elétrica residencial e instalação de ar condicionado,
-garantindo segurança, qualidade e preço justo.
-</p>
+<p>Serviço profissional com segurança e garantia</p>
+
+<a class="botao" href="https://wa.me/551998150753">
+Solicitar Orçamento
+</a>
 
 </section>
 
-<section>
+<section id="servicos">
 
-<h2>Serviços de Elétrica</h2>
+<div class="titulo">Nossos Serviços</div>
 
 <div class="servicos">
 
 <div class="card">
-✔ Instalação de chuveiros
+<h3>Instalações Elétricas</h3>
+<p>Tomadas, chuveiros, quadros de distribuição e rede elétrica.</p>
 </div>
 
 <div class="card">
-✔ Troca de disjuntores
+<h3>Manutenção Elétrica</h3>
+<p>Correção de curto, troca de disjuntores e manutenção.</p>
 </div>
 
 <div class="card">
-✔ Instalação de tomadas
+<h3>Instalação de Ar Condicionado</h3>
+<p>Instalação profissional de ar condicionado split.</p>
 </div>
 
 <div class="card">
-✔ Instalação de iluminação
-</div>
-
-<div class="card">
-✔ Quadro de distribuição
-</div>
-
-<div class="card">
-✔ Correção de curto circuito
+<h3>Higienização de Ar</h3>
+<p>Limpeza completa eliminando fungos e bactérias.</p>
 </div>
 
 </div>
 
 </section>
 
-<section>
+<section id="contato" class="cta">
 
-<h2>Serviços de Ar Condicionado</h2>
-
-<div class="servicos">
-
-<div class="card">
-❄ Instalação de ar condicionado split
-</div>
-
-<div class="card">
-❄ Higienização completa
-</div>
-
-<div class="card">
-❄ Manutenção preventiva
-</div>
-
-<div class="card">
-❄ Recarga de gás
-</div>
-
-<div class="card">
-❄ Limpeza da evaporadora
-</div>
-
-<div class="card">
-❄ Limpeza da condensadora
-</div>
-
-</div>
-
-</section>
-
-<section style="text-align:center">
-
-<h2>Atendimento</h2>
+<h2>Fale conosco agora</h2>
 
 <p>Atendimento rápido em Campinas e região</p>
 
-<a class="botao" href="https://wa.me/5511999999999">
-Solicitar Orçamento
+<a class="botao" href="https://wa.me/551998150753">
+Chamar no WhatsApp
 </a>
 
 </section>
 
 <footer>
 
-<p>Eletricista e Ar Condicionado</p>
+<p>⚡ Volt Elétrica</p>
+<p>Instalações • Manutenção • Ar Condicionado</p>
 
-<p>Atendimento com qualidade e garantia</p>
+<p>WhatsApp: (19) 98150-0753</p>
 
 </footer>
+
+<a class="whatsapp" href="https://wa.me/551998150753">
+WhatsApp
+</a>
 
 </body>
 </html>
