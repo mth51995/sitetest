@@ -15,8 +15,8 @@
 :root{
 --laranja:#ff6a00;
 --preto:#111;
---cinza:#f4f4f4;
 --branco:#fff;
+--cinza:#f4f4f4;
 }
 
 *{
@@ -26,7 +26,7 @@ box-sizing:border-box;
 }
 
 body{
-font-family:Poppins;
+font-family:'Poppins',sans-serif;
 background:var(--cinza);
 color:#333;
 }
@@ -34,14 +34,14 @@ color:#333;
 /* HEADER */
 
 header{
-background:var(--preto);
+position:fixed;
+width:100%;
+top:0;
+background:#000;
 padding:20px 8%;
 display:flex;
 justify-content:space-between;
 align-items:center;
-position:fixed;
-width:100%;
-top:0;
 z-index:1000;
 }
 
@@ -53,29 +53,43 @@ font-weight:700;
 
 .menu a{
 color:white;
-margin-left:25px;
 text-decoration:none;
+margin-left:25px;
+font-weight:500;
 }
 
-/* HERO */
+/* HERO COM DEGRADE ANIMADO */
 
 .hero{
-background:linear-gradient(rgba(0,0,0,.7),rgba(0,0,0,.7)),
-url("https://images.unsplash.com/photo-1581093458791-9d09c4e2a9c3");
-background-size:cover;
-background-position:center;
+
+background:linear-gradient(120deg,#000,#111,#ff6a00);
+background-size:300% 300%;
+
+animation:energia 8s ease infinite;
+
 height:100vh;
+
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
 text-align:center;
+
 color:white;
 padding:20px;
+
+}
+
+@keyframes energia{
+
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+
 }
 
 .hero h1{
-font-size:50px;
+font-size:48px;
 max-width:800px;
 }
 
@@ -84,14 +98,18 @@ margin:20px 0;
 font-size:20px;
 }
 
+/* BOTÃO */
+
 .btn{
+
 background:var(--laranja);
+color:white;
 padding:16px 40px;
 border-radius:40px;
-color:white;
 text-decoration:none;
 font-weight:600;
 transition:.3s;
+
 }
 
 .btn:hover{
@@ -113,17 +131,21 @@ margin-bottom:50px;
 /* SERVIÇOS */
 
 .servicos{
+
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 gap:30px;
+
 }
 
 .card{
+
 background:white;
 padding:30px;
 border-radius:12px;
 box-shadow:0 10px 30px rgba(0,0,0,.1);
 transition:.3s;
+
 }
 
 .card:hover{
@@ -135,42 +157,43 @@ color:var(--laranja);
 margin-bottom:10px;
 }
 
-/* BENEFICIOS */
+/* GALERIA SLIDER */
 
-.beneficios{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:30px;
-text-align:center;
+.slider{
+overflow:hidden;
 }
 
-/* GALERIA */
+.slider-track{
 
-.galeria{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:20px;
+display:flex;
+animation:scroll 20s linear infinite;
+
 }
 
-.galeria img{
-width:100%;
+.slider img{
+width:300px;
+margin-right:20px;
 border-radius:10px;
-transition:.4s;
 }
 
-.galeria img:hover{
-transform:scale(1.05);
+@keyframes scroll{
+
+0%{transform:translateX(0);}
+100%{transform:translateX(-50%);}
+
 }
 
 /* ANTES DEPOIS */
 
-.antes-depois{
+.antesdepois{
+
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
 gap:30px;
+
 }
 
-.antes-depois img{
+.antesdepois img{
 width:100%;
 border-radius:10px;
 }
@@ -178,39 +201,53 @@ border-radius:10px;
 /* CTA */
 
 .cta{
-background:var(--preto);
+
+background:#000;
 color:white;
 text-align:center;
+
 }
 
 /* FOOTER */
 
 footer{
+
 background:black;
 color:white;
 text-align:center;
 padding:40px;
+
 }
 
-/* WHATSAPP FLUTUANTE */
+/* WHATSAPP PULSANDO */
 
 .whatsapp{
+
 position:fixed;
 bottom:25px;
 right:25px;
+
 background:#25D366;
 color:white;
+
 padding:18px 25px;
+
 border-radius:40px;
+
 text-decoration:none;
+
 font-weight:600;
+
 animation:pulse 2s infinite;
+
 }
 
 @keyframes pulse{
+
 0%{box-shadow:0 0 0 0 rgba(37,211,102,.6);}
 70%{box-shadow:0 0 0 15px rgba(37,211,102,0);}
 100%{box-shadow:0 0 0 0 rgba(37,211,102,0);}
+
 }
 
 /* MOBILE */
@@ -239,7 +276,7 @@ display:none;
 
 <div class="menu">
 <a href="#servicos">Serviços</a>
-<a href="#fotos">Trabalhos</a>
+<a href="#trabalhos">Trabalhos</a>
 <a href="#contato">Contato</a>
 </div>
 
@@ -270,33 +307,37 @@ Pedir Orçamento
 
 <div class="card">
 <h3>Manutenção Elétrica</h3>
-<p>Correção de curto, troca de disjuntores e diagnóstico.</p>
+<p>Correção de curto e troca de disjuntores.</p>
 </div>
 
 <div class="card">
 <h3>Instalação de Ar</h3>
-<p>Instalação profissional de ar condicionado split.</p>
+<p>Instalação profissional de ar condicionado.</p>
 </div>
 
 <div class="card">
-<h3>Higienização de Ar</h3>
-<p>Limpeza completa eliminando fungos e bactérias.</p>
+<h3>Higienização</h3>
+<p>Limpeza completa de ar condicionado.</p>
 </div>
 
 </div>
 
 </section>
 
-<section id="fotos">
+<section id="trabalhos">
 
 <div class="titulo">Trabalhos Realizados</div>
 
-<div class="galeria">
+<div class="slider">
+
+<div class="slider-track">
 
 <img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4">
 <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952">
 <img src="https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc">
 <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758">
+
+</div>
 
 </div>
 
@@ -306,7 +347,7 @@ Pedir Orçamento
 
 <div class="titulo">Antes e Depois</div>
 
-<div class="antes-depois">
+<div class="antesdepois">
 
 <img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4">
 <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952">
@@ -323,7 +364,7 @@ Pedir Orçamento
 
 <br>
 
-<a class="btn" href="https://wa.me/551998150753?text=Olá%20preciso%20de%20um%20orçamento">
+<a class="btn" href="https://wa.me/551998150753">
 Chamar no WhatsApp
 </a>
 
@@ -338,8 +379,10 @@ Chamar no WhatsApp
 </footer>
 
 <a class="whatsapp" href="https://wa.me/551998150753">
+
 WhatsApp
+
 </a>
 
 </body>
-</html>
+  </html>
