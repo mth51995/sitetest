@@ -15,8 +15,8 @@
 :root{
 --laranja:#ff6a00;
 --preto:#111;
---branco:#fff;
 --cinza:#f4f4f4;
+--branco:#fff;
 }
 
 *{
@@ -26,7 +26,7 @@ box-sizing:border-box;
 }
 
 body{
-font-family:'Poppins', sans-serif;
+font-family:Poppins;
 background:var(--cinza);
 color:#333;
 }
@@ -39,18 +39,22 @@ padding:20px 8%;
 display:flex;
 justify-content:space-between;
 align-items:center;
+position:fixed;
+width:100%;
+top:0;
+z-index:1000;
 }
 
 .logo{
 color:var(--laranja);
-font-weight:700;
 font-size:24px;
+font-weight:700;
 }
 
 .menu a{
 color:white;
-text-decoration:none;
 margin-left:25px;
+text-decoration:none;
 }
 
 /* HERO */
@@ -60,7 +64,7 @@ background:linear-gradient(rgba(0,0,0,.7),rgba(0,0,0,.7)),
 url("https://images.unsplash.com/photo-1581093458791-9d09c4e2a9c3");
 background-size:cover;
 background-position:center;
-height:80vh;
+height:100vh;
 display:flex;
 flex-direction:column;
 justify-content:center;
@@ -71,28 +75,33 @@ padding:20px;
 }
 
 .hero h1{
-font-size:46px;
-margin-bottom:20px;
+font-size:50px;
+max-width:800px;
 }
 
 .hero p{
+margin:20px 0;
 font-size:20px;
-margin-bottom:30px;
 }
 
 .btn{
 background:var(--laranja);
-color:white;
-padding:15px 35px;
+padding:16px 40px;
 border-radius:40px;
+color:white;
 text-decoration:none;
 font-weight:600;
+transition:.3s;
+}
+
+.btn:hover{
+transform:scale(1.05);
 }
 
 /* SEÇÕES */
 
 section{
-padding:80px 8%;
+padding:90px 8%;
 }
 
 .titulo{
@@ -113,7 +122,12 @@ gap:30px;
 background:white;
 padding:30px;
 border-radius:12px;
-box-shadow:0 10px 25px rgba(0,0,0,.1);
+box-shadow:0 10px 30px rgba(0,0,0,.1);
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-8px);
 }
 
 .card h3{
@@ -121,7 +135,7 @@ color:var(--laranja);
 margin-bottom:10px;
 }
 
-/* BENEFÍCIOS */
+/* BENEFICIOS */
 
 .beneficios{
 display:grid;
@@ -148,6 +162,19 @@ transition:.4s;
 transform:scale(1.05);
 }
 
+/* ANTES DEPOIS */
+
+.antes-depois{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:30px;
+}
+
+.antes-depois img{
+width:100%;
+border-radius:10px;
+}
+
 /* CTA */
 
 .cta{
@@ -165,7 +192,7 @@ text-align:center;
 padding:40px;
 }
 
-/* WHATSAPP */
+/* WHATSAPP FLUTUANTE */
 
 .whatsapp{
 position:fixed;
@@ -173,10 +200,31 @@ bottom:25px;
 right:25px;
 background:#25D366;
 color:white;
-padding:16px 22px;
+padding:18px 25px;
 border-radius:40px;
 text-decoration:none;
 font-weight:600;
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+0%{box-shadow:0 0 0 0 rgba(37,211,102,.6);}
+70%{box-shadow:0 0 0 15px rgba(37,211,102,0);}
+100%{box-shadow:0 0 0 0 rgba(37,211,102,0);}
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+.hero h1{
+font-size:34px;
+}
+
+.menu{
+display:none;
+}
+
 }
 
 </style>
@@ -217,12 +265,12 @@ Pedir Orçamento
 
 <div class="card">
 <h3>Instalação Elétrica</h3>
-<p>Instalação de tomadas, quadros e redes elétricas completas.</p>
+<p>Tomadas, quadros, redes elétricas e pontos 220v.</p>
 </div>
 
 <div class="card">
 <h3>Manutenção Elétrica</h3>
-<p>Correção de curto, troca de disjuntores e diagnóstico elétrico.</p>
+<p>Correção de curto, troca de disjuntores e diagnóstico.</p>
 </div>
 
 <div class="card">
@@ -239,31 +287,6 @@ Pedir Orçamento
 
 </section>
 
-<section>
-
-<div class="titulo">Por que escolher a Volt Elétrica</div>
-
-<div class="beneficios">
-
-<div>
-<h3>⚡ Atendimento Rápido</h3>
-<p>Chegamos rápido para resolver seu problema.</p>
-</div>
-
-<div>
-<h3>🔧 Serviço Profissional</h3>
-<p>Ferramentas profissionais e serviço seguro.</p>
-</div>
-
-<div>
-<h3>💰 Orçamento Justo</h3>
-<p>Preço justo e transparência no serviço.</p>
-</div>
-
-</div>
-
-</section>
-
 <section id="fotos">
 
 <div class="titulo">Trabalhos Realizados</div>
@@ -274,8 +297,19 @@ Pedir Orçamento
 <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952">
 <img src="https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc">
 <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758">
-<img src="https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc">
+
+</div>
+
+</section>
+
+<section>
+
+<div class="titulo">Antes e Depois</div>
+
+<div class="antes-depois">
+
 <img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4">
+<img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952">
 
 </div>
 
@@ -308,4 +342,4 @@ WhatsApp
 </a>
 
 </body>
-  </html>
+</html>
