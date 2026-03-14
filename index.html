@@ -52,8 +52,6 @@ font-size:24px;
 font-weight:700;
 }
 
-/* MENU */
-
 .menu{
 display:flex;
 }
@@ -63,8 +61,6 @@ color:white;
 text-decoration:none;
 margin-left:25px;
 }
-
-/* MENU MOBILE */
 
 .menu-toggle{
 display:none;
@@ -172,7 +168,7 @@ color:var(--laranja);
 margin-bottom:10px;
 }
 
-/* GALERIA PROFISSIONAL */
+/* GALERIA */
 
 .galeria{
 position:relative;
@@ -194,8 +190,6 @@ border-radius:12px;
 box-shadow:0 10px 25px rgba(0,0,0,0.25);
 }
 
-/* BOTÕES */
-
 .btn-galeria{
 position:absolute;
 top:50%;
@@ -211,6 +205,32 @@ cursor:pointer;
 
 .btn-prev{ left:-10px; }
 .btn-next{ right:-10px; }
+
+/* AVALIAÇÕES */
+
+.avaliacoes{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:30px;
+}
+
+.avaliacao{
+background:white;
+padding:30px;
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+
+.estrelas{
+color:#FFD700;
+margin-bottom:10px;
+font-size:18px;
+}
+
+.avaliacao p{
+margin-bottom:10px;
+font-style:italic;
+}
 
 /* CTA */
 
@@ -249,8 +269,6 @@ animation:pulse 2s infinite;
 70%{box-shadow:0 0 0 15px rgba(37,211,102,0);}
 100%{box-shadow:0 0 0 0 rgba(37,211,102,0);}
 }
-
-/* MOBILE */
 
 @media(max-width:700px){
 
@@ -300,6 +318,7 @@ display:block;
 <div class="menu">
 <a href="#servicos">Serviços</a>
 <a href="#trabalhos">Trabalhos</a>
+<a href="#avaliacoes">Avaliações</a>
 <a href="#contato">Contato</a>
 </div>
 
@@ -402,6 +421,40 @@ Pedir Orçamento
 
 </section>
 
+<section id="avaliacoes">
+
+<div class="titulo">Avaliações de Clientes</div>
+
+<div class="avaliacoes">
+
+<div class="avaliacao">
+<div class="estrelas">
+★★★★★
+</div>
+<p>"Serviço excelente, instalou meu ar condicionado muito rápido."</p>
+<strong>— Carlos Silva</strong>
+</div>
+
+<div class="avaliacao">
+<div class="estrelas">
+★★★★★
+</div>
+<p>"Muito profissional, resolveu meu problema elétrico na hora."</p>
+<strong>— Fernanda Souza</strong>
+</div>
+
+<div class="avaliacao">
+<div class="estrelas">
+★★★★★
+</div>
+<p>"Instalou meu portão automático e câmeras, ficou perfeito."</p>
+<strong>— Marcos Oliveira</strong>
+</div>
+
+</div>
+
+</section>
+
 <section class="cta" id="contato">
 
 <h2>Precisa de um eletricista?</h2>
@@ -445,25 +498,6 @@ card.classList.add('show');
 });
 
 });
-
-/* GALERIA */
-
-const track = document.querySelector(".galeria-track");
-let pos = 0;
-
-document.querySelector(".btn-next").onclick = () =>{
-pos -= 100;
-if(pos < -300) pos = 0;
-track.style.transform = "translateX("+pos+"%)";
-}
-
-document.querySelector(".btn-prev").onclick = () =>{
-pos += 100;
-if(pos > 0) pos = -300;
-track.style.transform = "translateX("+pos+"%)";
-}
-
-/* MENU MOBILE */
 
 const toggle = document.querySelector(".menu-toggle");
 const menu = document.querySelector(".menu");
