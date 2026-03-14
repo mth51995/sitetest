@@ -81,7 +81,8 @@ padding:20px;
 }
 
 .hero h1{
-font-size:46px;
+font-size:48px;
+max-width:800px;
 }
 
 .hero p{
@@ -89,13 +90,20 @@ margin:20px 0;
 font-size:20px;
 }
 
+/* BOTÃO */
+
 .btn{
-background:#ff6a00;
+background:rgba(255,106,0,0.85);
 color:white;
 padding:16px 40px;
 border-radius:40px;
 text-decoration:none;
 font-weight:600;
+transition:.3s;
+}
+
+.btn:hover{
+transform:scale(1.05);
 }
 
 /* SEÇÕES */
@@ -124,14 +132,18 @@ padding:35px;
 border-radius:12px;
 box-shadow:0 10px 25px rgba(0,0,0,.1);
 text-align:center;
+transition:.4s;
 opacity:0;
 transform:translateY(40px);
-transition:.5s;
 }
 
 .card.show{
 opacity:1;
 transform:translateY(0);
+}
+
+.card:hover{
+transform:translateY(-10px);
 }
 
 .card i{
@@ -140,37 +152,49 @@ color:var(--laranja);
 margin-bottom:15px;
 }
 
-/* GALERIA */
+.card h3{
+color:var(--laranja);
+margin-bottom:10px;
+}
 
-.galeria{
+/* TRABALHOS */
+
+.slider-container{
 display:flex;
 align-items:center;
 justify-content:center;
 gap:20px;
 }
 
-.galeria-container{
+.slider{
 display:flex;
 overflow:hidden;
-width:350px;
+max-width:700px;
+scroll-behavior:smooth;
 }
 
-.foto{
-min-width:100%;
+.slider img{
+width:320px;
 height:320px;
 object-fit:cover;
+margin-right:20px;
 border-radius:12px;
-transition:0.5s;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
 }
 
-.prev,.next{
-background:#ff6a00;
-color:white;
+.prev, .next{
+background:var(--laranja);
 border:none;
-font-size:28px;
-padding:12px 18px;
+color:white;
+font-size:20px;
+padding:15px 18px;
 border-radius:50%;
 cursor:pointer;
+transition:.3s;
+}
+
+.prev:hover, .next:hover{
+transform:scale(1.1);
 }
 
 /* CTA */
@@ -180,6 +204,8 @@ background:#000;
 color:white;
 text-align:center;
 }
+
+/* FOOTER */
 
 footer{
 background:black;
@@ -200,6 +226,25 @@ padding:18px 25px;
 border-radius:40px;
 text-decoration:none;
 font-weight:600;
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+0%{box-shadow:0 0 0 0 rgba(37,211,102,.6);}
+70%{box-shadow:0 0 0 15px rgba(37,211,102,0);}
+100%{box-shadow:0 0 0 0 rgba(37,211,102,0);}
+}
+
+@media(max-width:700px){
+
+.hero h1{
+font-size:34px;
+}
+
+.menu{
+display:none;
+}
+
 }
 
 </style>
@@ -214,7 +259,7 @@ font-weight:600;
 
 <div class="menu">
 <a href="#servicos">Serviços</a>
-<a href="#ar">Instalação de Ar</a>
+<a href="#trabalhos">Trabalhos</a>
 <a href="#contato">Contato</a>
 </div>
 
@@ -224,9 +269,11 @@ font-weight:600;
 
 <h1>Matheus Instalações Elétricas e Ar Condicionado</h1>
 
-<p>Atendimento em Mogi Guaçu e região</p>
+<p>Eletricista em Mogi Guaçu e região</p>
 
-<a class="btn" href="https://wa.me/5519981507532">Pedir Orçamento</a>
+<a class="btn" href="https://wa.me/5519981507532?text=Olá%20preciso%20de%20um%20orçamento">
+Pedir Orçamento
+</a>
 
 </section>
 
@@ -257,31 +304,55 @@ font-weight:600;
 <div class="card">
 <i class="fa-solid fa-wind"></i>
 <h3>Higienização de Ar</h3>
-<p>Limpeza completa.</p>
+<p>Limpeza completa do ar condicionado.</p>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-shield-halved"></i>
+<h3>Cerca Elétrica</h3>
+<p>Instalação e manutenção.</p>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-video"></i>
+<h3>Câmeras</h3>
+<p>Sistema de monitoramento.</p>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-lightbulb"></i>
+<h3>Fita LED</h3>
+<p>Iluminação decorativa.</p>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-garage"></i>
+<h3>Portão Automático</h3>
+<p>Instalação e manutenção.</p>
 </div>
 
 </div>
 
 </section>
 
-<section id="ar">
+<section id="trabalhos">
 
-<div class="titulo">Instalação de Ar Condicionado</div>
+<div class="titulo">Instalações de Ar Condicionado</div>
 
-<div class="galeria">
+<div class="slider-container">
 
-<button class="prev">&#10094;</button>
+<button class="prev"><i class="fa-solid fa-chevron-left"></i></button>
 
-<div class="galeria-container">
+<div class="slider">
 
-<img src="https://i.postimg.cc/vHMTmyrL/1773507310615.jpg" class="foto">
-<img src="https://i.postimg.cc/9FV0f2dp/1773507315943.jpg" class="foto">
-<img src="https://i.postimg.cc/NfYF0t6b/1773507325014.jpg" class="foto">
-<img src="https://i.postimg.cc/tCyJgb3F/1773507330614.jpg" class="foto">
+<img src="https://i.postimg.cc/vHMTmyrL/1773507310615.jpg">
+<img src="https://i.postimg.cc/9FV0f2dp/1773507315943.jpg">
+<img src="https://i.postimg.cc/NfYF0t6b/1773507325014.jpg">
+<img src="https://i.postimg.cc/tCyJgb3F/1773507330614.jpg">
 
 </div>
 
-<button class="next">&#10095;</button>
+<button class="next"><i class="fa-solid fa-chevron-right"></i></button>
 
 </div>
 
@@ -291,7 +362,7 @@ font-weight:600;
 
 <h2>Precisa de um eletricista?</h2>
 
-<p>Atendimento rápido</p>
+<p>Atendimento rápido em Mogi Guaçu e região</p>
 
 <br>
 
@@ -314,7 +385,7 @@ WhatsApp
 
 <script>
 
-/* animação serviços */
+/* animação dos cards */
 
 const cards = document.querySelectorAll('.card');
 
@@ -333,39 +404,25 @@ card.classList.add('show');
 
 });
 
-/* galeria */
+/* slider */
 
-let index = 0;
+const slider = document.querySelector(".slider");
 
-const fotos = document.querySelectorAll(".foto");
-const total = fotos.length;
-const container = document.querySelector(".galeria-container");
-
-document.querySelector(".next").onclick = () => {
-
-index++;
-
-if(index >= total){
-index = 0;
-}
-
-container.style.transform = "translateX(-" + index * 100 + "%)";
-
+document.querySelector(".next").onclick = () =>{
+slider.scrollBy({
+left:340,
+behavior:"smooth"
+});
 };
 
-document.querySelector(".prev").onclick = () => {
-
-index--;
-
-if(index < 0){
-index = total - 1;
-}
-
-container.style.transform = "translateX(-" + index * 100 + "%)";
-
+document.querySelector(".prev").onclick = () =>{
+slider.scrollBy({
+left:-340,
+behavior:"smooth"
+});
 };
 
 </script>
 
 </body>
-</html>
+  </html>
