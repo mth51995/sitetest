@@ -52,10 +52,25 @@ font-size:24px;
 font-weight:700;
 }
 
+/* MENU */
+
+.menu{
+display:flex;
+}
+
 .menu a{
 color:white;
 text-decoration:none;
 margin-left:25px;
+}
+
+/* MENU MOBILE */
+
+.menu-toggle{
+display:none;
+font-size:28px;
+color:white;
+cursor:pointer;
 }
 
 /* HERO */
@@ -93,7 +108,7 @@ font-size:20px;
 /* BOTÃO */
 
 .btn{
-background:rgba(255,106,0,0.85);
+background:rgba(255,106,0,0.9);
 color:white;
 padding:16px 40px;
 border-radius:40px;
@@ -157,45 +172,45 @@ color:var(--laranja);
 margin-bottom:10px;
 }
 
-/* TRABALHOS */
+/* GALERIA PROFISSIONAL */
 
-.slider-container{
-display:flex;
-align-items:center;
-justify-content:center;
-gap:20px;
-}
-
-.slider{
-display:flex;
+.galeria{
+position:relative;
+max-width:750px;
+margin:auto;
 overflow:hidden;
-max-width:700px;
-scroll-behavior:smooth;
 }
 
-.slider img{
-width:320px;
-height:320px;
+.galeria-track{
+display:flex;
+transition:0.5s;
+}
+
+.galeria img{
+width:100%;
+height:420px;
 object-fit:cover;
-margin-right:20px;
 border-radius:12px;
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
+box-shadow:0 10px 25px rgba(0,0,0,0.25);
 }
 
-.prev, .next{
+/* BOTÕES */
+
+.btn-galeria{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
 background:var(--laranja);
 border:none;
 color:white;
-font-size:20px;
-padding:15px 18px;
+font-size:22px;
+padding:12px 16px;
 border-radius:50%;
 cursor:pointer;
-transition:.3s;
 }
 
-.prev:hover, .next:hover{
-transform:scale(1.1);
-}
+.btn-prev{ left:-10px; }
+.btn-next{ right:-10px; }
 
 /* CTA */
 
@@ -235,6 +250,8 @@ animation:pulse 2s infinite;
 100%{box-shadow:0 0 0 0 rgba(37,211,102,0);}
 }
 
+/* MOBILE */
+
 @media(max-width:700px){
 
 .hero h1{
@@ -243,6 +260,25 @@ font-size:34px;
 
 .menu{
 display:none;
+position:absolute;
+top:70px;
+right:0;
+background:black;
+flex-direction:column;
+width:200px;
+padding:20px;
+}
+
+.menu a{
+margin:10px 0;
+}
+
+.menu.active{
+display:flex;
+}
+
+.menu-toggle{
+display:block;
 }
 
 }
@@ -256,6 +292,10 @@ display:none;
 <header>
 
 <div class="logo">⚡ MATHEUS INSTALAÇÕES</div>
+
+<div class="menu-toggle">
+<i class="fa-solid fa-bars"></i>
+</div>
 
 <div class="menu">
 <a href="#servicos">Serviços</a>
@@ -339,11 +379,13 @@ Pedir Orçamento
 
 <div class="titulo">Instalações de Ar Condicionado</div>
 
-<div class="slider-container">
+<div class="galeria">
 
-<button class="prev"><i class="fa-solid fa-chevron-left"></i></button>
+<button class="btn-galeria btn-prev">
+<i class="fa-solid fa-chevron-left"></i>
+</button>
 
-<div class="slider">
+<div class="galeria-track">
 
 <img src="https://i.postimg.cc/vHMTmyrL/1773507310615.jpg">
 <img src="https://i.postimg.cc/9FV0f2dp/1773507315943.jpg">
@@ -352,7 +394,9 @@ Pedir Orçamento
 
 </div>
 
-<button class="next"><i class="fa-solid fa-chevron-right"></i></button>
+<button class="btn-galeria btn-next">
+<i class="fa-solid fa-chevron-right"></i>
+</button>
 
 </div>
 
@@ -404,23 +448,31 @@ card.classList.add('show');
 
 });
 
-/* slider */
+/* GALERIA */
 
-const slider = document.querySelector(".slider");
+const track = document.querySelector(".galeria-track");
+let pos = 0;
 
-document.querySelector(".next").onclick = () =>{
-slider.scrollBy({
-left:340,
-behavior:"smooth"
-});
-};
+document.querySelector(".btn-next").onclick = () =>{
+pos -= 100;
+if(pos < -300) pos = 0;
+track.style.transform = "translateX("+pos+"%)";
+}
 
-document.querySelector(".prev").onclick = () =>{
-slider.scrollBy({
-left:-340,
-behavior:"smooth"
-});
-};
+document.querySelector(".btn-prev").onclick = () =>{
+pos += 100;
+if(pos > 0) pos = -300;
+track.style.transform = "translateX("+pos+"%)";
+}
+
+/* MENU MOBILE */
+
+const toggle = document.querySelector(".menu-toggle");
+const menu = document.querySelector(".menu");
+
+toggle.onclick = ()=>{
+menu.classList.toggle("active");
+}
 
 </script>
 
