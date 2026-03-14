@@ -52,21 +52,10 @@ font-size:24px;
 font-weight:700;
 }
 
-.menu{
-display:flex;
-}
-
 .menu a{
 color:white;
 text-decoration:none;
 margin-left:25px;
-}
-
-.menu-toggle{
-display:none;
-font-size:28px;
-color:white;
-cursor:pointer;
 }
 
 /* HERO */
@@ -92,8 +81,7 @@ padding:20px;
 }
 
 .hero h1{
-font-size:48px;
-max-width:800px;
+font-size:46px;
 }
 
 .hero p{
@@ -102,18 +90,15 @@ font-size:20px;
 }
 
 .btn{
-background:rgba(255,106,0,0.9);
+background:#ff6a00;
 color:white;
 padding:16px 40px;
 border-radius:40px;
 text-decoration:none;
 font-weight:600;
-transition:.3s;
 }
 
-.btn:hover{
-transform:scale(1.05);
-}
+/* SEÇÕES */
 
 section{
 padding:90px 8%;
@@ -139,18 +124,14 @@ padding:35px;
 border-radius:12px;
 box-shadow:0 10px 25px rgba(0,0,0,.1);
 text-align:center;
-transition:.4s;
 opacity:0;
 transform:translateY(40px);
+transition:.5s;
 }
 
 .card.show{
 opacity:1;
 transform:translateY(0);
-}
-
-.card:hover{
-transform:translateY(-10px);
 }
 
 .card i{
@@ -159,73 +140,58 @@ color:var(--laranja);
 margin-bottom:15px;
 }
 
-.card h3{
-color:var(--laranja);
-margin-bottom:10px;
-}
-
 /* GALERIA */
 
 .galeria{
-position:relative;
-max-width:750px;
-margin:auto;
-overflow:hidden;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:20px;
 }
 
-.galeria-track{
+.galeria-container{
 display:flex;
+overflow:hidden;
+width:350px;
+}
+
+.foto{
+min-width:100%;
+height:320px;
+object-fit:cover;
+border-radius:12px;
 transition:0.5s;
 }
 
-.galeria img{
-width:100%;
-height:420px;
-object-fit:cover;
-border-radius:12px;
-box-shadow:0 10px 25px rgba(0,0,0,0.25);
-}
-
-.btn-galeria{
-position:absolute;
-top:50%;
-transform:translateY(-50%);
-background:var(--laranja);
-border:none;
+.prev,.next{
+background:#ff6a00;
 color:white;
-font-size:22px;
-padding:12px 16px;
+border:none;
+font-size:28px;
+padding:12px 18px;
 border-radius:50%;
 cursor:pointer;
 }
 
-.btn-prev{ left:-10px; }
-.btn-next{ right:-10px; }
+/* PROMOÇÃO */
 
-/* AVALIAÇÕES */
+.promo{
+background:#ff6a00;
+color:white;
+text-align:center;
+padding:80px 20px;
+}
 
-.avaliacoes{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+.contador{
+display:flex;
+justify-content:center;
 gap:30px;
+margin:20px 0;
 }
 
-.avaliacao{
-background:white;
-padding:30px;
-border-radius:12px;
-box-shadow:0 10px 25px rgba(0,0,0,0.1);
-}
-
-.estrelas{
-color:#FFD700;
-margin-bottom:10px;
-font-size:18px;
-}
-
-.avaliacao p{
-margin-bottom:10px;
-font-style:italic;
+.contador span{
+font-size:42px;
+font-weight:bold;
 }
 
 /* CTA */
@@ -257,46 +223,6 @@ padding:18px 25px;
 border-radius:40px;
 text-decoration:none;
 font-weight:600;
-animation:pulse 2s infinite;
-}
-
-@keyframes pulse{
-0%{box-shadow:0 0 0 0 rgba(37,211,102,.6);}
-70%{box-shadow:0 0 0 15px rgba(37,211,102,0);}
-100%{box-shadow:0 0 0 0 rgba(37,211,102,0);}
-}
-
-/* MOBILE */
-
-@media(max-width:700px){
-
-.hero h1{
-font-size:34px;
-}
-
-.menu{
-display:none;
-position:absolute;
-top:70px;
-right:0;
-background:black;
-flex-direction:column;
-width:200px;
-padding:20px;
-}
-
-.menu a{
-margin:10px 0;
-}
-
-.menu.active{
-display:flex;
-}
-
-.menu-toggle{
-display:block;
-}
-
 }
 
 </style>
@@ -309,14 +235,10 @@ display:block;
 
 <div class="logo">⚡ MATHEUS INSTALAÇÕES</div>
 
-<div class="menu-toggle">
-<i class="fa-solid fa-bars"></i>
-</div>
-
 <div class="menu">
 <a href="#servicos">Serviços</a>
-<a href="#trabalhos">Trabalhos</a>
-<a href="#avaliacoes">Avaliações</a>
+<a href="#ar">Instalação de Ar</a>
+<a href="#promo">Promoção</a>
 <a href="#contato">Contato</a>
 </div>
 
@@ -326,11 +248,9 @@ display:block;
 
 <h1>Matheus Instalações Elétricas e Ar Condicionado</h1>
 
-<p>Eletricista em Mogi Guaçu e região</p>
+<p>Atendimento em Mogi Guaçu e região</p>
 
-<a class="btn" href="https://wa.me/5519981507532?text=Olá%20preciso%20de%20um%20orçamento">
-Pedir Orçamento
-</a>
+<a class="btn" href="https://wa.me/5519981507532">Pedir Orçamento</a>
 
 </section>
 
@@ -361,89 +281,63 @@ Pedir Orçamento
 <div class="card">
 <i class="fa-solid fa-wind"></i>
 <h3>Higienização de Ar</h3>
-<p>Limpeza completa do ar condicionado.</p>
-</div>
-
-<div class="card">
-<i class="fa-solid fa-shield-halved"></i>
-<h3>Cerca Elétrica</h3>
-<p>Instalação e manutenção.</p>
-</div>
-
-<div class="card">
-<i class="fa-solid fa-video"></i>
-<h3>Câmeras</h3>
-<p>Sistema de monitoramento.</p>
-</div>
-
-<div class="card">
-<i class="fa-solid fa-lightbulb"></i>
-<h3>Fita LED</h3>
-<p>Iluminação decorativa.</p>
-</div>
-
-<div class="card">
-<i class="fa-solid fa-door-open"></i>
-<h3>Portão Automático</h3>
-<p>Instalação e manutenção.</p>
+<p>Limpeza completa.</p>
 </div>
 
 </div>
 
 </section>
 
-<section id="trabalhos">
+<section id="ar">
 
-<div class="titulo">Instalações de Ar Condicionado</div>
+<div class="titulo">Instalação de Ar Condicionado</div>
 
 <div class="galeria">
 
-<button class="btn-galeria btn-prev">
-<i class="fa-solid fa-chevron-left"></i>
-</button>
+<button class="prev">&#10094;</button>
 
-<div class="galeria-track">
+<div class="galeria-container">
 
-<img src="https://i.postimg.cc/vHMTmyrL/1773507310615.jpg">
-<img src="https://i.postimg.cc/9FV0f2dp/1773507315943.jpg">
-<img src="https://i.postimg.cc/NfYF0t6b/1773507325014.jpg">
-<img src="https://i.postimg.cc/tCyJgb3F/1773507330614.jpg">
+<img src="https://i.postimg.cc/vHMTmyrL/1773507310615.jpg" class="foto">
+<img src="https://i.postimg.cc/9FV0f2dp/1773507315943.jpg" class="foto">
+<img src="https://i.postimg.cc/NfYF0t6b/1773507325014.jpg" class="foto">
+<img src="https://i.postimg.cc/tCyJgb3F/1773507330614.jpg" class="foto">
 
 </div>
 
-<button class="btn-galeria btn-next">
-<i class="fa-solid fa-chevron-right"></i>
-</button>
+<button class="next">&#10095;</button>
 
 </div>
 
 </section>
 
-<section id="avaliacoes">
+<section class="promo" id="promo">
 
-<div class="titulo">Avaliações de Clientes</div>
+<h2>⚡ Promoção Especial</h2>
 
-<div class="avaliacoes">
+<p>Feche agora um serviço e ganhe</p>
 
-<div class="avaliacao">
-<div class="estrelas">★★★★★</div>
-<p>"Serviço excelente, instalou meu ar condicionado muito rápido."</p>
-<strong>— Carlos Silva</strong>
+<h1>10% DE DESCONTO</h1>
+
+<p>Oferta termina em:</p>
+
+<div class="contador">
+
+<div>
+<span id="minutos">30</span>
+<p>Min</p>
 </div>
 
-<div class="avaliacao">
-<div class="estrelas">★★★★★</div>
-<p>"Muito profissional, resolveu meu problema elétrico na hora."</p>
-<strong>— Fernanda Souza</strong>
-</div>
-
-<div class="avaliacao">
-<div class="estrelas">★★★★★</div>
-<p>"Instalou meu portão automático e câmeras, ficou perfeito."</p>
-<strong>— Marcos Oliveira</strong>
+<div>
+<span id="segundos">00</span>
+<p>Seg</p>
 </div>
 
 </div>
+
+<a class="btn" href="https://wa.me/5519981507532?text=Olá%20vi%20a%20promoção%20de%2010%25%20no%20site%20e%20quero%20um%20orçamento">
+Aproveitar Desconto
+</a>
 
 </section>
 
@@ -451,7 +345,7 @@ Pedir Orçamento
 
 <h2>Precisa de um eletricista?</h2>
 
-<p>Atendimento rápido em Mogi Guaçu e região</p>
+<p>Atendimento rápido</p>
 
 <br>
 
@@ -474,7 +368,7 @@ WhatsApp
 
 <script>
 
-/* animação dos cards */
+/* animação serviços */
 
 const cards = document.querySelectorAll('.card');
 
@@ -493,46 +387,59 @@ card.classList.add('show');
 
 });
 
-/* MENU MOBILE */
-
-const toggle = document.querySelector(".menu-toggle");
-const menu = document.querySelector(".menu");
-
-toggle.onclick = ()=>{
-menu.classList.toggle("active");
-}
-
-/* SLIDER */
-
-const track = document.querySelector(".galeria-track");
-const next = document.querySelector(".btn-next");
-const prev = document.querySelector(".btn-prev");
+/* galeria */
 
 let index = 0;
 
-next.onclick = () => {
+const fotos = document.querySelectorAll(".foto");
+const total = fotos.length;
+const container = document.querySelector(".galeria-container");
+
+document.querySelector(".next").onclick = () => {
 
 index++;
 
-if(index > 3){
+if(index >= total){
 index = 0;
 }
 
-track.style.transform = "translateX(-"+(index*100)+"%)";
+container.style.transform = "translateX(-" + index * 100 + "%)";
 
-}
+};
 
-prev.onclick = () => {
+document.querySelector(".prev").onclick = () => {
 
 index--;
 
 if(index < 0){
-index = 3;
+index = total - 1;
 }
 
-track.style.transform = "translateX(-"+(index*100)+"%)";
+container.style.transform = "translateX(-" + index * 100 + "%)";
+
+};
+
+/* contador infinito */
+
+let tempo = 1800;
+
+function atualizarContador(){
+
+let minutos = Math.floor(tempo / 60);
+let segundos = tempo % 60;
+
+document.getElementById("minutos").innerHTML = minutos;
+document.getElementById("segundos").innerHTML = segundos;
+
+tempo--;
+
+if(tempo < 0){
+tempo = 1800;
+}
 
 }
+
+setInterval(atualizarContador,1000);
 
 </script>
 
