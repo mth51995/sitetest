@@ -101,8 +101,6 @@ margin:20px 0;
 font-size:20px;
 }
 
-/* BOTÃO */
-
 .btn{
 background:rgba(255,106,0,0.9);
 color:white;
@@ -116,8 +114,6 @@ transition:.3s;
 .btn:hover{
 transform:scale(1.05);
 }
-
-/* SEÇÕES */
 
 section{
 padding:90px 8%;
@@ -269,6 +265,8 @@ animation:pulse 2s infinite;
 70%{box-shadow:0 0 0 15px rgba(37,211,102,0);}
 100%{box-shadow:0 0 0 0 rgba(37,211,102,0);}
 }
+
+/* MOBILE */
 
 @media(max-width:700px){
 
@@ -428,25 +426,19 @@ Pedir Orçamento
 <div class="avaliacoes">
 
 <div class="avaliacao">
-<div class="estrelas">
-★★★★★
-</div>
+<div class="estrelas">★★★★★</div>
 <p>"Serviço excelente, instalou meu ar condicionado muito rápido."</p>
 <strong>— Carlos Silva</strong>
 </div>
 
 <div class="avaliacao">
-<div class="estrelas">
-★★★★★
-</div>
+<div class="estrelas">★★★★★</div>
 <p>"Muito profissional, resolveu meu problema elétrico na hora."</p>
 <strong>— Fernanda Souza</strong>
 </div>
 
 <div class="avaliacao">
-<div class="estrelas">
-★★★★★
-</div>
+<div class="estrelas">★★★★★</div>
 <p>"Instalou meu portão automático e câmeras, ficou perfeito."</p>
 <strong>— Marcos Oliveira</strong>
 </div>
@@ -482,6 +474,8 @@ WhatsApp
 
 <script>
 
+/* animação dos cards */
+
 const cards = document.querySelectorAll('.card');
 
 window.addEventListener('scroll', () => {
@@ -499,6 +493,8 @@ card.classList.add('show');
 
 });
 
+/* MENU MOBILE */
+
 const toggle = document.querySelector(".menu-toggle");
 const menu = document.querySelector(".menu");
 
@@ -506,7 +502,39 @@ toggle.onclick = ()=>{
 menu.classList.toggle("active");
 }
 
+/* SLIDER */
+
+const track = document.querySelector(".galeria-track");
+const next = document.querySelector(".btn-next");
+const prev = document.querySelector(".btn-prev");
+
+let index = 0;
+
+next.onclick = () => {
+
+index++;
+
+if(index > 3){
+index = 0;
+}
+
+track.style.transform = "translateX(-"+(index*100)+"%)";
+
+}
+
+prev.onclick = () => {
+
+index--;
+
+if(index < 0){
+index = 3;
+}
+
+track.style.transform = "translateX(-"+(index*100)+"%)";
+
+}
+
 </script>
 
 </body>
-  </html>
+</html>
