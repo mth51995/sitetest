@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Matheus Instalações Elétricas</title>
+<title>Matheus Instalações</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
@@ -18,50 +18,41 @@ font-family:Arial;
 background:#f5f5f5;
 }
 
-/* HEADER */
+/* MENU */
 
 header{
-position:fixed;
-top:0;
-width:100%;
-background:#000;
+background:black;
 color:white;
+padding:15px;
 display:flex;
 justify-content:space-between;
-padding:15px 30px;
-z-index:999;
 }
 
 header a{
 color:white;
 text-decoration:none;
-margin-left:20px;
+margin-left:15px;
 }
 
-/* PROMOÇÃO TOPO */
+/* PROMOÇÃO */
 
 .promo{
-margin-top:70px;
 background:#ff6a00;
 color:white;
 text-align:center;
-padding:40px 20px;
-}
-
-.promo h1{
-font-size:40px;
-margin:10px 0;
+padding:40px;
 }
 
 .contador{
 font-size:30px;
 font-weight:bold;
+margin:10px 0;
 }
 
 /* HERO */
 
 .hero{
-background:linear-gradient(120deg,#000,#ff6a00);
+background:#111;
 color:white;
 text-align:center;
 padding:80px 20px;
@@ -70,42 +61,28 @@ padding:80px 20px;
 .btn{
 background:#ff6a00;
 color:white;
-padding:15px 35px;
+padding:15px 30px;
 border-radius:30px;
 text-decoration:none;
-display:inline-block;
-margin-top:20px;
 }
 
 /* SERVIÇOS */
 
 .servicos{
-padding:60px 20px;
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
 gap:20px;
+padding:40px;
 }
 
 .card{
 background:white;
 padding:30px;
+text-align:center;
 border-radius:10px;
-text-align:center;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
-.card i{
-font-size:35px;
-color:#ff6a00;
-margin-bottom:10px;
-}
-
-/* GALERIA */
-
-.galeria{
-text-align:center;
-padding:60px 20px;
-}
+/* SLIDER */
 
 .slider{
 max-width:400px;
@@ -133,12 +110,159 @@ background:#ff6a00;
 color:white;
 border:none;
 font-size:25px;
-padding:10px 15px;
+padding:10px;
 cursor:pointer;
-border-radius:50%;
 }
 
-.prev{left:-15px;}
-.next{right:-15px;}
+.prev{left:0}
+.next{right:0}
 
-/* WHATSAPP */
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<div>⚡ Matheus Instalações</div>
+
+<div>
+<a href="#">Serviços</a>
+<a href="#">Contato</a>
+</div>
+
+</header>
+
+<!-- PROMOÇÃO -->
+
+<section class="promo">
+
+<h2>Promoção Especial</h2>
+
+<h1>10% DE DESCONTO</h1>
+
+<div class="contador">
+<span id="min">30</span>:<span id="seg">00</span>
+</div>
+
+<a class="btn" href="https://wa.me/5519981507532">Aproveitar</a>
+
+</section>
+
+<!-- HERO -->
+
+<section class="hero">
+
+<h1>Instalações Elétricas e Ar Condicionado</h1>
+
+<p>Atendimento em Mogi Guaçu</p>
+
+<a class="btn" href="https://wa.me/5519981507532">Orçamento</a>
+
+</section>
+
+<!-- SERVIÇOS -->
+
+<section class="servicos">
+
+<div class="card">
+<i class="fa-solid fa-bolt"></i>
+<h3>Instalação Elétrica</h3>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-screwdriver-wrench"></i>
+<h3>Manutenção</h3>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-fan"></i>
+<h3>Ar Condicionado</h3>
+</div>
+
+</section>
+
+<!-- SLIDER -->
+
+<section>
+
+<h2 style="text-align:center">Instalação de Ar</h2>
+
+<div class="slider">
+
+<div class="slide active">
+<img src="https://i.postimg.cc/vHMTmyrL/1773507310615.jpg">
+</div>
+
+<div class="slide">
+<img src="https://i.postimg.cc/9FV0f2dp/1773507315943.jpg">
+</div>
+
+<div class="slide">
+<img src="https://i.postimg.cc/NfYF0t6b/1773507325014.jpg">
+</div>
+
+<div class="slide">
+<img src="https://i.postimg.cc/tCyJgb3F/1773507330614.jpg">
+</div>
+
+<button class="prev" onclick="trocar(-1)">❮</button>
+<button class="next" onclick="trocar(1)">❯</button>
+
+</div>
+
+</section>
+
+<script>
+
+/* CONTADOR */
+
+let tempo=1800;
+
+setInterval(function(){
+
+let min=Math.floor(tempo/60);
+let seg=tempo%60;
+
+document.getElementById("min").innerHTML=min;
+document.getElementById("seg").innerHTML=seg;
+
+tempo--;
+
+if(tempo<0){tempo=1800;}
+
+},1000);
+
+/* SLIDE */
+
+let slide=0;
+
+function mostrar(){
+
+let slides=document.querySelectorAll(".slide");
+
+slides.forEach(s=>s.classList.remove("active"));
+
+slides[slide].classList.add("active");
+
+}
+
+function trocar(n){
+
+let slides=document.querySelectorAll(".slide");
+
+slide+=n;
+
+if(slide>=slides.length){slide=0;}
+
+if(slide<0){slide=slides.length-1;}
+
+mostrar();
+
+}
+
+</script>
+
+</body>
+</html>
