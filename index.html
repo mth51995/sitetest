@@ -27,7 +27,6 @@ box-sizing:border-box;
 scroll-behavior:smooth;
 }
 
-/* 🔥 CORREÇÃO AQUI */
 body{
 font-family:'Poppins',sans-serif;
 background:var(--cinza);
@@ -35,29 +34,33 @@ color:#333;
 padding-top:90px;
 }
 
-/* HEADER */
+/* HEADER 🔥 */
 
 header{
 position:fixed;
-width:100%;
 top:0;
-background:rgba(0,0,0,0.6);
-backdrop-filter:blur(10px);
-padding:15px 5%;
+width:100%;
+height:70px;
+background: linear-gradient(120deg, #000, #111, #ff6a00);
+background-size:200% 200%;
+animation: headerAnim 6s ease infinite;
 display:flex;
 justify-content:space-between;
 align-items:center;
+padding:0 5%;
 z-index:1000;
+}
+
+@keyframes headerAnim{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
 }
 
 .logo{
 color:var(--laranja);
 font-size:20px;
 font-weight:700;
-}
-
-.menu{
-display:flex;
 }
 
 .menu a{
@@ -75,7 +78,6 @@ overflow:hidden;
 background: linear-gradient(120deg, #000, #111, #ff6a00, #ff8c1a, #000);
 background-size: 400% 400%;
 animation: energia 10s ease infinite;
-
 min-height:100vh;
 display:flex;
 flex-direction:column;
@@ -103,13 +105,11 @@ z-index:2;
 
 @keyframes energia{
 0%{background-position:0% 50%;}
-25%{background-position:50% 50%;}
 50%{background-position:100% 50%;}
-75%{background-position:50% 50%;}
 100%{background-position:0% 50%;}
 }
 
-/* COPY DESTACADA */
+/* COPY */
 
 .copy-destaque{
 max-width:700px;
@@ -118,15 +118,12 @@ padding:25px;
 background:rgba(0,0,0,0.5);
 border-radius:12px;
 backdrop-filter:blur(8px);
-font-size:16px;
 line-height:1.7;
 border-left:4px solid var(--laranja);
-box-shadow:0 10px 30px rgba(0,0,0,0.3);
 }
 
 .copy-destaque strong{
 color:var(--laranja);
-font-weight:600;
 }
 
 /* BOTÃO */
@@ -137,17 +134,11 @@ color:white;
 padding:14px 30px;
 border-radius:40px;
 text-decoration:none;
-font-weight:600;
 display:inline-block;
-transition:.3s;
+margin-top:20px;
 }
 
-.btn:hover{
-transform:scale(1.05);
-background:#ff7f26;
-}
-
-/* SEÇÕES */
+/* SERVIÇOS */
 
 section{
 padding:80px 5%;
@@ -155,11 +146,8 @@ padding:80px 5%;
 
 .titulo{
 text-align:center;
-font-size:26px;
 margin-bottom:40px;
 }
-
-/* SERVIÇOS */
 
 .servicos{
 display:grid;
@@ -170,23 +158,16 @@ gap:20px;
 .card{
 background:white;
 padding:25px;
-border-radius:12px;
-box-shadow:0 10px 25px rgba(0,0,0,.1);
+border-radius:10px;
 text-align:center;
 opacity:0;
 transform:translateY(50px);
-transition:.6s;
+transition:.5s;
 }
 
 .card.show{
 opacity:1;
 transform:translateY(0);
-}
-
-.card i{
-font-size:35px;
-color:var(--laranja);
-margin-bottom:10px;
 }
 
 /* GALERIA */
@@ -199,31 +180,29 @@ gap:10px;
 }
 
 .galeria-viewport{
-width:100%;
-max-width:350px;
 overflow:hidden;
+max-width:350px;
+width:100%;
 }
 
 .galeria-container{
 display:flex;
-transition:transform 0.5s ease-in-out;
+transition:0.5s;
 }
 
 .foto{
 width:100%;
-max-width:350px;
-height:260px;
-object-fit:cover;
-border-radius:12px;
 flex-shrink:0;
+height:250px;
+object-fit:cover;
+border-radius:10px;
 }
 
 .prev,.next{
 background:#ff6a00;
 color:white;
 border:none;
-font-size:22px;
-padding:10px 14px;
+padding:10px;
 border-radius:50%;
 cursor:pointer;
 }
@@ -231,7 +210,7 @@ cursor:pointer;
 /* CTA */
 
 .cta{
-background:#000;
+background:black;
 color:white;
 text-align:center;
 }
@@ -243,10 +222,9 @@ background:black;
 color:white;
 text-align:center;
 padding:30px;
-font-size:14px;
 }
 
-/* WHATSAPP */
+/* WHATSAPP 🔥 */
 
 .whatsapp{
 position:fixed;
@@ -258,32 +236,24 @@ padding:14px 18px;
 border-radius:40px;
 text-decoration:none;
 font-weight:600;
+animation:pulse 1.8s infinite;
+}
+
+@keyframes pulse{
+0%{transform:scale(1);}
+50%{transform:scale(1.1);}
+100%{transform:scale(1);}
 }
 
 /* RESPONSIVO */
 
 @media(min-width:768px){
-
-.logo{font-size:24px;}
-
-.menu a{font-size:16px;}
-
-.hero h1{font-size:48px;}
-
 .servicos{grid-template-columns:repeat(2,1fr);}
-
-.titulo{font-size:32px;}
-
-.foto{height:320px;}
-
+.hero h1{font-size:45px;}
 }
 
 @media(min-width:1024px){
-
 .servicos{grid-template-columns:repeat(4,1fr);}
-
-.galeria-viewport{max-width:400px;}
-
 }
 
 </style>
@@ -293,15 +263,12 @@ font-weight:600;
 <body>
 
 <header>
-
 <div class="logo">⚡ MATHEUS INSTALAÇÕES</div>
-
 <div class="menu">
 <a href="#servicos">Serviços</a>
 <a href="#ar">Ar</a>
 <a href="#contato">Contato</a>
 </div>
-
 </header>
 
 <section class="hero">
@@ -311,62 +278,30 @@ font-weight:600;
 <p>Atendimento em Mogi Guaçu e região</p>
 
 <div class="copy-destaque">
-
-⚡ <strong>Chega de perder tempo</strong> com vários orçamentos e profissionais diferentes.<br><br>
-
-🏠 Aqui você encontra a <strong>solução completa</strong> para sua residência.<br><br>
-
-🔧 Oferecemos pacotes completos de serviços, incluindo elétrica, instalação e higienização de ar-condicionado, cerca elétrica, câmeras de segurança (CFTV), portão eletrônico, quadro geral de distribuição e obras — do padrão ao acabamento elétrico.<br><br>
-
-🚀 <strong>Mais rapidez, segurança e o melhor custo-benefício.</strong><br><br>
-
-✅ <strong>Um só contato. Todo o serviço resolvido.</strong>
-
+⚡ <strong>Chega de perder tempo</strong> com vários orçamentos.<br><br>
+🏠 Solução completa para sua residência.<br><br>
+🔧 Elétrica, ar-condicionado, cerca elétrica, CFTV, portão eletrônico, quadro de distribuição e obras completas.<br><br>
+🚀 Mais rapidez, segurança e economia.<br><br>
+✅ Um só contato. Tudo resolvido.
 </div>
-
-<br>
 
 <a class="btn" href="https://wa.me/5519981507532">Pedir Orçamento</a>
 
 </section>
 
 <section id="servicos">
-
-<div class="titulo">Serviços</div>
+<h2 class="titulo">Serviços</h2>
 
 <div class="servicos">
-
-<div class="card">
-<i class="fa-solid fa-bolt"></i>
-<h3>Instalação Elétrica</h3>
-<p>Tomadas, quadros e redes elétricas.</p>
+<div class="card">Instalação Elétrica</div>
+<div class="card">Manutenção</div>
+<div class="card">Ar Condicionado</div>
+<div class="card">Higienização</div>
 </div>
-
-<div class="card">
-<i class="fa-solid fa-screwdriver-wrench"></i>
-<h3>Manutenção Elétrica</h3>
-<p>Correção de curto e troca de disjuntores.</p>
-</div>
-
-<div class="card">
-<i class="fa-solid fa-fan"></i>
-<h3>Instalação de Ar</h3>
-<p>Instalação profissional de ar condicionado.</p>
-</div>
-
-<div class="card">
-<i class="fa-solid fa-wind"></i>
-<h3>Higienização de Ar</h3>
-<p>Limpeza completa.</p>
-</div>
-
-</div>
-
 </section>
 
 <section id="ar">
-
-<div class="titulo">Instalação de Ar Condicionado</div>
+<h2 class="titulo">Trabalhos</h2>
 
 <div class="galeria">
 
@@ -390,68 +325,52 @@ font-weight:600;
 </section>
 
 <section class="cta" id="contato">
-
-<h2>Precisa de um eletricista?</h2>
-
-<p>Atendimento rápido</p>
-
-<br>
-
-<a class="btn" href="https://wa.me/5519981507532">
-Chamar no WhatsApp
-</a>
-
+<h2>Precisa de um serviço?</h2>
+<a class="btn" href="https://wa.me/5519981507532">Chamar no WhatsApp</a>
 </section>
 
 <footer>
-
-<p>⚡ Matheus Instalações Elétricas e Ar Condicionado</p>
-<p>WhatsApp: (19) 98150-7532</p>
-
+<p>Matheus Instalações</p>
+<p>(19) 98150-7532</p>
 </footer>
 
-<a class="whatsapp" href="https://wa.me/5519981507532">
-WhatsApp
-</a>
+<a class="whatsapp" href="https://wa.me/5519981507532">WhatsApp</a>
 
 <script>
 
-// animação dos cards
 const cards = document.querySelectorAll('.card');
 
 window.addEventListener('scroll', () => {
 cards.forEach(card => {
-const top = card.getBoundingClientRect().top;
-if(top < window.innerHeight - 80){
+if(card.getBoundingClientRect().top < window.innerHeight - 80){
 card.classList.add('show');
 }
 });
 });
 
-// galeria
 let index = 0;
 const container = document.querySelector(".galeria-container");
 const fotos = document.querySelectorAll(".foto");
 
-function atualizarSlide(){
-const largura = document.querySelector(".foto").clientWidth;
+function slide(){
+const largura = fotos[0].clientWidth;
 container.style.transform = `translateX(-${index * largura}px)`;
 }
 
 document.querySelector(".next").onclick = () => {
 index = (index + 1) % fotos.length;
-atualizarSlide();
+slide();
 };
 
 document.querySelector(".prev").onclick = () => {
 index = (index - 1 + fotos.length) % fotos.length;
-atualizarSlide();
+slide();
 };
 
 setInterval(()=>{
 index = (index + 1) % fotos.length;
-atualizarSlide();
-},4000);
+slide();
+},3000);
 
 </script>
 
