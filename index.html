@@ -27,7 +27,7 @@ box-sizing:border-box;
 scroll-behavior:smooth;
 }
 
-/* ✅ HEADER NÃO ATRAPALHA */
+/* 🔥 CORREÇÃO AQUI */
 body{
 font-family:'Poppins',sans-serif;
 background:var(--cinza);
@@ -35,27 +35,19 @@ color:#333;
 padding-top:90px;
 }
 
-/* HEADER COM DEGRADE */
+/* HEADER */
 
 header{
 position:fixed;
-top:0;
 width:100%;
-background: linear-gradient(120deg, #000, #111, #ff6a00);
-background-size:200% 200%;
-animation: headerAnim 6s ease infinite;
+top:0;
+background:rgba(0,0,0,0.6);
 backdrop-filter:blur(10px);
 padding:15px 5%;
 display:flex;
 justify-content:space-between;
 align-items:center;
 z-index:1000;
-}
-
-@keyframes headerAnim{
-0%{background-position:0% 50%;}
-50%{background-position:100% 50%;}
-100%{background-position:0% 50%;}
 }
 
 .logo{
@@ -75,7 +67,7 @@ margin-left:20px;
 font-size:14px;
 }
 
-/* HERO (NÃO MEXI) */
+/* HERO */
 
 .hero{
 position:relative;
@@ -117,7 +109,7 @@ z-index:2;
 100%{background-position:0% 50%;}
 }
 
-/* COPY (NÃO MEXI) */
+/* COPY DESTACADA */
 
 .copy-destaque{
 max-width:700px;
@@ -155,7 +147,7 @@ transform:scale(1.05);
 background:#ff7f26;
 }
 
-/* SEÇÕES (NÃO MEXI) */
+/* SEÇÕES */
 
 section{
 padding:80px 5%;
@@ -167,7 +159,7 @@ font-size:26px;
 margin-bottom:40px;
 }
 
-/* SERVIÇOS (INTACTO) */
+/* SERVIÇOS */
 
 .servicos{
 display:grid;
@@ -197,7 +189,7 @@ color:var(--laranja);
 margin-bottom:10px;
 }
 
-/* GALERIA (NÃO MEXI) */
+/* GALERIA */
 
 .galeria{
 display:flex;
@@ -254,7 +246,7 @@ padding:30px;
 font-size:14px;
 }
 
-/* 🔥 WHATSAPP POR CIMA + ANIMADO */
+/* WHATSAPP */
 
 .whatsapp{
 position:fixed;
@@ -262,18 +254,10 @@ bottom:20px;
 right:20px;
 background:#25D366;
 color:white;
-padding:15px 20px;
-border-radius:50px;
+padding:14px 18px;
+border-radius:40px;
 text-decoration:none;
 font-weight:600;
-z-index:2000;
-animation:pulse 1.5s infinite;
-}
-
-@keyframes pulse{
-0%{transform:scale(1);}
-50%{transform:scale(1.1);}
-100%{transform:scale(1);}
 }
 
 /* RESPONSIVO */
@@ -320,7 +304,156 @@ animation:pulse 1.5s infinite;
 
 </header>
 
-<!-- RESTANTE DO SEU HTML CONTINUA IGUAL -->
+<section class="hero">
+
+<h1>Matheus Instalações Elétricas e Ar Condicionado</h1>
+
+<p>Atendimento em Mogi Guaçu e região</p>
+
+<div class="copy-destaque">
+
+⚡ <strong>Chega de perder tempo</strong> com vários orçamentos e profissionais diferentes.<br><br>
+
+🏠 Aqui você encontra a <strong>solução completa</strong> para sua residência.<br><br>
+
+🔧 Oferecemos pacotes completos de serviços, incluindo elétrica, instalação e higienização de ar-condicionado, cerca elétrica, câmeras de segurança (CFTV), portão eletrônico, quadro geral de distribuição e obras — do padrão ao acabamento elétrico.<br><br>
+
+🚀 <strong>Mais rapidez, segurança e o melhor custo-benefício.</strong><br><br>
+
+✅ <strong>Um só contato. Todo o serviço resolvido.</strong>
+
+</div>
+
+<br>
+
+<a class="btn" href="https://wa.me/5519981507532">Pedir Orçamento</a>
+
+</section>
+
+<section id="servicos">
+
+<div class="titulo">Serviços</div>
+
+<div class="servicos">
+
+<div class="card">
+<i class="fa-solid fa-bolt"></i>
+<h3>Instalação Elétrica</h3>
+<p>Tomadas, quadros e redes elétricas.</p>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-screwdriver-wrench"></i>
+<h3>Manutenção Elétrica</h3>
+<p>Correção de curto e troca de disjuntores.</p>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-fan"></i>
+<h3>Instalação de Ar</h3>
+<p>Instalação profissional de ar condicionado.</p>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-wind"></i>
+<h3>Higienização de Ar</h3>
+<p>Limpeza completa.</p>
+</div>
+
+</div>
+
+</section>
+
+<section id="ar">
+
+<div class="titulo">Instalação de Ar Condicionado</div>
+
+<div class="galeria">
+
+<button class="prev">&#10094;</button>
+
+<div class="galeria-viewport">
+<div class="galeria-container">
+
+<img src="https://i.postimg.cc/vHMTmyrL/1773507310615.jpg" class="foto">
+<img src="https://i.postimg.cc/9FV0f2dp/1773507315943.jpg" class="foto">
+<img src="https://i.postimg.cc/NfYF0t6b/1773507325014.jpg" class="foto">
+<img src="https://i.postimg.cc/tCyJgb3F/1773507330614.jpg" class="foto">
+
+</div>
+</div>
+
+<button class="next">&#10095;</button>
+
+</div>
+
+</section>
+
+<section class="cta" id="contato">
+
+<h2>Precisa de um eletricista?</h2>
+
+<p>Atendimento rápido</p>
+
+<br>
+
+<a class="btn" href="https://wa.me/5519981507532">
+Chamar no WhatsApp
+</a>
+
+</section>
+
+<footer>
+
+<p>⚡ Matheus Instalações Elétricas e Ar Condicionado</p>
+<p>WhatsApp: (19) 98150-7532</p>
+
+</footer>
+
+<a class="whatsapp" href="https://wa.me/5519981507532">
+WhatsApp
+</a>
+
+<script>
+
+// animação dos cards
+const cards = document.querySelectorAll('.card');
+
+window.addEventListener('scroll', () => {
+cards.forEach(card => {
+const top = card.getBoundingClientRect().top;
+if(top < window.innerHeight - 80){
+card.classList.add('show');
+}
+});
+});
+
+// galeria
+let index = 0;
+const container = document.querySelector(".galeria-container");
+const fotos = document.querySelectorAll(".foto");
+
+function atualizarSlide(){
+const largura = document.querySelector(".foto").clientWidth;
+container.style.transform = `translateX(-${index * largura}px)`;
+}
+
+document.querySelector(".next").onclick = () => {
+index = (index + 1) % fotos.length;
+atualizarSlide();
+};
+
+document.querySelector(".prev").onclick = () => {
+index = (index - 1 + fotos.length) % fotos.length;
+atualizarSlide();
+};
+
+setInterval(()=>{
+index = (index + 1) % fotos.length;
+atualizarSlide();
+},4000);
+
+</script>
 
 </body>
 </html>
