@@ -65,12 +65,15 @@ margin-left:20px;
 font-size:14px;
 }
 
-/* HERO */
+/* HERO COM DEGRADÊ FORTE */
 
 .hero{
-background:linear-gradient(120deg,#000,#111,#ff6a00);
-background-size:300% 300%;
-animation:energia 8s ease infinite;
+position:relative;
+overflow:hidden;
+background: linear-gradient(120deg, #000, #111, #ff6a00, #ff8c1a, #000);
+background-size: 400% 400%;
+animation: energia 10s ease infinite;
+
 min-height:100vh;
 display:flex;
 flex-direction:column;
@@ -81,14 +84,30 @@ color:white;
 padding:20px;
 }
 
-.hero h1{
-font-size:28px;
+.hero::after{
+content:"";
+position:absolute;
+width:100%;
+height:100%;
+background: radial-gradient(circle, transparent, rgba(0,0,0,0.7));
+top:0;
+left:0;
 }
 
-.hero p{
-margin:15px 0;
-font-size:16px;
+.hero h1, .hero p, .hero a{
+position:relative;
+z-index:2;
 }
+
+@keyframes energia{
+0%{background-position:0% 50%;}
+25%{background-position:50% 50%;}
+50%{background-position:100% 50%;}
+75%{background-position:50% 50%;}
+100%{background-position:0% 50%;}
+}
+
+/* BOTÃO */
 
 .btn{
 background:#ff6a00;
@@ -98,6 +117,12 @@ border-radius:40px;
 text-decoration:none;
 font-weight:600;
 display:inline-block;
+transition:.3s;
+}
+
+.btn:hover{
+transform:scale(1.05);
+background:#ff7f26;
 }
 
 /* SEÇÕES */
@@ -213,7 +238,7 @@ text-decoration:none;
 font-weight:600;
 }
 
-/* DESKTOP */
+/* RESPONSIVO */
 
 @media(min-width:768px){
 
