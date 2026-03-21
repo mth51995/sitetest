@@ -65,7 +65,7 @@ margin-left:20px;
 font-size:14px;
 }
 
-/* HERO COM DEGRADÊ */
+/* HERO */
 
 .hero{
 position:relative;
@@ -94,7 +94,7 @@ top:0;
 left:0;
 }
 
-.hero h1, .hero p, .hero a{
+.hero h1, .hero p, .hero a, .copy-destaque{
 position:relative;
 z-index:2;
 }
@@ -105,6 +105,26 @@ z-index:2;
 50%{background-position:100% 50%;}
 75%{background-position:50% 50%;}
 100%{background-position:0% 50%;}
+}
+
+/* COPY DESTACADA */
+
+.copy-destaque{
+max-width:700px;
+margin-top:25px;
+padding:25px;
+background:rgba(0,0,0,0.5);
+border-radius:12px;
+backdrop-filter:blur(8px);
+font-size:16px;
+line-height:1.7;
+border-left:4px solid var(--laranja);
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+.copy-destaque strong{
+color:var(--laranja);
+font-weight:600;
 }
 
 /* BOTÃO */
@@ -242,45 +262,25 @@ font-weight:600;
 
 @media(min-width:768px){
 
-.logo{
-font-size:24px;
-}
+.logo{font-size:24px;}
 
-.menu a{
-font-size:16px;
-}
+.menu a{font-size:16px;}
 
-.hero h1{
-font-size:48px;
-}
+.hero h1{font-size:48px;}
 
-.hero p{
-font-size:20px;
-}
+.servicos{grid-template-columns:repeat(2,1fr);}
 
-.servicos{
-grid-template-columns:repeat(2,1fr);
-}
+.titulo{font-size:32px;}
 
-.titulo{
-font-size:32px;
-}
-
-.foto{
-height:320px;
-}
+.foto{height:320px;}
 
 }
 
 @media(min-width:1024px){
 
-.servicos{
-grid-template-columns:repeat(4,1fr);
-}
+.servicos{grid-template-columns:repeat(4,1fr);}
 
-.galeria-viewport{
-max-width:400px;
-}
+.galeria-viewport{max-width:400px;}
 
 }
 
@@ -308,13 +308,21 @@ max-width:400px;
 
 <p>Atendimento em Mogi Guaçu e região</p>
 
-<p style="max-width:700px; margin-top:20px; font-size:16px; line-height:1.6;">
-⚡ Chega de perder tempo com vários orçamentos e profissionais diferentes.<br><br>
-🏠 Aqui você encontra a solução completa para sua residência.<br><br>
+<div class="copy-destaque">
+
+⚡ <strong>Chega de perder tempo</strong> com vários orçamentos e profissionais diferentes.<br><br>
+
+🏠 Aqui você encontra a <strong>solução completa</strong> para sua residência.<br><br>
+
 🔧 Oferecemos pacotes completos de serviços, incluindo elétrica, instalação e higienização de ar-condicionado, cerca elétrica, câmeras de segurança (CFTV), portão eletrônico, quadro geral de distribuição e obras — do padrão ao acabamento elétrico.<br><br>
-🚀 Mais rapidez, segurança e o melhor custo-benefício.<br><br>
-✅ Um só contato. Todo o serviço resolvido.
-</p>
+
+🚀 <strong>Mais rapidez, segurança e o melhor custo-benefício.</strong><br><br>
+
+✅ <strong>Um só contato. Todo o serviço resolvido.</strong>
+
+</div>
+
+<br>
 
 <a class="btn" href="https://wa.me/5519981507532">Pedir Orçamento</a>
 
