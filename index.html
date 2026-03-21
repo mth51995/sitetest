@@ -186,7 +186,7 @@ gap:20px;
 display:flex;
 overflow:hidden;
 width:350px;
-transition:.5s;
+transition:transform 0.5s ease-in-out;
 }
 
 .foto{
@@ -392,6 +392,8 @@ WhatsApp
 
 <script>
 
+/* animação serviços */
+
 const cards = document.querySelectorAll('.card');
 
 window.addEventListener('scroll', () => {
@@ -409,25 +411,34 @@ card.classList.add('show');
 
 });
 
+/* SLIDE CORRIGIDO */
+
 let index = 0;
 
+const container = document.querySelector(".galeria-container");
 const fotos = document.querySelectorAll(".foto");
 const total = fotos.length;
-const container = document.querySelector(".galeria-container");
 
-document.querySelector(".next").onclick = () => {
+function atualizarSlide(){
+container.style.transform = `translateX(-${index * 100}%)`;
+}
 
+document.querySelector(".next").addEventListener("click", () => {
 index = (index + 1) % total;
-container.style.transform = "translateX(-" + index * 100 + "%)";
+atualizarSlide();
+});
 
-};
-
-document.querySelector(".prev").onclick = () => {
-
+document.querySelector(".prev").addEventListener("click", () => {
 index = (index - 1 + total) % total;
-container.style.transform = "translateX(-" + index * 100 + "%)";
+atualizarSlide();
+});
 
-};
+/* AUTO SLIDE */
+
+setInterval(() => {
+index = (index + 1) % total;
+atualizarSlide();
+}, 4000);
 
 </script>
 
