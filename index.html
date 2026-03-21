@@ -27,15 +27,14 @@ box-sizing:border-box;
 scroll-behavior:smooth;
 }
 
-/* 🔥 AJUSTE AQUI */
 body{
 font-family:'Poppins',sans-serif;
 background:var(--cinza);
 color:#333;
-padding-top:70px;
+padding-top:90px;
 }
 
-/* HEADER */
+/* HEADER ATUALIZADO */
 
 header{
 position:fixed;
@@ -87,9 +86,6 @@ align-items:center;
 text-align:center;
 color:white;
 padding:20px;
-
-/* 🔥 COLAR NO HEADER */
-margin-top:-20px;
 }
 
 .hero::after{
@@ -252,7 +248,7 @@ padding:30px;
 font-size:14px;
 }
 
-/* WHATSAPP */
+/* WHATSAPP ANIMADO */
 
 .whatsapp{
 position:fixed;
@@ -336,11 +332,17 @@ box-shadow:0 0 0 0 rgba(37,211,102, 0);
 <p>Atendimento em Mogi Guaçu e região</p>
 
 <div class="copy-destaque">
+
 ⚡ <strong>Chega de perder tempo</strong> com vários orçamentos e profissionais diferentes.<br><br>
+
 🏠 Aqui você encontra a <strong>solução completa</strong> para sua residência.<br><br>
+
 🔧 Oferecemos pacotes completos de serviços, incluindo elétrica, instalação e higienização de ar-condicionado, cerca elétrica, câmeras de segurança (CFTV), portão eletrônico, quadro geral de distribuição e obras — do padrão ao acabamento elétrico.<br><br>
+
 🚀 <strong>Mais rapidez, segurança e o melhor custo-benefício.</strong><br><br>
+
 ✅ <strong>Um só contato. Todo o serviço resolvido.</strong>
+
 </div>
 
 <br>
@@ -349,7 +351,130 @@ box-shadow:0 0 0 0 rgba(37,211,102, 0);
 
 </section>
 
-<!-- RESTANTE IGUAL (sem mudanças) -->
+<section id="servicos">
+
+<div class="titulo">Serviços</div>
+
+<div class="servicos">
+
+<div class="card">
+<i class="fa-solid fa-bolt"></i>
+<h3>Instalação Elétrica</h3>
+<p>Tomadas, quadros e redes elétricas.</p>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-screwdriver-wrench"></i>
+<h3>Manutenção Elétrica</h3>
+<p>Correção de curto e troca de disjuntores.</p>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-fan"></i>
+<h3>Instalação de Ar</h3>
+<p>Instalação profissional de ar condicionado.</p>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-wind"></i>
+<h3>Higienização de Ar</h3>
+<p>Limpeza completa.</p>
+</div>
+
+</div>
+
+</section>
+
+<section id="ar">
+
+<div class="titulo">Instalação de Ar Condicionado</div>
+
+<div class="galeria">
+
+<button class="prev">&#10094;</button>
+
+<div class="galeria-viewport">
+<div class="galeria-container">
+
+<img src="https://i.postimg.cc/vHMTmyrL/1773507310615.jpg" class="foto">
+<img src="https://i.postimg.cc/9FV0f2dp/1773507315943.jpg" class="foto">
+<img src="https://i.postimg.cc/NfYF0t6b/1773507325014.jpg" class="foto">
+<img src="https://i.postimg.cc/tCyJgb3F/1773507330614.jpg" class="foto">
+
+</div>
+</div>
+
+<button class="next">&#10095;</button>
+
+</div>
+
+</section>
+
+<section class="cta" id="contato">
+
+<h2>Precisa de um eletricista?</h2>
+
+<p>Atendimento rápido</p>
+
+<br>
+
+<a class="btn" href="https://wa.me/5519981507532">
+Chamar no WhatsApp
+</a>
+
+</section>
+
+<footer>
+
+<p>⚡ Matheus Instalações Elétricas e Ar Condicionado</p>
+<p>WhatsApp: (19) 98150-7532</p>
+
+</footer>
+
+<a class="whatsapp" href="https://wa.me/5519981507532">
+<i class="fa-brands fa-whatsapp"></i> WhatsApp
+</a>
+
+<script>
+
+// animação dos cards
+const cards = document.querySelectorAll('.card');
+
+window.addEventListener('scroll', () => {
+cards.forEach(card => {
+const top = card.getBoundingClientRect().top;
+if(top < window.innerHeight - 80){
+card.classList.add('show');
+}
+});
+});
+
+// galeria
+let index = 0;
+const container = document.querySelector(".galeria-container");
+const fotos = document.querySelectorAll(".foto");
+
+function atualizarSlide(){
+const largura = document.querySelector(".foto").clientWidth;
+container.style.transform = `translateX(-${index * largura}px)`;
+}
+
+document.querySelector(".next").onclick = () => {
+index = (index + 1) % fotos.length;
+atualizarSlide();
+};
+
+document.querySelector(".prev").onclick = () => {
+index = (index - 1 + fotos.length) % fotos.length;
+atualizarSlide();
+};
+
+setInterval(()=>{
+index = (index + 1) % fotos.length;
+atualizarSlide();
+},4000);
+
+</script>
 
 </body>
 </html>
