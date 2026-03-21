@@ -24,6 +24,7 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
+scroll-behavior:smooth;
 }
 
 body{
@@ -38,7 +39,8 @@ header{
 position:fixed;
 width:100%;
 top:0;
-background:rgba(0,0,0,0.9);
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(10px);
 padding:20px 8%;
 display:flex;
 justify-content:space-between;
@@ -56,6 +58,22 @@ font-weight:700;
 color:white;
 text-decoration:none;
 margin-left:25px;
+position:relative;
+}
+
+.menu a::after{
+content:"";
+position:absolute;
+width:0%;
+height:2px;
+background:var(--laranja);
+left:0;
+bottom:-5px;
+transition:.3s;
+}
+
+.menu a:hover::after{
+width:100%;
 }
 
 /* HERO */
@@ -81,13 +99,17 @@ padding:20px;
 }
 
 .hero h1{
-font-size:46px;
+font-size:48px;
+animation:fadeUp 1s ease;
 }
 
 .hero p{
 margin:20px 0;
 font-size:20px;
+animation:fadeUp 1.3s ease;
 }
+
+/* BOTÃO */
 
 .btn{
 background:#ff6a00;
@@ -96,12 +118,19 @@ padding:16px 40px;
 border-radius:40px;
 text-decoration:none;
 font-weight:600;
+transition:.3s;
+box-shadow:0 5px 20px rgba(0,0,0,.3);
+}
+
+.btn:hover{
+transform:translateY(-4px) scale(1.05);
+background:#ff7f26;
 }
 
 /* SEÇÕES */
 
 section{
-padding:90px 8%;
+padding:100px 8%;
 }
 
 .titulo{
@@ -125,13 +154,17 @@ border-radius:12px;
 box-shadow:0 10px 25px rgba(0,0,0,.1);
 text-align:center;
 opacity:0;
-transform:translateY(40px);
-transition:.5s;
+transform:translateY(50px);
+transition:.6s;
 }
 
 .card.show{
 opacity:1;
 transform:translateY(0);
+}
+
+.card:hover{
+transform:translateY(-10px);
 }
 
 .card i{
@@ -153,6 +186,7 @@ gap:20px;
 display:flex;
 overflow:hidden;
 width:350px;
+transition:.5s;
 }
 
 .foto{
@@ -160,7 +194,6 @@ min-width:100%;
 height:320px;
 object-fit:cover;
 border-radius:12px;
-transition:0.5s;
 }
 
 .prev,.next{
@@ -171,6 +204,11 @@ font-size:28px;
 padding:12px 18px;
 border-radius:50%;
 cursor:pointer;
+transition:.3s;
+}
+
+.prev:hover,.next:hover{
+transform:scale(1.1);
 }
 
 /* CTA */
@@ -180,6 +218,8 @@ background:#000;
 color:white;
 text-align:center;
 }
+
+/* FOOTER */
 
 footer{
 background:black;
@@ -200,6 +240,27 @@ padding:18px 25px;
 border-radius:40px;
 text-decoration:none;
 font-weight:600;
+box-shadow:0 5px 20px rgba(0,0,0,.3);
+animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+0%{transform:scale(1);}
+50%{transform:scale(1.1);}
+100%{transform:scale(1);}
+}
+
+/* ANIMAÇÃO */
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(40px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
 }
 
 .social{
@@ -318,13 +379,8 @@ Chamar no WhatsApp
 
 <div class="social">
 
-<a href="https://instagram.com" target="_blank">
-<i class="fa-brands fa-instagram"></i>
-</a>
-
-<a href="https://facebook.com" target="_blank">
-<i class="fa-brands fa-facebook"></i>
-</a>
+<a href="#"><i class="fa-brands fa-instagram"></i></a>
+<a href="#"><i class="fa-brands fa-facebook"></i></a>
 
 </div>
 
@@ -335,8 +391,6 @@ WhatsApp
 </a>
 
 <script>
-
-/* animação serviços */
 
 const cards = document.querySelectorAll('.card');
 
@@ -355,8 +409,6 @@ card.classList.add('show');
 
 });
 
-/* galeria */
-
 let index = 0;
 
 const fotos = document.querySelectorAll(".foto");
@@ -365,24 +417,14 @@ const container = document.querySelector(".galeria-container");
 
 document.querySelector(".next").onclick = () => {
 
-index++;
-
-if(index >= total){
-index = 0;
-}
-
+index = (index + 1) % total;
 container.style.transform = "translateX(-" + index * 100 + "%)";
 
 };
 
 document.querySelector(".prev").onclick = () => {
 
-index--;
-
-if(index < 0){
-index = total - 1;
-}
-
+index = (index - 1 + total) % total;
 container.style.transform = "translateX(-" + index * 100 + "%)";
 
 };
@@ -390,4 +432,4 @@ container.style.transform = "translateX(-" + index * 100 + "%)";
 </script>
 
 </body>
-  </html>
+</html>
