@@ -27,10 +27,12 @@ box-sizing:border-box;
 scroll-behavior:smooth;
 }
 
+/* 🔥 CORREÇÃO AQUI */
 body{
 font-family:'Poppins',sans-serif;
 background:var(--cinza);
 color:#333;
+padding-top:90px;
 }
 
 /* HEADER */
@@ -414,28 +416,22 @@ WhatsApp
 
 <script>
 
+// animação dos cards
 const cards = document.querySelectorAll('.card');
 
 window.addEventListener('scroll', () => {
-
 cards.forEach(card => {
-
 const top = card.getBoundingClientRect().top;
-const trigger = window.innerHeight - 80;
-
-if(top < trigger){
+if(top < window.innerHeight - 80){
 card.classList.add('show');
 }
-
+});
 });
 
-});
-
+// galeria
 let index = 0;
-
 const container = document.querySelector(".galeria-container");
 const fotos = document.querySelectorAll(".foto");
-const total = fotos.length;
 
 function atualizarSlide(){
 const largura = document.querySelector(".foto").clientWidth;
@@ -443,19 +439,19 @@ container.style.transform = `translateX(-${index * largura}px)`;
 }
 
 document.querySelector(".next").onclick = () => {
-index = (index + 1) % total;
+index = (index + 1) % fotos.length;
 atualizarSlide();
 };
 
 document.querySelector(".prev").onclick = () => {
-index = (index - 1 + total) % total;
+index = (index - 1 + fotos.length) % fotos.length;
 atualizarSlide();
 };
 
-setInterval(() => {
-index = (index + 1) % total;
+setInterval(()=>{
+index = (index + 1) % fotos.length;
 atualizarSlide();
-}, 4000);
+},4000);
 
 </script>
 
