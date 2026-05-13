@@ -1,90 +1,113 @@
 export default function LandingPageAdvogado() {
   return (
-    <div className="min-h-screen bg-[#0f0f0f] text-white font-sans">
-      {/* HERO */}
-      <section className="relative overflow-hidden border-b border-yellow-700/20">
-        <div className="max-w-7xl mx-auto px-6 py-24 grid lg:grid-cols-2 gap-12 items-center">
+    <div className="bg-white text-[#222] font-serif min-h-screen">
+      {/* TOPO */}
+      <header className="w-full border-b border-[#d9c6a5] bg-[#f7f3ed] sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
           <div>
-            <span className="text-yellow-500 uppercase tracking-[0.3em] text-sm">
-              Advocacia Especializada
-            </span>
-
-            <h1 className="text-5xl md:text-6xl font-bold leading-tight mt-6">
+            <h1 className="text-2xl font-semibold tracking-wide text-[#7a5a32]">
               Dr. Sebastião de Oliveira Reis
             </h1>
+            <p className="text-sm text-[#8a7a66] mt-1">
+              Advocacia & Consultoria Jurídica
+            </p>
+          </div>
 
-            <p className="text-zinc-300 text-lg mt-6 leading-relaxed max-w-xl">
-              Atendimento jurídico com seriedade, estratégia e compromisso com os
-              direitos dos clientes. Soluções rápidas e eficientes para sua causa.
+          <a
+            href="https://wa.me/5500000000000"
+            className="bg-[#9b7a50] hover:bg-[#866742] text-white px-6 py-3 rounded-sm transition"
+          >
+            Fale Conosco
+          </a>
+        </div>
+      </header>
+
+      {/* HERO */}
+      <section className="bg-[#f7f3ed] py-24 border-b border-[#e7d7bf]">
+        <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <span className="uppercase tracking-[0.25em] text-[#9b7a50] text-sm">
+              Atendimento Jurídico Especializado
+            </span>
+
+            <h2 className="text-5xl leading-tight text-[#3d2d1c] mt-6 font-semibold">
+              Soluções jurídicas com excelência, ética e confiança.
+            </h2>
+
+            <p className="mt-8 text-lg leading-relaxed text-[#6e6255] max-w-xl">
+              Atendimento personalizado em diversas áreas do Direito,
+              oferecendo suporte jurídico estratégico e comprometido com os
+              melhores resultados para cada cliente.
             </p>
 
-            <div className="flex flex-wrap gap-4 mt-10">
+            <div className="flex gap-4 mt-10 flex-wrap">
               <a
                 href="https://wa.me/5500000000000"
-                className="bg-yellow-500 hover:bg-yellow-400 text-black font-semibold px-8 py-4 rounded-2xl transition"
+                className="bg-[#9b7a50] hover:bg-[#866742] text-white px-8 py-4 transition"
               >
-                Falar no WhatsApp
+                Atendimento via WhatsApp
               </a>
 
               <a
                 href="#areas"
-                className="border border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-black px-8 py-4 rounded-2xl transition"
+                className="border border-[#9b7a50] text-[#9b7a50] hover:bg-[#9b7a50] hover:text-white px-8 py-4 transition"
               >
                 Áreas de Atuação
               </a>
             </div>
           </div>
 
-          <div className="flex justify-center">
-            <div className="bg-zinc-900 border border-yellow-500/20 rounded-[2rem] p-4 shadow-2xl">
-              <img
-                src="https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=1200&auto=format&fit=crop"
-                alt="Advogado"
-                className="rounded-[1.5rem] w-full max-w-md object-cover"
-              />
-            </div>
+          <div>
+            <img
+              src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1200&auto=format&fit=crop"
+              alt="Advogado"
+              className="w-full h-[650px] object-cover shadow-xl"
+            />
           </div>
         </div>
       </section>
 
       {/* ÁREAS */}
-      <section id="areas" className="py-24 px-6">
-        <div className="max-w-7xl mx-auto">
+      <section id="areas" className="py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold">Áreas de Atuação</h2>
-            <p className="text-zinc-400 mt-4">
-              Atendimento jurídico especializado e humanizado.
-            </p>
+            <span className="uppercase tracking-[0.25em] text-[#9b7a50] text-sm">
+              Especialidades
+            </span>
+
+            <h2 className="text-4xl text-[#3d2d1c] mt-4 font-semibold">
+              Áreas de Atuação
+            </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 gap-8">
             {[
               {
-                titulo: "Direito de Família",
-                desc: "Divórcio, guarda, pensão alimentícia e inventário.",
+                titulo: 'Direito de Família',
+                desc: 'Divórcio, guarda, pensão alimentícia, união estável e inventário.',
               },
               {
-                titulo: "Direito Trabalhista",
-                desc: "Defesa dos direitos do trabalhador e empresas.",
+                titulo: 'Direito Previdenciário',
+                desc: 'Aposentadorias, revisões, benefícios e auxílio-doença.',
               },
               {
-                titulo: "Direito Previdenciário",
-                desc: "Aposentadoria, auxílio-doença e benefícios do INSS.",
+                titulo: 'Direito Civil',
+                desc: 'Contratos, indenizações, responsabilidade civil e obrigações.',
               },
               {
-                titulo: "Direito Civil",
-                desc: "Contratos, indenizações e responsabilidade civil.",
+                titulo: 'Direito Trabalhista',
+                desc: 'Defesa dos direitos do trabalhador e assessoria jurídica.',
               },
             ].map((item, index) => (
               <div
                 key={index}
-                className="bg-zinc-900 border border-yellow-500/10 rounded-3xl p-8 hover:border-yellow-500/40 transition"
+                className="border border-[#e7d7bf] p-10 hover:shadow-lg transition bg-[#faf7f2]"
               >
-                <h3 className="text-2xl font-semibold text-yellow-500">
+                <h3 className="text-2xl text-[#7a5a32] font-semibold">
                   {item.titulo}
                 </h3>
 
-                <p className="text-zinc-400 mt-4 leading-relaxed">
+                <p className="mt-5 text-[#6e6255] leading-relaxed text-lg">
                   {item.desc}
                 </p>
               </div>
@@ -94,101 +117,89 @@ export default function LandingPageAdvogado() {
       </section>
 
       {/* SOBRE */}
-      <section className="py-24 bg-zinc-950 px-6 border-y border-yellow-700/10">
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-14 items-center">
+      <section className="py-24 bg-[#f7f3ed] border-y border-[#e7d7bf]">
+        <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
           <div>
             <img
-              src="https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?q=80&w=1200&auto=format&fit=crop"
+              src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=1200&auto=format&fit=crop"
               alt="Escritório"
-              className="rounded-[2rem]"
+              className="w-full h-[550px] object-cover shadow-xl"
             />
           </div>
 
           <div>
-            <span className="text-yellow-500 uppercase tracking-[0.3em] text-sm">
+            <span className="uppercase tracking-[0.25em] text-[#9b7a50] text-sm">
               Sobre o Escritório
             </span>
 
-            <h2 className="text-4xl font-bold mt-6 leading-tight">
-              Atendimento transparente e focado em resultados.
+            <h2 className="text-4xl text-[#3d2d1c] mt-6 font-semibold leading-tight">
+              Compromisso jurídico pautado na confiança e transparência.
             </h2>
 
-            <p className="text-zinc-400 mt-6 leading-relaxed text-lg">
-              O escritório Dr. Sebastião de Oliveira Reis atua com excelência,
-              ética e comprometimento na defesa dos direitos dos clientes,
-              oferecendo atendimento personalizado e estratégias jurídicas
-              eficientes.
+            <p className="mt-8 text-[#6e6255] text-lg leading-relaxed">
+              O escritório Dr. Sebastião de Oliveira Reis oferece atendimento
+              jurídico estratégico e humanizado, com foco em soluções seguras,
+              eficientes e personalizadas para cada cliente.
             </p>
 
-            <div className="grid grid-cols-2 gap-6 mt-10">
-              <div className="bg-zinc-900 rounded-2xl p-6 border border-yellow-500/10">
-                <h3 className="text-3xl font-bold text-yellow-500">+15</h3>
-                <p className="text-zinc-400 mt-2">Anos de experiência</p>
+            <div className="grid grid-cols-2 gap-6 mt-12">
+              <div className="bg-white border border-[#e7d7bf] p-8 text-center">
+                <h3 className="text-4xl text-[#7a5a32] font-semibold">15+</h3>
+                <p className="mt-3 text-[#6e6255]">Anos de experiência</p>
               </div>
 
-              <div className="bg-zinc-900 rounded-2xl p-6 border border-yellow-500/10">
-                <h3 className="text-3xl font-bold text-yellow-500">500+</h3>
-                <p className="text-zinc-400 mt-2">Clientes atendidos</p>
+              <div className="bg-white border border-[#e7d7bf] p-8 text-center">
+                <h3 className="text-4xl text-[#7a5a32] font-semibold">500+</h3>
+                <p className="mt-3 text-[#6e6255]">Clientes atendidos</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* DIFERENCIAIS */}
-      <section className="py-24 px-6">
-        <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-4xl font-bold">Por que escolher nosso escritório?</h2>
-
-          <div className="grid md:grid-cols-3 gap-8 mt-16">
-            {[
-              "Atendimento humanizado",
-              "Estratégia jurídica eficiente",
-              "Agilidade no acompanhamento",
-              "Transparência total",
-              "Atendimento online e presencial",
-              "Compromisso com resultados",
-            ].map((item, index) => (
-              <div
-                key={index}
-                className="bg-zinc-900 rounded-3xl p-8 border border-yellow-500/10"
-              >
-                <p className="text-xl text-zinc-200">{item}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* CTA */}
-      <section className="py-24 px-6">
-        <div className="max-w-5xl mx-auto bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-[2rem] p-12 text-center text-black shadow-2xl">
-          <h2 className="text-4xl md:text-5xl font-bold leading-tight">
+      <section className="py-24 bg-[#3d2d1c] text-white text-center">
+        <div className="max-w-4xl mx-auto px-6">
+          <span className="uppercase tracking-[0.25em] text-[#d9c6a5] text-sm">
+            Atendimento Jurídico
+          </span>
+
+          <h2 className="text-5xl mt-6 leading-tight font-semibold">
             Precisa de orientação jurídica?
           </h2>
 
-          <p className="mt-6 text-lg max-w-2xl mx-auto">
-            Entre em contato agora mesmo e fale diretamente com nossa equipe.
+          <p className="mt-8 text-lg text-[#f3e7d6] leading-relaxed">
+            Entre em contato agora mesmo e receba atendimento especializado.
           </p>
 
           <a
             href="https://wa.me/5500000000000"
-            className="inline-block mt-10 bg-black text-white px-10 py-5 rounded-2xl text-lg font-semibold hover:scale-105 transition"
+            className="inline-block mt-10 bg-[#9b7a50] hover:bg-[#866742] px-10 py-4 text-white transition"
           >
-            Atendimento via WhatsApp
+            Falar com Especialista
           </a>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="border-t border-yellow-700/10 py-10 text-center text-zinc-500 text-sm">
-        © 2026 Dr. Sebastião de Oliveira Reis — Todos os direitos reservados.
+      {/* RODAPÉ */}
+      <footer className="bg-[#f7f3ed] py-10 border-t border-[#e7d7bf] text-center">
+        <h3 className="text-xl text-[#7a5a32] font-semibold">
+          Dr. Sebastião de Oliveira Reis
+        </h3>
+
+        <p className="mt-3 text-[#6e6255]">
+          Advocacia & Consultoria Jurídica
+        </p>
+
+        <p className="mt-6 text-sm text-[#8a7a66]">
+          © 2026 Todos os direitos reservados.
+        </p>
       </footer>
 
-      {/* WHATSAPP FIXO */}
+      {/* BOTÃO FIXO */}
       <a
         href="https://wa.me/5500000000000"
-        className="fixed bottom-6 right-6 bg-green-500 hover:scale-110 transition text-white px-6 py-4 rounded-full shadow-2xl font-semibold"
+        className="fixed bottom-6 right-6 bg-[#9b7a50] hover:bg-[#866742] text-white px-6 py-4 shadow-xl transition"
       >
         WhatsApp
       </a>
